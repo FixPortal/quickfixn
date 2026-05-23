@@ -14,7 +14,7 @@ namespace QuickFix.DataDictionary
     public class DataDictionary
     {
 
-        #region CP Enhancement
+        #region FixPortal Enhancement
 
         public int Revision { get; set; }
         public string SessionDescription { get; set; }
@@ -107,7 +107,7 @@ namespace QuickFix.DataDictionary
             Header = src.Header;
             Trailer = src.Trailer;
 
-            #region CP Enhancement
+            #region FixPortal Enhancement
 
             Name = src.Name;
             DictionaryID = src.DictionaryID;
@@ -395,7 +395,7 @@ namespace QuickFix.DataDictionary
                 return;
             if (FieldsByTag.TryGetValue(field.Tag, out var fld))
             {
-                #region CP Enhancement
+                #region FixPortal Enhancement
 
                 if (fld.HasEnums())
                 {
@@ -493,7 +493,7 @@ namespace QuickFix.DataDictionary
             Load(stream);
         }
 
-        #region CP Enhancement
+        #region FixPortal Enhancement
 
         public void Load(Stream stream)
         {
@@ -519,7 +519,7 @@ namespace QuickFix.DataDictionary
             ParseMessages(doc);
             ParseHeader(doc);
             ParseTrailer(doc);
-            ParseName(doc); //	CP Enhancement
+            ParseName(doc); //	FixPortal Enhancement
         }
 
         #endregion

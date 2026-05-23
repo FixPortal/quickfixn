@@ -251,7 +251,7 @@ namespace QuickFix
                 ? DataDictionaryProvider.GetApplicationDataDictionary(SenderDefaultApplVerID)
                 : SessionDataDictionary;
 
-            #region CP Enhancement
+            #region FixPortal Enhancement
             SessionID.DataDictionary = ApplicationDataDictionary;
             #endregion
 
@@ -1423,7 +1423,7 @@ namespace QuickFix
             GenerateReject(msgBuilder.RejectableMessage(), reason, field);
         }
        
-        public void GenerateReject(Message message, FixValues.SessionRejectReason reason, int field = 0, string value = "") //	CP Enhancement
+        public void GenerateReject(Message message, FixValues.SessionRejectReason reason, int field = 0, string value = "") //	FixPortal Enhancement
         {
             string beginString = SessionID.BeginString;
 
@@ -1514,7 +1514,7 @@ namespace QuickFix
             reject.SetField(new Fields.Text(text));
         }
 
-        #region CP Enhancement
+        #region FixPortal Enhancement
 
         private void NotifyMessageRejected(Message rejectMessage, string reason)
         {
@@ -1727,7 +1727,7 @@ namespace QuickFix
                 if (0UL == seqNum)
                     Persist(message, messageString);
 
-				#region CP Enhancement
+				#region FixPortal Enhancement
                 var result = Send(messageString);
 
                 LogExtended(message, msgType);
@@ -1737,7 +1737,7 @@ namespace QuickFix
             }
         }
 
-        #region CP Enhancement
+        #region FixPortal Enhancement
 		
 	   	public static bool SendToTarget(Message message, SessionID sessionID, bool removeDupeFlag = true, bool removeOriginalSendingTime = true)
 		{

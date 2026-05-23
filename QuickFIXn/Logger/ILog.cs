@@ -30,7 +30,7 @@ public interface ILog : IDisposable
     /// <param name="s">event description</param>
     void OnEvent(string s);
 
-    #region CP Enhancement
+    #region FixPortal Enhancement
 
     void OnRejectionEvent(string originalMessage, string eventText);
     void LogOn();

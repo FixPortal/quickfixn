@@ -27,7 +27,7 @@ public sealed class NullLog : ILog
 
     #endregion
 
-    #region CP Enhancement
+    #region FixPortal Enhancement
 
     public void LogOn() { }
     public void LogOff() { }

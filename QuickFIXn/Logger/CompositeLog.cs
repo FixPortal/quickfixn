@@ -69,7 +69,7 @@ internal class CompositeLog : ILog
 
     ~CompositeLog() => Dispose(false);
 
-    #region CP Enhancement
+    #region FixPortal Enhancement
 	
     public void LogOn() { }
     public void LogOff() { }

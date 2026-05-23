@@ -14,7 +14,7 @@ namespace QuickFix;
 public class FieldMap : IEnumerable<KeyValuePair<int, IField>> {
     private SortedDictionary<int, IField> _fields = new();
 
-    #region CP Enhancement
+    #region FixPortal Enhancement
 		
 	public bool AllowStringTruncationForCharFields { get; set; }
 		

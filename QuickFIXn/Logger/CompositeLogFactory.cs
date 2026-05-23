@@ -29,7 +29,7 @@ public class CompositeLogFactory : ILogFactory
     public ILog CreateNonSessionLog() {
         return new CompositeLog(_factories.Select(f => f.CreateNonSessionLog()).ToArray());
     }
-    #region CP Enhancement
+    #region FixPortal Enhancement
 
     public ILog Create(SessionID sessionID, Enhancements.DataDictionary.VersionInfo dataDictionaryVersionInfo)
     {

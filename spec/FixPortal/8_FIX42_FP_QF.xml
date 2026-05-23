@@ -1,4 +1,4 @@
-<fix major="4" minor="2" name="FIX42_CP_QF">
+<fix major="4" minor="2" name="FIX42_FP_QF">
 	<header>
 		<field name="BeginString" required="Y" />
 		<field name="BodyLength" required="Y" />

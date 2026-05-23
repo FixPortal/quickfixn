@@ -33,7 +33,7 @@ public class FileLog : ILog
     /// <param name="sessionId"></param>
     public FileLog(string fileLogPath, SessionID sessionId)
     {
-        #region  CP Enhancement
+        #region  FixPortal Enhancement
         _fileLogPath = Enhancements.Utility.ParsePath(StringUtil.FixSlashes(fileLogPath)); 
         _sessionPrefix = Prefix(sessionId);
 
@@ -115,7 +115,7 @@ public class FileLog : ILog
         lock (_sync)
         {
             DisposedCheck();
-			DirectoryCheck();   //	CP Enhancement
+			DirectoryCheck();   //	FixPortal Enhancement
             EnsureMessageLogInit();
             _messageLog.WriteLine(DateTimeConverter.ToFIX(DateTime.UtcNow, TimeStampPrecision.Millisecond) + " : " + msg);
         }
@@ -126,7 +126,7 @@ public class FileLog : ILog
         lock (_sync)
         {
             DisposedCheck();
-			DirectoryCheck();   //	CP Enhancement
+			DirectoryCheck();   //	FixPortal Enhancement
             EnsureMessageLogInit();
             _messageLog.WriteLine(DateTimeConverter.ToFIX(DateTime.UtcNow, TimeStampPrecision.Millisecond) + " : " + msg);
         }
@@ -137,7 +137,7 @@ public class FileLog : ILog
         lock (_sync)
         {
             DisposedCheck();
-            DirectoryCheck();   //	CP Enhancement
+            DirectoryCheck();   //	FixPortal Enhancement
             EnsureEventLogInit();
             _eventLog.WriteLine(DateTimeConverter.ToFIX(DateTime.UtcNow, TimeStampPrecision.Millisecond) + " : " + s);
         }
@@ -175,7 +175,7 @@ public class FileLog : ILog
     }
     #endregion
 
-    #region CP Enhancement
+    #region FixPortal Enhancement
 
     
     private readonly string _sessionPrefix;

@@ -1,6 +1,6 @@
 """
-Merge FIX_Latest_EP302.xml (base) + 9_FIX44_CP_QF.xml (CP additions)
-into 10_FIX50_CP_QF.xml.
+Merge FIX_Latest_EP302.xml (base) + 9_FIX44_FP_QF.xml (FixPortal additions)
+into 10_FIX50_FP_QF.xml.
 
 Rules:
 - EP302 authoritative for name/type on overlapping fields
@@ -12,12 +12,18 @@ Rules:
 - Known overrides applied (tag 47, 327, 800, OrigClOrdID, etc.)
 """
 
+import os
 import xml.etree.ElementTree as ET
+from defusedxml.ElementTree import parse as safe_parse
 from collections import OrderedDict
 import sys
 import copy
 
-BASE = "D:/Centerprise/work/ems-win-app.worktrees/BPX/Framework/Services/QFService/quickfix-n/spec/Centerprise"
+# Paths are resolved relative to this script:
+#   script lives in spec/FixPortal/Extension Pack Support/orchestra/
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+EXT_PACK_DIR = os.path.dirname(SCRIPT_DIR)          # spec/FixPortal/Extension Pack Support
+FP_SPEC_DIR = os.path.dirname(EXT_PACK_DIR)         # spec/FixPortal
 
 # ─── Parse helpers ───
 
@@ -232,7 +238,7 @@ ORIGCLORDID_OVERRIDE_Y = {"F"}  # OrderCancelRequest: force required="Y"
 def merge_messages(ep302_msgs, fix44_msgs, group_to_wrapper):
     """
     Merge messages.
-    - EP302 base for shared messages, with FIX44 CP additions appended.
+    - EP302 base for shared messages, with FIX44 FixPortal additions appended.
     - Inline groups replaced with component refs where wrappers exist.
     - Admin messages excluded.
     - EP302-only messages carried (also with inline->component conversion).
@@ -247,7 +253,7 @@ def merge_messages(ep302_msgs, fix44_msgs, group_to_wrapper):
         # Replace inline groups with component references
         _replace_inline_with_components(merged_msg, group_to_wrapper)
 
-        # If FIX44 has this message, append CP additions
+        # If FIX44 has this message, append FixPortal additions
         if msgtype in fix44_msgs:
             f44_msg = fix44_msgs[msgtype]
             ep_child_names = get_child_names(merged_msg)
@@ -376,7 +382,7 @@ def write_output(path, merged_fields, merged_comps, merged_msgs):
     root.set("type", "FIX")
     root.set("servicepack", "2")
     root.set("minor", "0")
-    root.set("name", "FIX50_CP_QF")
+    root.set("name", "FIX50_FP_QF")
 
     # Header / Trailer (empty for app dictionary)
     ET.SubElement(root, "header")
@@ -415,16 +421,16 @@ def write_output(path, merged_fields, merged_comps, merged_msgs):
 # ─── Main ───
 
 def main():
-    ep302_path = f"{BASE}/FIX_Latest_EP302.xml"
-    fix44_path = f"{BASE}/9_FIX44_CP_QF.xml"
-    output_path = f"{BASE}/10_FIX50_CP_QF.xml"
+    ep302_path = os.path.join(EXT_PACK_DIR, "FIX_Latest_EP302.xml")
+    fix44_path = os.path.join(FP_SPEC_DIR, "9_FIX44_FP_QF.xml")
+    output_path = os.path.join(FP_SPEC_DIR, "10_FIX50_FP_QF.xml")
 
     print("Parsing EP302...")
-    ep302_tree = ET.parse(ep302_path)
+    ep302_tree = safe_parse(ep302_path)
     ep302_root = ep302_tree.getroot()
 
-    print("Parsing FIX44 CP...")
-    fix44_tree = ET.parse(fix44_path)
+    print("Parsing FIX44 FixPortal...")
+    fix44_tree = safe_parse(fix44_path)
     fix44_root = fix44_tree.getroot()
 
     # Parse sections

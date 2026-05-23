@@ -30,7 +30,7 @@ public class FileLogFactory : ILogFactory
             new SessionID("Non", "Session", "Log"));
     }
 
-    #region CP Enhancement
+    #region FixPortal Enhancement
 
     public ILog Create(SessionID sessionID, Enhancements.DataDictionary.VersionInfo dataDictionaryVersionInfo)
     {

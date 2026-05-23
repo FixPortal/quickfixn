@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using NUnit.Framework;
 using QuickFix;
@@ -708,7 +708,7 @@ namespace UnitTests
             Assert.That(sched.IsSessionTime(new DateTime(2024, 05, 24, 11, 00, 00, DateTimeKind.Utc)), Is.False);
             Assert.That(sched.IsSessionTime(new DateTime(2024, 05, 24, 11, 00, 10, DateTimeKind.Utc)), Is.False);
         }
-        //#region CP Enhancement
+        //#region FixPortal Enhancement
         //[Test]
         //[TestCase("22:35:00", "22:30:00", "Sun,Mon,Tue,Wed,Thu,Fri,Sat", "04/05/2020 22:35", true)]
         //[TestCase("22:35:00", "22:30:00", "Sun,Mon,Tue,Wed,Thu,Fri,Sat", "05/05/2020 22:35", true)]

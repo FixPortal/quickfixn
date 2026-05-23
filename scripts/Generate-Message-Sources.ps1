@@ -5,7 +5,7 @@ if ($args.Length -gt 0) {
 
 $rootpath = Join-Path $PSScriptRoot '..' | Resolve-Path
 
-$specs = Get-ChildItem -Path (Join-Path $rootpath 'spec\Centerprise') -Filter '*.xml' |
+$specs = Get-ChildItem -Path (Join-Path $rootpath 'spec\FixPortal') -Filter '*.xml' |
          Sort-Object { [int]($_.BaseName -split '_')[0] } |
          ForEach-Object { $_.FullName }
 

@@ -26,7 +26,7 @@ For general QuickFIX/n documentation, refer to the upstream `README.md`.
 
 ### FixPortal-specific content
 
-- `spec/Centerprise/` — Custom data-dictionary XML files (legacy directory name)
+- `spec/FixPortal/` — Custom data-dictionary XML files (legacy directory name)
 - `scripts/Generate-Message-Sources.ps1` — Uses the custom specs
 - `DDTool/Structures/DataDictionary.cs` — Ordering enhancements for spec processing
 - FixPortal enhancements throughout `QuickFIXn/`, marked `// FixPortal Enhancement`
@@ -68,7 +68,7 @@ do not confuse them during merges.
 pwsh scripts/Generate-Message-Sources.ps1
 ```
 
-This runs DDTool against `spec/Centerprise/*.xml` and regenerates fields and
+This runs DDTool against `spec/FixPortal/*.xml` and regenerates fields and
 message classes. DDTool does not delete stale outputs — clean the relevant
 `Messages/*/` directory before regenerating if definitions have been removed.
 
@@ -96,18 +96,18 @@ symbol packages are produced.
 
 ## Spec maintenance
 
-The custom data dictionaries in `spec/Centerprise/` replace the standard
+The custom data dictionaries in `spec/FixPortal/` replace the standard
 QuickFIX/n specs in `spec/fix/`. The approach:
 
 - **Standard versions** (FIX 4.0, 4.1, 4.3, 5.0, 5.0 SP1, FIXT 1.1) are copied
   from upstream with a numeric prefix for ordering
 - **Customised versions** (FIX 4.2, 4.4, 5.0 SP2) extend the standard versions
   with FixPortal-specific fields, components, and message additions
-- The customised FIX 5.0 SP2 spec (`10_FIX50SP2_CP_QF.xml`) is built from the
-  upstream FIX50SP2.xml with FixPortal additions merged in. `scripts/build_fix50_cp.py`
+- The customised FIX 5.0 SP2 spec (`10_FIX50SP2_FP_QF.xml`) is built from the
+  upstream FIX50SP2.xml with FixPortal additions merged in. `scripts/build_fix50_fp.py`
   can regenerate it from the upstream base and the FIX44 source
 - Custom specs use a `name` attribute on the root `<fix>` element (e.g.
-  `name="FIX50SP2_CP_QF"`) to avoid DDTool's duplicate-name check
+  `name="FIX50SP2_FP_QF"`) to avoid DDTool's duplicate-name check
 
 ### Known tag collisions (custom FIX44 vs FIX50SP2)
 

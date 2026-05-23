@@ -16,7 +16,7 @@ public class NullLogFactory : ILogFactory
         return new NullLog();
     }
 
-    #region CP Enhancement
+    #region FixPortal Enhancement
 
     public ILog Create(SessionID sessionID, Enhancements.DataDictionary.VersionInfo dataDictionaryVersionInfo)
     {
