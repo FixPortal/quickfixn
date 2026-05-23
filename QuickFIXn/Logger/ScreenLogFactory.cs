@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace QuickFix.Logger;
 
@@ -48,4 +48,11 @@ public class ScreenLogFactory : ILogFactory
     public ILog CreateNonSessionLog() {
         return new ScreenLog(true, true, true);
     }
+
+    #region CP Enhancement
+    public ILog Create(SessionID sessionID, Enhancements.DataDictionary.VersionInfo dataDictionaryVersionInfo)
+    {
+        return Create(sessionID);
+    }
+    #endregion
 }

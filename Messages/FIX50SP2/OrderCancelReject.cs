@@ -362,4 +362,116 @@ public class OrderCancelReject : Message
     public EncodedText Get(EncodedText val) { GetField(val); return val; }
     public bool IsSet(EncodedText val) { return IsSetEncodedText(); }
     public bool IsSetEncodedText() { return IsSetField(Tags.EncodedText); }
+
+    public Side Side
+    {
+        get
+        {
+            Side val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(Side val) { Side = val; }
+    public Side Get(Side val) { GetField(val); return val; }
+    public bool IsSet(Side val) { return IsSetSide(); }
+    public bool IsSetSide() { return IsSetField(Tags.Side); }
+
+    public ExecID ExecID
+    {
+        get
+        {
+            ExecID val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(ExecID val) { ExecID = val; }
+    public ExecID Get(ExecID val) { GetField(val); return val; }
+    public bool IsSet(ExecID val) { return IsSetExecID(); }
+    public bool IsSetExecID() { return IsSetField(Tags.ExecID); }
+
+    public StrikePrice StrikePrice
+    {
+        get
+        {
+            StrikePrice val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(StrikePrice val) { StrikePrice = val; }
+    public StrikePrice Get(StrikePrice val) { GetField(val); return val; }
+    public bool IsSet(StrikePrice val) { return IsSetStrikePrice(); }
+    public bool IsSetStrikePrice() { return IsSetField(Tags.StrikePrice); }
+
+    public ExpireDate ExpireDate
+    {
+        get
+        {
+            ExpireDate val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(ExpireDate val) { ExpireDate = val; }
+    public ExpireDate Get(ExpireDate val) { GetField(val); return val; }
+    public bool IsSet(ExpireDate val) { return IsSetExpireDate(); }
+    public bool IsSetExpireDate() { return IsSetField(Tags.ExpireDate); }
+
+    public ExpireTime ExpireTime
+    {
+        get
+        {
+            ExpireTime val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(ExpireTime val) { ExpireTime = val; }
+    public ExpireTime Get(ExpireTime val) { GetField(val); return val; }
+    public bool IsSet(ExpireTime val) { return IsSetExpireTime(); }
+    public bool IsSetExpireTime() { return IsSetField(Tags.ExpireTime); }
+
+    public PositionEffect PositionEffect
+    {
+        get
+        {
+            PositionEffect val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(PositionEffect val) { PositionEffect = val; }
+    public PositionEffect Get(PositionEffect val) { GetField(val); return val; }
+    public bool IsSet(PositionEffect val) { return IsSetPositionEffect(); }
+    public bool IsSetPositionEffect() { return IsSetField(Tags.PositionEffect); }
+
+    public OrderQty OrderQty
+    {
+        get
+        {
+            OrderQty val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(OrderQty val) { OrderQty = val; }
+    public OrderQty Get(OrderQty val) { GetField(val); return val; }
+    public bool IsSet(OrderQty val) { return IsSetOrderQty(); }
+    public bool IsSetOrderQty() { return IsSetField(Tags.OrderQty); }
 }

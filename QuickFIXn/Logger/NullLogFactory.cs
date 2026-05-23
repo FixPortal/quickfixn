@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace QuickFix.Logger;
 
@@ -15,4 +15,13 @@ public class NullLogFactory : ILogFactory
     {
         return new NullLog();
     }
+
+    #region CP Enhancement
+
+    public ILog Create(SessionID sessionID, Enhancements.DataDictionary.VersionInfo dataDictionaryVersionInfo)
+    {
+        return new NullLog();
+    }
+
+    #endregion
 }

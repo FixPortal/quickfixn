@@ -622,10 +622,10 @@ public class SettlementInstructions : Message
 
         public class NoPartyIDsGroup : Group
         {
-            public static int[] DefaultFieldOrder = [Tags.PartyID, Tags.PartyIDSource, Tags.PartyRole, Tags.NoPartySubIDs, 0];
+            public static int[] DefaultFieldOrder = [Tags.PartyID, Tags.PartyIDSource, Tags.PartyRole, Tags.PartyRoleQualifier, Tags.NoPartySubIDs, Tags.NoPartyAltIDs, 0];
 
             [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
-            public static int[] fieldOrder = {Tags.PartyID, Tags.PartyIDSource, Tags.PartyRole, Tags.NoPartySubIDs, 0};
+            public static int[] fieldOrder = {Tags.PartyID, Tags.PartyIDSource, Tags.PartyRole, Tags.PartyRoleQualifier, Tags.NoPartySubIDs, Tags.NoPartyAltIDs, 0};
 
             public NoPartyIDsGroup()
               : base(Tags.NoPartyIDs, Tags.PartyID, DefaultFieldOrder)
@@ -687,6 +687,22 @@ public class SettlementInstructions : Message
             public bool IsSet(PartyRole val) { return IsSetPartyRole(); }
             public bool IsSetPartyRole() { return IsSetField(Tags.PartyRole); }
 
+            public PartyRoleQualifier PartyRoleQualifier
+            {
+                get
+                {
+                    PartyRoleQualifier val = new();
+                    GetField(val);
+                    return val;
+                }
+                set  => SetField(value);
+            }
+
+            public void Set(PartyRoleQualifier val) { PartyRoleQualifier = val; }
+            public PartyRoleQualifier Get(PartyRoleQualifier val) { GetField(val); return val; }
+            public bool IsSet(PartyRoleQualifier val) { return IsSetPartyRoleQualifier(); }
+            public bool IsSetPartyRoleQualifier() { return IsSetField(Tags.PartyRoleQualifier); }
+
             public NoPartySubIDs NoPartySubIDs
             {
                 get
@@ -702,6 +718,22 @@ public class SettlementInstructions : Message
             public NoPartySubIDs Get(NoPartySubIDs val) { GetField(val); return val; }
             public bool IsSet(NoPartySubIDs val) { return IsSetNoPartySubIDs(); }
             public bool IsSetNoPartySubIDs() { return IsSetField(Tags.NoPartySubIDs); }
+
+            public NoPartyAltIDs NoPartyAltIDs
+            {
+                get
+                {
+                    NoPartyAltIDs val = new();
+                    GetField(val);
+                    return val;
+                }
+                set  => SetField(value);
+            }
+
+            public void Set(NoPartyAltIDs val) { NoPartyAltIDs = val; }
+            public NoPartyAltIDs Get(NoPartyAltIDs val) { GetField(val); return val; }
+            public bool IsSet(NoPartyAltIDs val) { return IsSetNoPartyAltIDs(); }
+            public bool IsSetNoPartyAltIDs() { return IsSetField(Tags.NoPartyAltIDs); }
 
             public class NoPartySubIDsGroup : Group
             {
@@ -753,6 +785,126 @@ public class SettlementInstructions : Message
                 public PartySubIDType Get(PartySubIDType val) { GetField(val); return val; }
                 public bool IsSet(PartySubIDType val) { return IsSetPartySubIDType(); }
                 public bool IsSetPartySubIDType() { return IsSetField(Tags.PartySubIDType); }
+            }
+
+            public class NoPartyAltIDsGroup : Group
+            {
+                public static int[] DefaultFieldOrder = [Tags.PartyAltID, Tags.PartyAltIDSource, Tags.NoPartyAltSubIDs, 0];
+
+                [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+                public static int[] fieldOrder = {Tags.PartyAltID, Tags.PartyAltIDSource, Tags.NoPartyAltSubIDs, 0};
+
+                public NoPartyAltIDsGroup()
+                  : base(Tags.NoPartyAltIDs, Tags.PartyAltID, DefaultFieldOrder)
+                {
+                }
+
+                public override Group Clone()
+                {
+                    var clone = new NoPartyAltIDsGroup();
+                    clone.CopyStateFrom(this);
+                    return clone;
+                }
+
+                public PartyAltID PartyAltID
+                {
+                    get
+                    {
+                        PartyAltID val = new();
+                        GetField(val);
+                        return val;
+                    }
+                    set  => SetField(value);
+                }
+
+                public void Set(PartyAltID val) { PartyAltID = val; }
+                public PartyAltID Get(PartyAltID val) { GetField(val); return val; }
+                public bool IsSet(PartyAltID val) { return IsSetPartyAltID(); }
+                public bool IsSetPartyAltID() { return IsSetField(Tags.PartyAltID); }
+
+                public PartyAltIDSource PartyAltIDSource
+                {
+                    get
+                    {
+                        PartyAltIDSource val = new();
+                        GetField(val);
+                        return val;
+                    }
+                    set  => SetField(value);
+                }
+
+                public void Set(PartyAltIDSource val) { PartyAltIDSource = val; }
+                public PartyAltIDSource Get(PartyAltIDSource val) { GetField(val); return val; }
+                public bool IsSet(PartyAltIDSource val) { return IsSetPartyAltIDSource(); }
+                public bool IsSetPartyAltIDSource() { return IsSetField(Tags.PartyAltIDSource); }
+
+                public NoPartyAltSubIDs NoPartyAltSubIDs
+                {
+                    get
+                    {
+                        NoPartyAltSubIDs val = new();
+                        GetField(val);
+                        return val;
+                    }
+                    set  => SetField(value);
+                }
+
+                public void Set(NoPartyAltSubIDs val) { NoPartyAltSubIDs = val; }
+                public NoPartyAltSubIDs Get(NoPartyAltSubIDs val) { GetField(val); return val; }
+                public bool IsSet(NoPartyAltSubIDs val) { return IsSetNoPartyAltSubIDs(); }
+                public bool IsSetNoPartyAltSubIDs() { return IsSetField(Tags.NoPartyAltSubIDs); }
+
+                public class NoPartyAltSubIDsGroup : Group
+                {
+                    public static int[] DefaultFieldOrder = [Tags.PartyAltSubID, Tags.PartyAltSubIDType, 0];
+
+                    [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+                    public static int[] fieldOrder = {Tags.PartyAltSubID, Tags.PartyAltSubIDType, 0};
+
+                    public NoPartyAltSubIDsGroup()
+                      : base(Tags.NoPartyAltSubIDs, Tags.PartyAltSubID, DefaultFieldOrder)
+                    {
+                    }
+
+                    public override Group Clone()
+                    {
+                        var clone = new NoPartyAltSubIDsGroup();
+                        clone.CopyStateFrom(this);
+                        return clone;
+                    }
+
+                    public PartyAltSubID PartyAltSubID
+                    {
+                        get
+                        {
+                            PartyAltSubID val = new();
+                            GetField(val);
+                            return val;
+                        }
+                        set  => SetField(value);
+                    }
+
+                    public void Set(PartyAltSubID val) { PartyAltSubID = val; }
+                    public PartyAltSubID Get(PartyAltSubID val) { GetField(val); return val; }
+                    public bool IsSet(PartyAltSubID val) { return IsSetPartyAltSubID(); }
+                    public bool IsSetPartyAltSubID() { return IsSetField(Tags.PartyAltSubID); }
+
+                    public PartyAltSubIDType PartyAltSubIDType
+                    {
+                        get
+                        {
+                            PartyAltSubIDType val = new();
+                            GetField(val);
+                            return val;
+                        }
+                        set  => SetField(value);
+                    }
+
+                    public void Set(PartyAltSubIDType val) { PartyAltSubIDType = val; }
+                    public PartyAltSubIDType Get(PartyAltSubIDType val) { GetField(val); return val; }
+                    public bool IsSet(PartyAltSubIDType val) { return IsSetPartyAltSubIDType(); }
+                    public bool IsSetPartyAltSubIDType() { return IsSetField(Tags.PartyAltSubIDType); }
+                }
             }
         }
 

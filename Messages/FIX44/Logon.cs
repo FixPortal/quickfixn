@@ -199,6 +199,102 @@ public class Logon : Message
     public bool IsSet(Password val) { return IsSetPassword(); }
     public bool IsSetPassword() { return IsSetField(Tags.Password); }
 
+    public FIXEngineName FIXEngineName
+    {
+        get
+        {
+            FIXEngineName val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(FIXEngineName val) { FIXEngineName = val; }
+    public FIXEngineName Get(FIXEngineName val) { GetField(val); return val; }
+    public bool IsSet(FIXEngineName val) { return IsSetFIXEngineName(); }
+    public bool IsSetFIXEngineName() { return IsSetField(Tags.FIXEngineName); }
+
+    public FIXEngineVersion FIXEngineVersion
+    {
+        get
+        {
+            FIXEngineVersion val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(FIXEngineVersion val) { FIXEngineVersion = val; }
+    public FIXEngineVersion Get(FIXEngineVersion val) { GetField(val); return val; }
+    public bool IsSet(FIXEngineVersion val) { return IsSetFIXEngineVersion(); }
+    public bool IsSetFIXEngineVersion() { return IsSetField(Tags.FIXEngineVersion); }
+
+    public FIXEngineVendor FIXEngineVendor
+    {
+        get
+        {
+            FIXEngineVendor val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(FIXEngineVendor val) { FIXEngineVendor = val; }
+    public FIXEngineVendor Get(FIXEngineVendor val) { GetField(val); return val; }
+    public bool IsSet(FIXEngineVendor val) { return IsSetFIXEngineVendor(); }
+    public bool IsSetFIXEngineVendor() { return IsSetField(Tags.FIXEngineVendor); }
+
+    public ApplicationSystemName ApplicationSystemName
+    {
+        get
+        {
+            ApplicationSystemName val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(ApplicationSystemName val) { ApplicationSystemName = val; }
+    public ApplicationSystemName Get(ApplicationSystemName val) { GetField(val); return val; }
+    public bool IsSet(ApplicationSystemName val) { return IsSetApplicationSystemName(); }
+    public bool IsSetApplicationSystemName() { return IsSetField(Tags.ApplicationSystemName); }
+
+    public ApplicationSystemVersion ApplicationSystemVersion
+    {
+        get
+        {
+            ApplicationSystemVersion val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(ApplicationSystemVersion val) { ApplicationSystemVersion = val; }
+    public ApplicationSystemVersion Get(ApplicationSystemVersion val) { GetField(val); return val; }
+    public bool IsSet(ApplicationSystemVersion val) { return IsSetApplicationSystemVersion(); }
+    public bool IsSetApplicationSystemVersion() { return IsSetField(Tags.ApplicationSystemVersion); }
+
+    public ApplicationSystemVendor ApplicationSystemVendor
+    {
+        get
+        {
+            ApplicationSystemVendor val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(ApplicationSystemVendor val) { ApplicationSystemVendor = val; }
+    public ApplicationSystemVendor Get(ApplicationSystemVendor val) { GetField(val); return val; }
+    public bool IsSet(ApplicationSystemVendor val) { return IsSetApplicationSystemVendor(); }
+    public bool IsSetApplicationSystemVendor() { return IsSetField(Tags.ApplicationSystemVendor); }
+
     public class NoMsgTypesGroup : Group
     {
         public static int[] DefaultFieldOrder = [Tags.RefMsgType, Tags.MsgDirection, 0];

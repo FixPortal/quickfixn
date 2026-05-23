@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using QuickFix;
 using QuickFix.Fields;
 using System.Collections.Generic;
@@ -258,6 +258,7 @@ namespace TradeClient
         private QuickFix.FIX44.OrderCancelReplaceRequest QueryCancelReplaceRequest44()
         {
             QuickFix.FIX44.OrderCancelReplaceRequest ocrr = new QuickFix.FIX44.OrderCancelReplaceRequest(
+                QueryOrderID(), // FixPortal Enhancement
                 QueryOrigClOrdId(),
                 QueryClOrdId(),
                 QuerySymbol(),
@@ -295,6 +296,16 @@ namespace TradeClient
         #endregion
 
         #region field query private methods
+
+		#region CP Enhancement
+        private OrderID QueryOrderID()
+        {
+            Console.WriteLine();
+            Console.Write("OrderID? ");
+            return new OrderID(ReadCommand());
+        }
+		#endregion
+		
         private ClOrdID QueryClOrdId()
         {
             Console.WriteLine();

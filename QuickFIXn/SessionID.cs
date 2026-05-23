@@ -1,4 +1,6 @@
-﻿using System;
+using System;
+using QuickFix.Enhancements;
+using QuickFix.Logger;
 
 namespace QuickFix
 {
@@ -8,7 +10,7 @@ namespace QuickFix
     /// that it's possible to have multiple sessions to the same counterparty
     /// but using different FIX versions (and/or session qualifiers).
     /// </summary>
-    public class SessionID
+    public class SessionID // FixPortal Enhancement
     {
         public string BeginString { get; }
         public string SenderCompID { get; }
@@ -17,6 +19,12 @@ namespace QuickFix
         public string TargetCompID { get; }
         public string TargetSubID { get; }
         public string TargetLocationID { get; }
+        
+        public static SessionID GetNonSessionLog()
+        {
+         return new SessionID("Non", "Session", "Log");   
+        }
+        public static string GetNonSessionLogName => "Non:Session->Log";
 
         /// <summary>
         /// Session qualifier can be used to identify different sessions
@@ -35,6 +43,43 @@ namespace QuickFix
 
         private readonly string _id;
 
+		#region CP Enhancement
+		
+		private readonly string _host;
+		private readonly string _port;
+		private readonly string _sessionDescription;
+		
+        public DataDictionary.DataDictionary DataDictionary { get; set; }
+		public ILog DataLogger { get; set; }
+		public string SessionType { get; }
+        public string SessionBroker { get; }
+        public bool SessionSupportsUpload { get; set; }		
+        public string SessionDescription => string.IsNullOrEmpty(_sessionDescription) || _sessionDescription == string.Empty ? _id : _sessionDescription;
+		public System.Collections.Concurrent.ConcurrentDictionary<string, (int LogId, DateTime CaptureTime)> SessionLogIdentifiers { get; }
+        public FixVersion FixVersion { get; set; }
+		
+		public SessionID(string beginString, string senderCompID, string senderSubID, string senderLocationID, string targetCompID, string targetSubID, string targetLocationID, string sessionQualifier, string sessionType = "", string host = "", string port = "", bool sessionSupportsUpload = false, string sessionBroker = "", string sessionDescription = "")
+			: this(beginString,senderCompID,senderSubID,senderLocationID, targetCompID,targetSubID,targetLocationID, sessionQualifier)
+        {
+			SessionLogIdentifiers = new System.Collections.Concurrent.ConcurrentDictionary<string, (int, DateTime)>();
+
+			_sessionDescription = sessionDescription;
+			SessionBroker = sessionBroker; 
+			SessionType = sessionType;
+			_host = host;              
+			_port = port;
+			SessionSupportsUpload = sessionSupportsUpload;
+		}
+		
+		public System.Net.IPEndPoint EndPoint()
+		{
+			if (!string.IsNullOrEmpty(_host) && !string.IsNullOrEmpty(_port))
+				return new System.Net.IPEndPoint(System.Net.IPAddress.Parse(_host), Int32.Parse(_port));
+			return !string.IsNullOrEmpty(_port) ? new System.Net.IPEndPoint(System.Net.IPAddress.Any, Int32.Parse(_port)) : null;
+		}
+		
+		#endregion
+	
         public SessionID(string beginString, string senderCompId, string senderSubId, string senderLocationId, string targetCompId, string targetSubId, string targetLocationId, string? sessionQualifier = NOT_SET)
         {
             BeginString = beginString ?? throw new ArgumentNullException(nameof(beginString));

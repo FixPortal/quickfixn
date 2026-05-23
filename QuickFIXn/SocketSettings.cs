@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Security.Authentication;
 
 namespace QuickFix
@@ -141,7 +141,7 @@ namespace QuickFix
         /// <c>true</c> if [require client certificate]; otherwise, <c>false</c>.
         /// </value>
         public bool RequireClientCertificate { get; internal set; }
-
+        
         #endregion
 
         /// <summary>
@@ -193,7 +193,7 @@ namespace QuickFix
                 CACertificatePath = settingsDictionary.GetString(SessionSettings.SSL_CA_CERTIFICATE);
 
             if (settingsDictionary.Has(SessionSettings.SSL_CERTIFICATE))
-                CertificatePath = settingsDictionary.GetString(SessionSettings.SSL_CERTIFICATE);
+                CertificatePath = Enhancements.Utility.ParsePath(settingsDictionary.GetString(SessionSettings.SSL_CERTIFICATE)); // FixPortal Enhancement
 
             if (settingsDictionary.Has(SessionSettings.SSL_CERTIFICATE_PASSWORD))
                 CertificatePassword = settingsDictionary.GetString(SessionSettings.SSL_CERTIFICATE_PASSWORD);

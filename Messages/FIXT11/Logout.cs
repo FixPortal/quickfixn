@@ -14,6 +14,22 @@ public class Logout : Message
         Header.SetField(new MsgType("5"));
     }
 
+    public SessionStatus SessionStatus
+    {
+        get
+        {
+            SessionStatus val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(SessionStatus val) { SessionStatus = val; }
+    public SessionStatus Get(SessionStatus val) { GetField(val); return val; }
+    public bool IsSet(SessionStatus val) { return IsSetSessionStatus(); }
+    public bool IsSetSessionStatus() { return IsSetField(Tags.SessionStatus); }
+
     public Text Text
     {
         get

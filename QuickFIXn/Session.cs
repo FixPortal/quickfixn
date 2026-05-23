@@ -17,7 +17,7 @@ namespace QuickFix
     /// of 1 and ending when the session is reset. The Session could span many sequential
     /// connections (it cannot operate on multiple connections simultaneously).
     /// </summary>
-    public class Session : IDisposable
+    public class Session : IDisposable // FixPortal Enhancement
     {
         private static readonly Dictionary<SessionID, Session> Sessions = new();
         private static readonly HashSet<string> AdminMsgTypes = ["0", "A", "1", "2", "3", "4", "5"];
@@ -28,6 +28,7 @@ namespace QuickFix
         private readonly SessionState _state;
         private readonly IMessageFactory _msgFactory;
         private readonly bool _appDoesEarlyIntercept;
+        private readonly bool _appHandlesRejection; // FixPortal Enhancement
 
         private const LogLevel MessagesLogLevel = LogLevel.Information;
 
@@ -238,6 +239,7 @@ namespace QuickFix
             _schedule = sessionSchedule;
             _msgFactory = msgFactory;
             _appDoesEarlyIntercept = app is IApplicationExt;
+            _appHandlesRejection = app is IApplicationMessageRejection; // FixPortal Enhancement
 
             Application = app;
             SessionID = sessId;
@@ -249,7 +251,16 @@ namespace QuickFix
                 ? DataDictionaryProvider.GetApplicationDataDictionary(SenderDefaultApplVerID)
                 : SessionDataDictionary;
 
-            ILogger logger = loggerFactory.CreateSessionLogger(sessId);
+            #region CP Enhancement
+            SessionID.DataDictionary = ApplicationDataDictionary;
+            #endregion
+
+            ILogger logger = loggerFactory.CreateSessionLogger(sessId,
+                new Enhancements.DataDictionary.VersionInfo // FixPortal Enhancement
+                {
+                    Name = ApplicationDataDictionary.Name,
+                    Id = ApplicationDataDictionary.DictionaryID
+                });
 
             _state = new SessionState(isInitiator, logger, heartBtInt, storeFactory.Create(sessId));
 
@@ -612,7 +623,7 @@ namespace QuickFix
                     NextLogon(message);
                 else if (MsgType.LOGOUT.Equals(msgType))
                     NextLogout(message);
-                else if (!IsLoggedOn)
+                else if (!IsLoggedOn && msgType != "5") // FixPortal Enhancement
                     Disconnect($"Received msg type '{msgType}' when not logged on");
                 else if (MsgType.HEARTBEAT.Equals(msgType))
                     NextHeartbeat(message);
@@ -628,6 +639,8 @@ namespace QuickFix
                         return;
                     _state.IncrNextTargetMsgSeqNum();
                 }
+
+                LogExtended(message, msgType); // FixPortal Enhancement
 
             }
             catch (InvalidMessage e)
@@ -1048,7 +1061,15 @@ namespace QuickFix
             _state.TestRequestCounter = 0;
 
             if (Message.IsAdminMsgType(msgType))
+            {
                 Application.FromAdmin(msg, SessionID);
+
+                if (msgType == MsgType.REJECT) // FixPortal Enhancement
+                {
+                    var reason = msg.IsSetField(Tags.Text) ? msg.GetString(Tags.Text) : "Session-level reject received";
+                    NotifyMessageRejected(msg, reason);
+                }
+            }
             else
                 Application.FromApp(msg, SessionID);
 
@@ -1401,8 +1422,8 @@ namespace QuickFix
         {
             GenerateReject(msgBuilder.RejectableMessage(), reason, field);
         }
-
-        public void GenerateReject(Message message, FixValues.SessionRejectReason reason, int field = 0)
+       
+        public void GenerateReject(Message message, FixValues.SessionRejectReason reason, int field = 0, string value = "") //	CP Enhancement
         {
             string beginString = SessionID.BeginString;
 
@@ -1456,11 +1477,13 @@ namespace QuickFix
                 else
                     PopulateSessionRejectReason(reject, field, reason.Description, true);
 
+                Log.OnRejectionEvent(message.RawMessage, $"Message {msgSeqNum} Rejected: {reason.Description} (Field={field}, Value={value})"); // FixPortal Enhancement
                 Log.Log(LogLevel.Warning, "Message {MsgSeqNum} Rejected: {Reason} (Field={Field})", msgSeqNum, reason.Description, field);
             }
             else
             {
                 PopulateRejectReason(reject, reason.Description);
+                Log.OnRejectionEvent(message.RawMessage, $"Message {msgSeqNum} Rejected: {reason.Value}"); // FixPortal Enhancement
                 Log.Log(LogLevel.Error, "Message {MsgSeqNum} Rejected: {Reason}", msgSeqNum, reason.Value);
             }
 
@@ -1490,6 +1513,37 @@ namespace QuickFix
         {
             reject.SetField(new Fields.Text(text));
         }
+
+        #region CP Enhancement
+
+        private void NotifyMessageRejected(Message rejectMessage, string reason)
+        {
+            if (!_appHandlesRejection)
+                return;
+
+            try
+            {
+                Message? originalMessage = null;
+
+                if (rejectMessage.IsSetField(Tags.RefSeqNum))
+                {
+                    SeqNumType refSeqNum = (SeqNumType)rejectMessage.GetInt(Tags.RefSeqNum);
+                    var messages = new List<string>();
+                    _state.Get(refSeqNum, refSeqNum, messages);
+
+                    if (messages.Count > 0)
+                        originalMessage = new Message(messages[0]);
+                }
+
+                ((IApplicationMessageRejection)Application).OnMessageRejected(rejectMessage, originalMessage, SessionID, reason);
+            }
+            catch (Exception ex)
+            {
+                Log.Log(LogLevel.Error, ex, "Error in OnMessageRejected callback: {Message}", ex.Message);
+            }
+        }
+
+        #endregion
 
         protected void InitializeHeader(Message m, SeqNumType msgSeqNum = 0)
         {
@@ -1672,9 +1726,47 @@ namespace QuickFix
                 string messageString = message.ConstructString();
                 if (0UL == seqNum)
                     Persist(message, messageString);
-                return Send(messageString);
+
+				#region CP Enhancement
+                var result = Send(messageString);
+
+                LogExtended(message, msgType);
+
+                return result;
+				#endregion 
             }
         }
+
+        #region CP Enhancement
+		
+	   	public static bool SendToTarget(Message message, SessionID sessionID, bool removeDupeFlag = true, bool removeOriginalSendingTime = true)
+		{
+			message.SetSessionID(sessionID);
+			Session session = Session.LookupSession(sessionID);
+			if (null == session)
+				throw new SessionNotFound(sessionID);
+			return session.Send(message, removeDupeFlag, removeOriginalSendingTime);
+		}
+		public virtual bool Send(Message message, bool removeDupeFlag, bool removeOriginalSendingTime = true)
+		{
+			if (removeDupeFlag) message.Header.RemoveField(Fields.Tags.PossDupFlag);
+			if (removeOriginalSendingTime) message.Header.RemoveField(Fields.Tags.OrigSendingTime);
+			return SendRaw(message, 0);
+		}
+		
+        private void LogExtended(Message message, string msgType)
+        {
+            if (Message.IsAdminMsgType(msgType)) return;
+
+            if (SessionID.SessionLogIdentifiers != null && message.ToString() != null)
+                if (SessionID.SessionLogIdentifiers.ContainsKey(message.ToString()))
+                {
+                    Log.OnIncomingAndOutgoing((SessionID.SessionLogIdentifiers[message.ToString()].LogId, message.ToString(), message.ToXML(), message.ToJSON())); // FixPortal Enhancement
+                }
+               
+        }
+		
+        #endregion
 
         public void Dispose()
         {

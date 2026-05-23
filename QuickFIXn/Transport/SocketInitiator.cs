@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using Microsoft.Extensions.Logging;
+using QuickFix.Enhancements.DataDictionary;
 using QuickFix.Logger;
 using QuickFix.Store;
 
@@ -16,6 +17,7 @@ namespace QuickFix.Transport
     /// </summary>
     public class SocketInitiator : AbstractInitiator
     {
+
         private volatile bool _shutdownRequested = false;
         private DateTime _lastConnectTimeDt = DateTime.MinValue;
         private int _reconnectInterval = 30;
@@ -30,8 +32,9 @@ namespace QuickFix.Transport
             IMessageStoreFactory storeFactory,
             SessionSettings settings,
             ILogFactory? logFactoryNullable = null,
-            IMessageFactory? messageFactoryNullable = null)
-            : base(application, storeFactory, settings, logFactoryNullable, messageFactoryNullable)
+            IMessageFactory? messageFactoryNullable = null,
+            IQFCoreSetup? dictionaryLoader = null) // FixPortal Enhancement)
+            : base(application, storeFactory, settings, logFactoryNullable, messageFactoryNullable, dictionaryLoader)
         {
             _nonSessionLog = QfLoggerFactory.CreateNonSessionLogger<SocketInitiator>();
         }
@@ -131,6 +134,7 @@ namespace QuickFix.Transport
 
             string hostKey = SessionSettings.SOCKET_CONNECT_HOST + num;
             string portKey = SessionSettings.SOCKET_CONNECT_PORT + num;
+            
             if (!settings.Has(hostKey) || !settings.Has(portKey))
             {
                 num = 0;

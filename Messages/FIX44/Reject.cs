@@ -69,6 +69,54 @@ public class Reject : Message
     public bool IsSet(RefMsgType val) { return IsSetRefMsgType(); }
     public bool IsSetRefMsgType() { return IsSetField(Tags.RefMsgType); }
 
+    public RefApplVerID RefApplVerID
+    {
+        get
+        {
+            RefApplVerID val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(RefApplVerID val) { RefApplVerID = val; }
+    public RefApplVerID Get(RefApplVerID val) { GetField(val); return val; }
+    public bool IsSet(RefApplVerID val) { return IsSetRefApplVerID(); }
+    public bool IsSetRefApplVerID() { return IsSetField(Tags.RefApplVerID); }
+
+    public RefApplExtID RefApplExtID
+    {
+        get
+        {
+            RefApplExtID val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(RefApplExtID val) { RefApplExtID = val; }
+    public RefApplExtID Get(RefApplExtID val) { GetField(val); return val; }
+    public bool IsSet(RefApplExtID val) { return IsSetRefApplExtID(); }
+    public bool IsSetRefApplExtID() { return IsSetField(Tags.RefApplExtID); }
+
+    public RefCstmApplVerID RefCstmApplVerID
+    {
+        get
+        {
+            RefCstmApplVerID val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(RefCstmApplVerID val) { RefCstmApplVerID = val; }
+    public RefCstmApplVerID Get(RefCstmApplVerID val) { GetField(val); return val; }
+    public bool IsSet(RefCstmApplVerID val) { return IsSetRefCstmApplVerID(); }
+    public bool IsSetRefCstmApplVerID() { return IsSetField(Tags.RefCstmApplVerID); }
+
     public SessionRejectReason SessionRejectReason
     {
         get

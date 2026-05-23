@@ -39,6 +39,22 @@ public class BusinessMessageReject : Message
     public bool IsSet(RefSeqNum val) { return IsSetRefSeqNum(); }
     public bool IsSetRefSeqNum() { return IsSetField(Tags.RefSeqNum); }
 
+    public RefTagID RefTagID
+    {
+        get
+        {
+            RefTagID val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(RefTagID val) { RefTagID = val; }
+    public RefTagID Get(RefTagID val) { GetField(val); return val; }
+    public bool IsSet(RefTagID val) { return IsSetRefTagID(); }
+    public bool IsSetRefTagID() { return IsSetField(Tags.RefTagID); }
+
     public RefMsgType RefMsgType
     {
         get

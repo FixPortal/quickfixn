@@ -357,6 +357,54 @@ public class AllocationReportAck : Message
     public bool IsSet(AllocTransType val) { return IsSetAllocTransType(); }
     public bool IsSetAllocTransType() { return IsSetField(Tags.AllocTransType); }
 
+    public AllocType AllocType
+    {
+        get
+        {
+            AllocType val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(AllocType val) { AllocType = val; }
+    public AllocType Get(AllocType val) { GetField(val); return val; }
+    public bool IsSet(AllocType val) { return IsSetAllocType(); }
+    public bool IsSetAllocType() { return IsSetField(Tags.AllocType); }
+
+    public TradingSystemTicketNumber TradingSystemTicketNumber
+    {
+        get
+        {
+            TradingSystemTicketNumber val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(TradingSystemTicketNumber val) { TradingSystemTicketNumber = val; }
+    public TradingSystemTicketNumber Get(TradingSystemTicketNumber val) { GetField(val); return val; }
+    public bool IsSet(TradingSystemTicketNumber val) { return IsSetTradingSystemTicketNumber(); }
+    public bool IsSetTradingSystemTicketNumber() { return IsSetField(Tags.TradingSystemTicketNumber); }
+
+    public BLOTSequenceNumber BLOTSequenceNumber
+    {
+        get
+        {
+            BLOTSequenceNumber val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(BLOTSequenceNumber val) { BLOTSequenceNumber = val; }
+    public BLOTSequenceNumber Get(BLOTSequenceNumber val) { GetField(val); return val; }
+    public bool IsSet(BLOTSequenceNumber val) { return IsSetBLOTSequenceNumber(); }
+    public bool IsSetBLOTSequenceNumber() { return IsSetField(Tags.BLOTSequenceNumber); }
+
     public class NoPartyIDsGroup : Group
     {
         public static int[] DefaultFieldOrder = [Tags.PartyID, Tags.PartyIDSource, Tags.PartyRole, Tags.NoPartySubIDs, 0];

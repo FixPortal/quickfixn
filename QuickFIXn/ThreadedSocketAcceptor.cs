@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -13,7 +13,7 @@ namespace QuickFix
     /// Acceptor implementation - with threads
     /// Creates a ThreadedSocketReactor for every listening endpoint.
     /// </summary>
-    public class ThreadedSocketAcceptor : IAcceptor
+	public class ThreadedSocketAcceptor : IAcceptor
     {
         private const int TenSecondsInTicks = 10000;
 
@@ -25,6 +25,8 @@ namespace QuickFix
         private readonly object _sync = new();
         private readonly IQuickFixLoggerFactory _qfLoggerFactory;
         private readonly LogFactoryAdapter? _logFactoryAdapter;
+
+        #region Constructors
 
         /// <summary>
         /// Create a ThreadedSocketAcceptor (with a legacy ILogFactory)
@@ -39,13 +41,15 @@ namespace QuickFix
             IMessageStoreFactory storeFactory,
             SessionSettings settings,
             ILogFactory? logFactory = null,
-            IMessageFactory? messageFactory = null)
+            IMessageFactory? messageFactory = null,
+            QuickFix.Enhancements.DataDictionary.IQFCoreSetup? dictionaryLoader = null) // FixPortal Enhancement
             : this(
                 application,
                 storeFactory,
                 settings,
                 logFactory is null ? NullQuickFixLoggerFactory.Instance : new LogFactoryAdapter(logFactory),
-                messageFactory)
+                messageFactory,
+                dictionaryLoader)
         { }
 
         /// <summary>
@@ -56,12 +60,14 @@ namespace QuickFix
         /// <param name="settings"></param>
         /// <param name="loggerFactory">If null, a NullQuickFixLoggerFactory (which produces no logs) will be used.</param>
         /// <param name="messageFactory">If null, a DefaultMessageFactory will be created (using settings parameters)</param>
+        /// <param name="dictionaryLoader">CP Enhancement</param>
         public ThreadedSocketAcceptor(
             IApplication application,
             IMessageStoreFactory storeFactory,
             SessionSettings settings,
             ILoggerFactory? loggerFactory = null,
-            IMessageFactory? messageFactory = null)
+            IMessageFactory? messageFactory = null,
+            QuickFix.Enhancements.DataDictionary.IQFCoreSetup? dictionaryLoader = null) // FixPortal Enhancement)
             : this(
                 application,
                 storeFactory,
@@ -69,7 +75,8 @@ namespace QuickFix
                 loggerFactory is null
                     ? NullQuickFixLoggerFactory.Instance
                     : new MelQuickFixLoggerFactory(loggerFactory),
-                messageFactory)
+                messageFactory,
+                dictionaryLoader)
         { }
 
         private ThreadedSocketAcceptor(
@@ -77,7 +84,8 @@ namespace QuickFix
             IMessageStoreFactory storeFactory,
             SessionSettings settings,
             IQuickFixLoggerFactory qfLoggerFactory,
-            IMessageFactory? messageFactory = null)
+            IMessageFactory? messageFactory = null,
+            QuickFix.Enhancements.DataDictionary.IQFCoreSetup? dictionaryLoader = null) // FixPortal Enhancement)
         {
             if (qfLoggerFactory is LogFactoryAdapter lfa)
             {
@@ -89,7 +97,7 @@ namespace QuickFix
             }
             IMessageFactory mf = messageFactory ?? new DefaultMessageFactory();
             _settings = settings;
-            _sessionFactory = new SessionFactory(application, storeFactory, qfLoggerFactory, mf);
+            _sessionFactory = new SessionFactory(application, storeFactory, qfLoggerFactory, mf, dictionaryLoader);
             _qfLoggerFactory = qfLoggerFactory;
 
             try
@@ -106,6 +114,17 @@ namespace QuickFix
             }
         }
 
+        #endregion
+
+		#region CP Enhancement
+
+		public IEnumerable<IPEndPoint> EndPoints()
+		{
+			return _socketDescriptorForAddress.Values.Select(socketDescriptor => socketDescriptor.Address);
+		}
+		
+		#endregion
+	
         #region Private Methods
 
         private AcceptorSocketDescriptor GetAcceptorSocketDescriptor(SettingsDictionary dict)
@@ -405,6 +424,7 @@ namespace QuickFix
         }
 
 
+        // FixPortal Enhancement: free a listening port when its last session is removed
         /// <summary>
         /// Ad-hoc removal of an existing session
         /// </summary>
@@ -418,13 +438,32 @@ namespace QuickFix
                 if (session.IsLoggedOn && !terminateActiveSession)
                     return false;
                 session.Disconnect("Dynamic session removal");
+
+                // Track a descriptor that this removal empties, so its listening port can be freed.
+                AcceptorSocketDescriptor? emptiedDescriptor = null;
                 foreach (AcceptorSocketDescriptor descriptor in _socketDescriptorForAddress.Values)
+                {
                     if (descriptor.RemoveSession(sessionId))
+                    {
+                        if (descriptor.GetAcceptedSessions().Count == 0)
+                            emptiedDescriptor = descriptor;
                         break;
+                    }
+                }
+
                 _sessions.Remove(sessionId);
                 session.Dispose();
                 lock (_settings)
                     _settings.Remove(sessionId);
+
+                // The removed session was the last one on its port: shut the reactor down and drop
+                // the descriptor, so the port is released and a later AddSession on it builds a fresh
+                // descriptor + reactor. Done after the loop to avoid mutating the dictionary mid-iteration.
+                if (emptiedDescriptor is not null)
+                {
+                    emptiedDescriptor.SocketReactor.Shutdown();
+                    _socketDescriptorForAddress.Remove(emptiedDescriptor.Address);
+                }
             }
             return true;
         }

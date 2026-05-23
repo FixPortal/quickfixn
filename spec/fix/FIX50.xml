@@ -6769,7 +6769,7 @@
    <value enum='8' description='STATUS_FOR_ORDERS_FOR_A_PARTYID' />
   </field>
   <field number='586' name='OrigOrdModTime' type='UTCTIMESTAMP' />
-  <field number='587' name='LegSettlType' type='CHAR' />
+  <field number='587' name='LegSettlType' type='STRING' /> <!-- CP Enhancement -->
   <field number='588' name='LegSettlDate' type='LOCALMKTDATE' />
   <field number='589' name='DayBookingInst' type='CHAR'>
    <value enum='0' description='CAN_TRIGGER_BOOKING_WITHOUT_REFERENCE_TO_THE_ORDER_INITIATOR' />

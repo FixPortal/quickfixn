@@ -1,4 +1,4 @@
-﻿using QuickFix.ObjectPooling;
+using QuickFix.ObjectPooling;
 using System;
 using System.Text;
 

@@ -16,13 +16,21 @@ public class TradeCaptureReportAck : Message
 
     public TradeCaptureReportAck(
             TradeReportID aTradeReportID,
-            ExecType aExecType,
-            Symbol aSymbol
+            TradeReportTransType aTradeReportTransType,
+            TradeReportType aTradeReportType,
+            TrdRptStatus aTrdRptStatus,
+            SecondaryTradeReportID aSecondaryTradeReportID,
+            Symbol aSymbol,
+            TransactTime aTransactTime
         ) : this()
     {
         TradeReportID = aTradeReportID;
-        ExecType = aExecType;
+        TradeReportTransType = aTradeReportTransType;
+        TradeReportType = aTradeReportType;
+        TrdRptStatus = aTrdRptStatus;
+        SecondaryTradeReportID = aSecondaryTradeReportID;
         Symbol = aSymbol;
+        TransactTime = aTransactTime;
     }
 
     public TradeReportID TradeReportID
@@ -73,70 +81,6 @@ public class TradeCaptureReportAck : Message
     public bool IsSet(TradeReportType val) { return IsSetTradeReportType(); }
     public bool IsSetTradeReportType() { return IsSetField(Tags.TradeReportType); }
 
-    public TrdType TrdType
-    {
-        get
-        {
-            TrdType val = new();
-            GetField(val);
-            return val;
-        }
-        set  => SetField(value);
-    }
-
-    public void Set(TrdType val) { TrdType = val; }
-    public TrdType Get(TrdType val) { GetField(val); return val; }
-    public bool IsSet(TrdType val) { return IsSetTrdType(); }
-    public bool IsSetTrdType() { return IsSetField(Tags.TrdType); }
-
-    public TrdSubType TrdSubType
-    {
-        get
-        {
-            TrdSubType val = new();
-            GetField(val);
-            return val;
-        }
-        set  => SetField(value);
-    }
-
-    public void Set(TrdSubType val) { TrdSubType = val; }
-    public TrdSubType Get(TrdSubType val) { GetField(val); return val; }
-    public bool IsSet(TrdSubType val) { return IsSetTrdSubType(); }
-    public bool IsSetTrdSubType() { return IsSetField(Tags.TrdSubType); }
-
-    public SecondaryTrdType SecondaryTrdType
-    {
-        get
-        {
-            SecondaryTrdType val = new();
-            GetField(val);
-            return val;
-        }
-        set  => SetField(value);
-    }
-
-    public void Set(SecondaryTrdType val) { SecondaryTrdType = val; }
-    public SecondaryTrdType Get(SecondaryTrdType val) { GetField(val); return val; }
-    public bool IsSet(SecondaryTrdType val) { return IsSetSecondaryTrdType(); }
-    public bool IsSetSecondaryTrdType() { return IsSetField(Tags.SecondaryTrdType); }
-
-    public TransferReason TransferReason
-    {
-        get
-        {
-            TransferReason val = new();
-            GetField(val);
-            return val;
-        }
-        set  => SetField(value);
-    }
-
-    public void Set(TransferReason val) { TransferReason = val; }
-    public TransferReason Get(TransferReason val) { GetField(val); return val; }
-    public bool IsSet(TransferReason val) { return IsSetTransferReason(); }
-    public bool IsSetTransferReason() { return IsSetField(Tags.TransferReason); }
-
     public ExecType ExecType
     {
         get
@@ -152,38 +96,6 @@ public class TradeCaptureReportAck : Message
     public ExecType Get(ExecType val) { GetField(val); return val; }
     public bool IsSet(ExecType val) { return IsSetExecType(); }
     public bool IsSetExecType() { return IsSetField(Tags.ExecType); }
-
-    public TradeReportRefID TradeReportRefID
-    {
-        get
-        {
-            TradeReportRefID val = new();
-            GetField(val);
-            return val;
-        }
-        set  => SetField(value);
-    }
-
-    public void Set(TradeReportRefID val) { TradeReportRefID = val; }
-    public TradeReportRefID Get(TradeReportRefID val) { GetField(val); return val; }
-    public bool IsSet(TradeReportRefID val) { return IsSetTradeReportRefID(); }
-    public bool IsSetTradeReportRefID() { return IsSetField(Tags.TradeReportRefID); }
-
-    public SecondaryTradeReportRefID SecondaryTradeReportRefID
-    {
-        get
-        {
-            SecondaryTradeReportRefID val = new();
-            GetField(val);
-            return val;
-        }
-        set  => SetField(value);
-    }
-
-    public void Set(SecondaryTradeReportRefID val) { SecondaryTradeReportRefID = val; }
-    public SecondaryTradeReportRefID Get(SecondaryTradeReportRefID val) { GetField(val); return val; }
-    public bool IsSet(SecondaryTradeReportRefID val) { return IsSetSecondaryTradeReportRefID(); }
-    public bool IsSetSecondaryTradeReportRefID() { return IsSetField(Tags.SecondaryTradeReportRefID); }
 
     public TrdRptStatus TrdRptStatus
     {
@@ -217,6 +129,22 @@ public class TradeCaptureReportAck : Message
     public bool IsSet(TradeReportRejectReason val) { return IsSetTradeReportRejectReason(); }
     public bool IsSetTradeReportRejectReason() { return IsSetField(Tags.TradeReportRejectReason); }
 
+    public RejectText RejectText
+    {
+        get
+        {
+            RejectText val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(RejectText val) { RejectText = val; }
+    public RejectText Get(RejectText val) { GetField(val); return val; }
+    public bool IsSet(RejectText val) { return IsSetRejectText(); }
+    public bool IsSetRejectText() { return IsSetField(Tags.RejectText); }
+
     public SecondaryTradeReportID SecondaryTradeReportID
     {
         get
@@ -233,38 +161,6 @@ public class TradeCaptureReportAck : Message
     public bool IsSet(SecondaryTradeReportID val) { return IsSetSecondaryTradeReportID(); }
     public bool IsSetSecondaryTradeReportID() { return IsSetField(Tags.SecondaryTradeReportID); }
 
-    public SubscriptionRequestType SubscriptionRequestType
-    {
-        get
-        {
-            SubscriptionRequestType val = new();
-            GetField(val);
-            return val;
-        }
-        set  => SetField(value);
-    }
-
-    public void Set(SubscriptionRequestType val) { SubscriptionRequestType = val; }
-    public SubscriptionRequestType Get(SubscriptionRequestType val) { GetField(val); return val; }
-    public bool IsSet(SubscriptionRequestType val) { return IsSetSubscriptionRequestType(); }
-    public bool IsSetSubscriptionRequestType() { return IsSetField(Tags.SubscriptionRequestType); }
-
-    public TradeLinkID TradeLinkID
-    {
-        get
-        {
-            TradeLinkID val = new();
-            GetField(val);
-            return val;
-        }
-        set  => SetField(value);
-    }
-
-    public void Set(TradeLinkID val) { TradeLinkID = val; }
-    public TradeLinkID Get(TradeLinkID val) { GetField(val); return val; }
-    public bool IsSet(TradeLinkID val) { return IsSetTradeLinkID(); }
-    public bool IsSetTradeLinkID() { return IsSetField(Tags.TradeLinkID); }
-
     public TrdMatchID TrdMatchID
     {
         get
@@ -280,38 +176,6 @@ public class TradeCaptureReportAck : Message
     public TrdMatchID Get(TrdMatchID val) { GetField(val); return val; }
     public bool IsSet(TrdMatchID val) { return IsSetTrdMatchID(); }
     public bool IsSetTrdMatchID() { return IsSetField(Tags.TrdMatchID); }
-
-    public ExecID ExecID
-    {
-        get
-        {
-            ExecID val = new();
-            GetField(val);
-            return val;
-        }
-        set  => SetField(value);
-    }
-
-    public void Set(ExecID val) { ExecID = val; }
-    public ExecID Get(ExecID val) { GetField(val); return val; }
-    public bool IsSet(ExecID val) { return IsSetExecID(); }
-    public bool IsSetExecID() { return IsSetField(Tags.ExecID); }
-
-    public SecondaryExecID SecondaryExecID
-    {
-        get
-        {
-            SecondaryExecID val = new();
-            GetField(val);
-            return val;
-        }
-        set  => SetField(value);
-    }
-
-    public void Set(SecondaryExecID val) { SecondaryExecID = val; }
-    public SecondaryExecID Get(SecondaryExecID val) { GetField(val); return val; }
-    public bool IsSet(SecondaryExecID val) { return IsSetSecondaryExecID(); }
-    public bool IsSetSecondaryExecID() { return IsSetField(Tags.SecondaryExecID); }
 
     public Symbol Symbol
     {
@@ -473,6 +337,22 @@ public class TradeCaptureReportAck : Message
     public bool IsSet(MaturityMonthYear val) { return IsSetMaturityMonthYear(); }
     public bool IsSetMaturityMonthYear() { return IsSetField(Tags.MaturityMonthYear); }
 
+    public MaturityDay MaturityDay
+    {
+        get
+        {
+            MaturityDay val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(MaturityDay val) { MaturityDay = val; }
+    public MaturityDay Get(MaturityDay val) { GetField(val); return val; }
+    public bool IsSet(MaturityDay val) { return IsSetMaturityDay(); }
+    public bool IsSetMaturityDay() { return IsSetField(Tags.MaturityDay); }
+
     public MaturityDate MaturityDate
     {
         get
@@ -489,37 +369,277 @@ public class TradeCaptureReportAck : Message
     public bool IsSet(MaturityDate val) { return IsSetMaturityDate(); }
     public bool IsSetMaturityDate() { return IsSetField(Tags.MaturityDate); }
 
-    public PutOrCall PutOrCall
+    public RestructuringType RestructuringType
     {
         get
         {
-            PutOrCall val = new();
+            RestructuringType val = new();
             GetField(val);
             return val;
         }
         set  => SetField(value);
     }
 
-    public void Set(PutOrCall val) { PutOrCall = val; }
-    public PutOrCall Get(PutOrCall val) { GetField(val); return val; }
-    public bool IsSet(PutOrCall val) { return IsSetPutOrCall(); }
-    public bool IsSetPutOrCall() { return IsSetField(Tags.PutOrCall); }
+    public void Set(RestructuringType val) { RestructuringType = val; }
+    public RestructuringType Get(RestructuringType val) { GetField(val); return val; }
+    public bool IsSet(RestructuringType val) { return IsSetRestructuringType(); }
+    public bool IsSetRestructuringType() { return IsSetField(Tags.RestructuringType); }
 
-    public CouponPaymentDate CouponPaymentDate
+    public Seniority Seniority
     {
         get
         {
-            CouponPaymentDate val = new();
+            Seniority val = new();
             GetField(val);
             return val;
         }
         set  => SetField(value);
     }
 
-    public void Set(CouponPaymentDate val) { CouponPaymentDate = val; }
-    public CouponPaymentDate Get(CouponPaymentDate val) { GetField(val); return val; }
-    public bool IsSet(CouponPaymentDate val) { return IsSetCouponPaymentDate(); }
-    public bool IsSetCouponPaymentDate() { return IsSetField(Tags.CouponPaymentDate); }
+    public void Set(Seniority val) { Seniority = val; }
+    public Seniority Get(Seniority val) { GetField(val); return val; }
+    public bool IsSet(Seniority val) { return IsSetSeniority(); }
+    public bool IsSetSeniority() { return IsSetField(Tags.Seniority); }
+
+    public AttachmentPoint AttachmentPoint
+    {
+        get
+        {
+            AttachmentPoint val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(AttachmentPoint val) { AttachmentPoint = val; }
+    public AttachmentPoint Get(AttachmentPoint val) { GetField(val); return val; }
+    public bool IsSet(AttachmentPoint val) { return IsSetAttachmentPoint(); }
+    public bool IsSetAttachmentPoint() { return IsSetField(Tags.AttachmentPoint); }
+
+    public DetachmentPoint DetachmentPoint
+    {
+        get
+        {
+            DetachmentPoint val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(DetachmentPoint val) { DetachmentPoint = val; }
+    public DetachmentPoint Get(DetachmentPoint val) { GetField(val); return val; }
+    public bool IsSet(DetachmentPoint val) { return IsSetDetachmentPoint(); }
+    public bool IsSetDetachmentPoint() { return IsSetField(Tags.DetachmentPoint); }
+
+    public AssetClass AssetClass
+    {
+        get
+        {
+            AssetClass val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(AssetClass val) { AssetClass = val; }
+    public AssetClass Get(AssetClass val) { GetField(val); return val; }
+    public bool IsSet(AssetClass val) { return IsSetAssetClass(); }
+    public bool IsSetAssetClass() { return IsSetField(Tags.AssetClass); }
+
+    public AssetSubClass AssetSubClass
+    {
+        get
+        {
+            AssetSubClass val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(AssetSubClass val) { AssetSubClass = val; }
+    public AssetSubClass Get(AssetSubClass val) { GetField(val); return val; }
+    public bool IsSet(AssetSubClass val) { return IsSetAssetSubClass(); }
+    public bool IsSetAssetSubClass() { return IsSetField(Tags.AssetSubClass); }
+
+    public AssetType AssetType
+    {
+        get
+        {
+            AssetType val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(AssetType val) { AssetType = val; }
+    public AssetType Get(AssetType val) { GetField(val); return val; }
+    public bool IsSet(AssetType val) { return IsSetAssetType(); }
+    public bool IsSetAssetType() { return IsSetField(Tags.AssetType); }
+
+    public CouponType CouponType
+    {
+        get
+        {
+            CouponType val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(CouponType val) { CouponType = val; }
+    public CouponType Get(CouponType val) { GetField(val); return val; }
+    public bool IsSet(CouponType val) { return IsSetCouponType(); }
+    public bool IsSetCouponType() { return IsSetField(Tags.CouponType); }
+
+    public CouponFrequencyPeriod CouponFrequencyPeriod
+    {
+        get
+        {
+            CouponFrequencyPeriod val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(CouponFrequencyPeriod val) { CouponFrequencyPeriod = val; }
+    public CouponFrequencyPeriod Get(CouponFrequencyPeriod val) { GetField(val); return val; }
+    public bool IsSet(CouponFrequencyPeriod val) { return IsSetCouponFrequencyPeriod(); }
+    public bool IsSetCouponFrequencyPeriod() { return IsSetField(Tags.CouponFrequencyPeriod); }
+
+    public CouponFrequencyUnit CouponFrequencyUnit
+    {
+        get
+        {
+            CouponFrequencyUnit val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(CouponFrequencyUnit val) { CouponFrequencyUnit = val; }
+    public CouponFrequencyUnit Get(CouponFrequencyUnit val) { GetField(val); return val; }
+    public bool IsSet(CouponFrequencyUnit val) { return IsSetCouponFrequencyUnit(); }
+    public bool IsSetCouponFrequencyUnit() { return IsSetField(Tags.CouponFrequencyUnit); }
+
+    public CouponDayCount CouponDayCount
+    {
+        get
+        {
+            CouponDayCount val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(CouponDayCount val) { CouponDayCount = val; }
+    public CouponDayCount Get(CouponDayCount val) { GetField(val); return val; }
+    public bool IsSet(CouponDayCount val) { return IsSetCouponDayCount(); }
+    public bool IsSetCouponDayCount() { return IsSetField(Tags.CouponDayCount); }
+
+    public ConvertibleBondEquityID ConvertibleBondEquityID
+    {
+        get
+        {
+            ConvertibleBondEquityID val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(ConvertibleBondEquityID val) { ConvertibleBondEquityID = val; }
+    public ConvertibleBondEquityID Get(ConvertibleBondEquityID val) { GetField(val); return val; }
+    public bool IsSet(ConvertibleBondEquityID val) { return IsSetConvertibleBondEquityID(); }
+    public bool IsSetConvertibleBondEquityID() { return IsSetField(Tags.ConvertibleBondEquityID); }
+
+    public ConvertibleBondEquityIDSource ConvertibleBondEquityIDSource
+    {
+        get
+        {
+            ConvertibleBondEquityIDSource val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(ConvertibleBondEquityIDSource val) { ConvertibleBondEquityIDSource = val; }
+    public ConvertibleBondEquityIDSource Get(ConvertibleBondEquityIDSource val) { GetField(val); return val; }
+    public bool IsSet(ConvertibleBondEquityIDSource val) { return IsSetConvertibleBondEquityIDSource(); }
+    public bool IsSetConvertibleBondEquityIDSource() { return IsSetField(Tags.ConvertibleBondEquityIDSource); }
+
+    public IndexSeries IndexSeries
+    {
+        get
+        {
+            IndexSeries val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(IndexSeries val) { IndexSeries = val; }
+    public IndexSeries Get(IndexSeries val) { GetField(val); return val; }
+    public bool IsSet(IndexSeries val) { return IsSetIndexSeries(); }
+    public bool IsSetIndexSeries() { return IsSetField(Tags.IndexSeries); }
+
+    public IndexAnnexVersion IndexAnnexVersion
+    {
+        get
+        {
+            IndexAnnexVersion val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(IndexAnnexVersion val) { IndexAnnexVersion = val; }
+    public IndexAnnexVersion Get(IndexAnnexVersion val) { GetField(val); return val; }
+    public bool IsSet(IndexAnnexVersion val) { return IsSetIndexAnnexVersion(); }
+    public bool IsSetIndexAnnexVersion() { return IsSetField(Tags.IndexAnnexVersion); }
+
+    public IndexAnnexDate IndexAnnexDate
+    {
+        get
+        {
+            IndexAnnexDate val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(IndexAnnexDate val) { IndexAnnexDate = val; }
+    public IndexAnnexDate Get(IndexAnnexDate val) { GetField(val); return val; }
+    public bool IsSet(IndexAnnexDate val) { return IsSetIndexAnnexDate(); }
+    public bool IsSetIndexAnnexDate() { return IsSetField(Tags.IndexAnnexDate); }
+
+    public IndexAnnexSource IndexAnnexSource
+    {
+        get
+        {
+            IndexAnnexSource val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(IndexAnnexSource val) { IndexAnnexSource = val; }
+    public IndexAnnexSource Get(IndexAnnexSource val) { GetField(val); return val; }
+    public bool IsSet(IndexAnnexSource val) { return IsSetIndexAnnexSource(); }
+    public bool IsSetIndexAnnexSource() { return IsSetField(Tags.IndexAnnexSource); }
 
     public IssueDate IssueDate
     {
@@ -536,54 +656,6 @@ public class TradeCaptureReportAck : Message
     public IssueDate Get(IssueDate val) { GetField(val); return val; }
     public bool IsSet(IssueDate val) { return IsSetIssueDate(); }
     public bool IsSetIssueDate() { return IsSetField(Tags.IssueDate); }
-
-    public RepoCollateralSecurityType RepoCollateralSecurityType
-    {
-        get
-        {
-            RepoCollateralSecurityType val = new();
-            GetField(val);
-            return val;
-        }
-        set  => SetField(value);
-    }
-
-    public void Set(RepoCollateralSecurityType val) { RepoCollateralSecurityType = val; }
-    public RepoCollateralSecurityType Get(RepoCollateralSecurityType val) { GetField(val); return val; }
-    public bool IsSet(RepoCollateralSecurityType val) { return IsSetRepoCollateralSecurityType(); }
-    public bool IsSetRepoCollateralSecurityType() { return IsSetField(Tags.RepoCollateralSecurityType); }
-
-    public RepurchaseTerm RepurchaseTerm
-    {
-        get
-        {
-            RepurchaseTerm val = new();
-            GetField(val);
-            return val;
-        }
-        set  => SetField(value);
-    }
-
-    public void Set(RepurchaseTerm val) { RepurchaseTerm = val; }
-    public RepurchaseTerm Get(RepurchaseTerm val) { GetField(val); return val; }
-    public bool IsSet(RepurchaseTerm val) { return IsSetRepurchaseTerm(); }
-    public bool IsSetRepurchaseTerm() { return IsSetField(Tags.RepurchaseTerm); }
-
-    public RepurchaseRate RepurchaseRate
-    {
-        get
-        {
-            RepurchaseRate val = new();
-            GetField(val);
-            return val;
-        }
-        set  => SetField(value);
-    }
-
-    public void Set(RepurchaseRate val) { RepurchaseRate = val; }
-    public RepurchaseRate Get(RepurchaseRate val) { GetField(val); return val; }
-    public bool IsSet(RepurchaseRate val) { return IsSetRepurchaseRate(); }
-    public bool IsSetRepurchaseRate() { return IsSetField(Tags.RepurchaseRate); }
 
     public Factor Factor
     {
@@ -616,22 +688,6 @@ public class TradeCaptureReportAck : Message
     public CreditRating Get(CreditRating val) { GetField(val); return val; }
     public bool IsSet(CreditRating val) { return IsSetCreditRating(); }
     public bool IsSetCreditRating() { return IsSetField(Tags.CreditRating); }
-
-    public InstrRegistry InstrRegistry
-    {
-        get
-        {
-            InstrRegistry val = new();
-            GetField(val);
-            return val;
-        }
-        set  => SetField(value);
-    }
-
-    public void Set(InstrRegistry val) { InstrRegistry = val; }
-    public InstrRegistry Get(InstrRegistry val) { GetField(val); return val; }
-    public bool IsSet(InstrRegistry val) { return IsSetInstrRegistry(); }
-    public bool IsSetInstrRegistry() { return IsSetField(Tags.InstrRegistry); }
 
     public CountryOfIssue CountryOfIssue
     {
@@ -681,22 +737,6 @@ public class TradeCaptureReportAck : Message
     public bool IsSet(LocaleOfIssue val) { return IsSetLocaleOfIssue(); }
     public bool IsSetLocaleOfIssue() { return IsSetField(Tags.LocaleOfIssue); }
 
-    public RedemptionDate RedemptionDate
-    {
-        get
-        {
-            RedemptionDate val = new();
-            GetField(val);
-            return val;
-        }
-        set  => SetField(value);
-    }
-
-    public void Set(RedemptionDate val) { RedemptionDate = val; }
-    public RedemptionDate Get(RedemptionDate val) { GetField(val); return val; }
-    public bool IsSet(RedemptionDate val) { return IsSetRedemptionDate(); }
-    public bool IsSetRedemptionDate() { return IsSetField(Tags.RedemptionDate); }
-
     public StrikePrice StrikePrice
     {
         get
@@ -729,6 +769,38 @@ public class TradeCaptureReportAck : Message
     public bool IsSet(StrikeCurrency val) { return IsSetStrikeCurrency(); }
     public bool IsSetStrikeCurrency() { return IsSetField(Tags.StrikeCurrency); }
 
+    public StrikePriceBoundaryMethod StrikePriceBoundaryMethod
+    {
+        get
+        {
+            StrikePriceBoundaryMethod val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(StrikePriceBoundaryMethod val) { StrikePriceBoundaryMethod = val; }
+    public StrikePriceBoundaryMethod Get(StrikePriceBoundaryMethod val) { GetField(val); return val; }
+    public bool IsSet(StrikePriceBoundaryMethod val) { return IsSetStrikePriceBoundaryMethod(); }
+    public bool IsSetStrikePriceBoundaryMethod() { return IsSetField(Tags.StrikePriceBoundaryMethod); }
+
+    public UnderlyingPriceDeterminationMethod UnderlyingPriceDeterminationMethod
+    {
+        get
+        {
+            UnderlyingPriceDeterminationMethod val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(UnderlyingPriceDeterminationMethod val) { UnderlyingPriceDeterminationMethod = val; }
+    public UnderlyingPriceDeterminationMethod Get(UnderlyingPriceDeterminationMethod val) { GetField(val); return val; }
+    public bool IsSet(UnderlyingPriceDeterminationMethod val) { return IsSetUnderlyingPriceDeterminationMethod(); }
+    public bool IsSetUnderlyingPriceDeterminationMethod() { return IsSetField(Tags.UnderlyingPriceDeterminationMethod); }
+
     public OptAttribute OptAttribute
     {
         get
@@ -760,6 +832,54 @@ public class TradeCaptureReportAck : Message
     public ContractMultiplier Get(ContractMultiplier val) { GetField(val); return val; }
     public bool IsSet(ContractMultiplier val) { return IsSetContractMultiplier(); }
     public bool IsSetContractMultiplier() { return IsSetField(Tags.ContractMultiplier); }
+
+    public SettlMethod SettlMethod
+    {
+        get
+        {
+            SettlMethod val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(SettlMethod val) { SettlMethod = val; }
+    public SettlMethod Get(SettlMethod val) { GetField(val); return val; }
+    public bool IsSet(SettlMethod val) { return IsSetSettlMethod(); }
+    public bool IsSetSettlMethod() { return IsSetField(Tags.SettlMethod); }
+
+    public ExerciseStyle ExerciseStyle
+    {
+        get
+        {
+            ExerciseStyle val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(ExerciseStyle val) { ExerciseStyle = val; }
+    public ExerciseStyle Get(ExerciseStyle val) { GetField(val); return val; }
+    public bool IsSet(ExerciseStyle val) { return IsSetExerciseStyle(); }
+    public bool IsSetExerciseStyle() { return IsSetField(Tags.ExerciseStyle); }
+
+    public PutOrCall PutOrCall
+    {
+        get
+        {
+            PutOrCall val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(PutOrCall val) { PutOrCall = val; }
+    public PutOrCall Get(PutOrCall val) { GetField(val); return val; }
+    public bool IsSet(PutOrCall val) { return IsSetPutOrCall(); }
+    public bool IsSetPutOrCall() { return IsSetField(Tags.PutOrCall); }
 
     public CouponRate CouponRate
     {
@@ -809,38 +929,6 @@ public class TradeCaptureReportAck : Message
     public bool IsSet(Issuer val) { return IsSetIssuer(); }
     public bool IsSetIssuer() { return IsSetField(Tags.Issuer); }
 
-    public EncodedIssuerLen EncodedIssuerLen
-    {
-        get
-        {
-            EncodedIssuerLen val = new();
-            GetField(val);
-            return val;
-        }
-        set  => SetField(value);
-    }
-
-    public void Set(EncodedIssuerLen val) { EncodedIssuerLen = val; }
-    public EncodedIssuerLen Get(EncodedIssuerLen val) { GetField(val); return val; }
-    public bool IsSet(EncodedIssuerLen val) { return IsSetEncodedIssuerLen(); }
-    public bool IsSetEncodedIssuerLen() { return IsSetField(Tags.EncodedIssuerLen); }
-
-    public EncodedIssuer EncodedIssuer
-    {
-        get
-        {
-            EncodedIssuer val = new();
-            GetField(val);
-            return val;
-        }
-        set  => SetField(value);
-    }
-
-    public void Set(EncodedIssuer val) { EncodedIssuer = val; }
-    public EncodedIssuer Get(EncodedIssuer val) { GetField(val); return val; }
-    public bool IsSet(EncodedIssuer val) { return IsSetEncodedIssuer(); }
-    public bool IsSetEncodedIssuer() { return IsSetField(Tags.EncodedIssuer); }
-
     public SecurityDesc SecurityDesc
     {
         get
@@ -888,6 +976,54 @@ public class TradeCaptureReportAck : Message
     public EncodedSecurityDesc Get(EncodedSecurityDesc val) { GetField(val); return val; }
     public bool IsSet(EncodedSecurityDesc val) { return IsSetEncodedSecurityDesc(); }
     public bool IsSetEncodedSecurityDesc() { return IsSetField(Tags.EncodedSecurityDesc); }
+
+    public SecurityXMLLen SecurityXMLLen
+    {
+        get
+        {
+            SecurityXMLLen val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(SecurityXMLLen val) { SecurityXMLLen = val; }
+    public SecurityXMLLen Get(SecurityXMLLen val) { GetField(val); return val; }
+    public bool IsSet(SecurityXMLLen val) { return IsSetSecurityXMLLen(); }
+    public bool IsSetSecurityXMLLen() { return IsSetField(Tags.SecurityXMLLen); }
+
+    public SecurityXML SecurityXML
+    {
+        get
+        {
+            SecurityXML val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(SecurityXML val) { SecurityXML = val; }
+    public SecurityXML Get(SecurityXML val) { GetField(val); return val; }
+    public bool IsSet(SecurityXML val) { return IsSetSecurityXML(); }
+    public bool IsSetSecurityXML() { return IsSetField(Tags.SecurityXML); }
+
+    public SecurityXMLSchema SecurityXMLSchema
+    {
+        get
+        {
+            SecurityXMLSchema val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(SecurityXMLSchema val) { SecurityXMLSchema = val; }
+    public SecurityXMLSchema Get(SecurityXMLSchema val) { GetField(val); return val; }
+    public bool IsSet(SecurityXMLSchema val) { return IsSetSecurityXMLSchema(); }
+    public bool IsSetSecurityXMLSchema() { return IsSetField(Tags.SecurityXMLSchema); }
 
     public Pool Pool
     {
@@ -1001,6 +1137,326 @@ public class TradeCaptureReportAck : Message
     public bool IsSet(InterestAccrualDate val) { return IsSetInterestAccrualDate(); }
     public bool IsSetInterestAccrualDate() { return IsSetField(Tags.InterestAccrualDate); }
 
+    public NoInstrumentParties NoInstrumentParties
+    {
+        get
+        {
+            NoInstrumentParties val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(NoInstrumentParties val) { NoInstrumentParties = val; }
+    public NoInstrumentParties Get(NoInstrumentParties val) { GetField(val); return val; }
+    public bool IsSet(NoInstrumentParties val) { return IsSetNoInstrumentParties(); }
+    public bool IsSetNoInstrumentParties() { return IsSetField(Tags.NoInstrumentParties); }
+
+    public NoComplexEvents NoComplexEvents
+    {
+        get
+        {
+            NoComplexEvents val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(NoComplexEvents val) { NoComplexEvents = val; }
+    public NoComplexEvents Get(NoComplexEvents val) { GetField(val); return val; }
+    public bool IsSet(NoComplexEvents val) { return IsSetNoComplexEvents(); }
+    public bool IsSetNoComplexEvents() { return IsSetField(Tags.NoComplexEvents); }
+
+    public StrategyType StrategyType
+    {
+        get
+        {
+            StrategyType val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(StrategyType val) { StrategyType = val; }
+    public StrategyType Get(StrategyType val) { GetField(val); return val; }
+    public bool IsSet(StrategyType val) { return IsSetStrategyType(); }
+    public bool IsSetStrategyType() { return IsSetField(Tags.StrategyType); }
+
+    public BusinessDayConvention BusinessDayConvention
+    {
+        get
+        {
+            BusinessDayConvention val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(BusinessDayConvention val) { BusinessDayConvention = val; }
+    public BusinessDayConvention Get(BusinessDayConvention val) { GetField(val); return val; }
+    public bool IsSet(BusinessDayConvention val) { return IsSetBusinessDayConvention(); }
+    public bool IsSetBusinessDayConvention() { return IsSetField(Tags.BusinessDayConvention); }
+
+    public DateRollConvention DateRollConvention
+    {
+        get
+        {
+            DateRollConvention val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(DateRollConvention val) { DateRollConvention = val; }
+    public DateRollConvention Get(DateRollConvention val) { GetField(val); return val; }
+    public bool IsSet(DateRollConvention val) { return IsSetDateRollConvention(); }
+    public bool IsSetDateRollConvention() { return IsSetField(Tags.DateRollConvention); }
+
+    public OptionExerciseLatestTime OptionExerciseLatestTime
+    {
+        get
+        {
+            OptionExerciseLatestTime val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(OptionExerciseLatestTime val) { OptionExerciseLatestTime = val; }
+    public OptionExerciseLatestTime Get(OptionExerciseLatestTime val) { GetField(val); return val; }
+    public bool IsSet(OptionExerciseLatestTime val) { return IsSetOptionExerciseLatestTime(); }
+    public bool IsSetOptionExerciseLatestTime() { return IsSetField(Tags.OptionExerciseLatestTime); }
+
+    public OptionExerciseTimeBusinessCenter OptionExerciseTimeBusinessCenter
+    {
+        get
+        {
+            OptionExerciseTimeBusinessCenter val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(OptionExerciseTimeBusinessCenter val) { OptionExerciseTimeBusinessCenter = val; }
+    public OptionExerciseTimeBusinessCenter Get(OptionExerciseTimeBusinessCenter val) { GetField(val); return val; }
+    public bool IsSet(OptionExerciseTimeBusinessCenter val) { return IsSetOptionExerciseTimeBusinessCenter(); }
+    public bool IsSetOptionExerciseTimeBusinessCenter() { return IsSetField(Tags.OptionExerciseTimeBusinessCenter); }
+
+    public OptionExerciseDeliveryDate OptionExerciseDeliveryDate
+    {
+        get
+        {
+            OptionExerciseDeliveryDate val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(OptionExerciseDeliveryDate val) { OptionExerciseDeliveryDate = val; }
+    public OptionExerciseDeliveryDate Get(OptionExerciseDeliveryDate val) { GetField(val); return val; }
+    public bool IsSet(OptionExerciseDeliveryDate val) { return IsSetOptionExerciseDeliveryDate(); }
+    public bool IsSetOptionExerciseDeliveryDate() { return IsSetField(Tags.OptionExerciseDeliveryDate); }
+
+    public NoOptionExerciseExpirationDates NoOptionExerciseExpirationDates
+    {
+        get
+        {
+            NoOptionExerciseExpirationDates val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(NoOptionExerciseExpirationDates val) { NoOptionExerciseExpirationDates = val; }
+    public NoOptionExerciseExpirationDates Get(NoOptionExerciseExpirationDates val) { GetField(val); return val; }
+    public bool IsSet(NoOptionExerciseExpirationDates val) { return IsSetNoOptionExerciseExpirationDates(); }
+    public bool IsSetNoOptionExerciseExpirationDates() { return IsSetField(Tags.NoOptionExerciseExpirationDates); }
+
+    public NoStreams NoStreams
+    {
+        get
+        {
+            NoStreams val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(NoStreams val) { NoStreams = val; }
+    public NoStreams Get(NoStreams val) { GetField(val); return val; }
+    public bool IsSet(NoStreams val) { return IsSetNoStreams(); }
+    public bool IsSetNoStreams() { return IsSetField(Tags.NoStreams); }
+
+    public StrategyPosition StrategyPosition
+    {
+        get
+        {
+            StrategyPosition val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(StrategyPosition val) { StrategyPosition = val; }
+    public StrategyPosition Get(StrategyPosition val) { GetField(val); return val; }
+    public bool IsSet(StrategyPosition val) { return IsSetStrategyPosition(); }
+    public bool IsSetStrategyPosition() { return IsSetField(Tags.StrategyPosition); }
+
+    public PutOrCallCurrency PutOrCallCurrency
+    {
+        get
+        {
+            PutOrCallCurrency val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(PutOrCallCurrency val) { PutOrCallCurrency = val; }
+    public PutOrCallCurrency Get(PutOrCallCurrency val) { GetField(val); return val; }
+    public bool IsSet(PutOrCallCurrency val) { return IsSetPutOrCallCurrency(); }
+    public bool IsSetPutOrCallCurrency() { return IsSetField(Tags.PutOrCallCurrency); }
+
+    public CreditRatingSource CreditRatingSource
+    {
+        get
+        {
+            CreditRatingSource val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(CreditRatingSource val) { CreditRatingSource = val; }
+    public CreditRatingSource Get(CreditRatingSource val) { GetField(val); return val; }
+    public bool IsSet(CreditRatingSource val) { return IsSetCreditRatingSource(); }
+    public bool IsSetCreditRatingSource() { return IsSetField(Tags.CreditRatingSource); }
+
+    public CouponDateGenerationMethod CouponDateGenerationMethod
+    {
+        get
+        {
+            CouponDateGenerationMethod val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(CouponDateGenerationMethod val) { CouponDateGenerationMethod = val; }
+    public CouponDateGenerationMethod Get(CouponDateGenerationMethod val) { GetField(val); return val; }
+    public bool IsSet(CouponDateGenerationMethod val) { return IsSetCouponDateGenerationMethod(); }
+    public bool IsSetCouponDateGenerationMethod() { return IsSetField(Tags.CouponDateGenerationMethod); }
+
+    public CustomizedIndicator CustomizedIndicator
+    {
+        get
+        {
+            CustomizedIndicator val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(CustomizedIndicator val) { CustomizedIndicator = val; }
+    public CustomizedIndicator Get(CustomizedIndicator val) { GetField(val); return val; }
+    public bool IsSet(CustomizedIndicator val) { return IsSetCustomizedIndicator(); }
+    public bool IsSetCustomizedIndicator() { return IsSetField(Tags.CustomizedIndicator); }
+
+    public OptionSettlAmtDeterminationMethod OptionSettlAmtDeterminationMethod
+    {
+        get
+        {
+            OptionSettlAmtDeterminationMethod val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(OptionSettlAmtDeterminationMethod val) { OptionSettlAmtDeterminationMethod = val; }
+    public OptionSettlAmtDeterminationMethod Get(OptionSettlAmtDeterminationMethod val) { GetField(val); return val; }
+    public bool IsSet(OptionSettlAmtDeterminationMethod val) { return IsSetOptionSettlAmtDeterminationMethod(); }
+    public bool IsSetOptionSettlAmtDeterminationMethod() { return IsSetField(Tags.OptionSettlAmtDeterminationMethod); }
+
+    public ConvertibleBondEquityCurrency ConvertibleBondEquityCurrency
+    {
+        get
+        {
+            ConvertibleBondEquityCurrency val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(ConvertibleBondEquityCurrency val) { ConvertibleBondEquityCurrency = val; }
+    public ConvertibleBondEquityCurrency Get(ConvertibleBondEquityCurrency val) { GetField(val); return val; }
+    public bool IsSet(ConvertibleBondEquityCurrency val) { return IsSetConvertibleBondEquityCurrency(); }
+    public bool IsSetConvertibleBondEquityCurrency() { return IsSetField(Tags.ConvertibleBondEquityCurrency); }
+
+    public OfferingSize OfferingSize
+    {
+        get
+        {
+            OfferingSize val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(OfferingSize val) { OfferingSize = val; }
+    public OfferingSize Get(OfferingSize val) { GetField(val); return val; }
+    public bool IsSet(OfferingSize val) { return IsSetOfferingSize(); }
+    public bool IsSetOfferingSize() { return IsSetField(Tags.OfferingSize); }
+
+    public CountryOfJurisdiction CountryOfJurisdiction
+    {
+        get
+        {
+            CountryOfJurisdiction val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(CountryOfJurisdiction val) { CountryOfJurisdiction = val; }
+    public CountryOfJurisdiction Get(CountryOfJurisdiction val) { GetField(val); return val; }
+    public bool IsSet(CountryOfJurisdiction val) { return IsSetCountryOfJurisdiction(); }
+    public bool IsSetCountryOfJurisdiction() { return IsSetField(Tags.CountryOfJurisdiction); }
+
+    public CurrencyOfIssue CurrencyOfIssue
+    {
+        get
+        {
+            CurrencyOfIssue val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(CurrencyOfIssue val) { CurrencyOfIssue = val; }
+    public CurrencyOfIssue Get(CurrencyOfIssue val) { GetField(val); return val; }
+    public bool IsSet(CurrencyOfIssue val) { return IsSetCurrencyOfIssue(); }
+    public bool IsSetCurrencyOfIssue() { return IsSetField(Tags.CurrencyOfIssue); }
+
     public TransactTime TransactTime
     {
         get
@@ -1016,54 +1472,6 @@ public class TradeCaptureReportAck : Message
     public TransactTime Get(TransactTime val) { GetField(val); return val; }
     public bool IsSet(TransactTime val) { return IsSetTransactTime(); }
     public bool IsSetTransactTime() { return IsSetField(Tags.TransactTime); }
-
-    public NoTrdRegTimestamps NoTrdRegTimestamps
-    {
-        get
-        {
-            NoTrdRegTimestamps val = new();
-            GetField(val);
-            return val;
-        }
-        set  => SetField(value);
-    }
-
-    public void Set(NoTrdRegTimestamps val) { NoTrdRegTimestamps = val; }
-    public NoTrdRegTimestamps Get(NoTrdRegTimestamps val) { GetField(val); return val; }
-    public bool IsSet(NoTrdRegTimestamps val) { return IsSetNoTrdRegTimestamps(); }
-    public bool IsSetNoTrdRegTimestamps() { return IsSetField(Tags.NoTrdRegTimestamps); }
-
-    public ResponseTransportType ResponseTransportType
-    {
-        get
-        {
-            ResponseTransportType val = new();
-            GetField(val);
-            return val;
-        }
-        set  => SetField(value);
-    }
-
-    public void Set(ResponseTransportType val) { ResponseTransportType = val; }
-    public ResponseTransportType Get(ResponseTransportType val) { GetField(val); return val; }
-    public bool IsSet(ResponseTransportType val) { return IsSetResponseTransportType(); }
-    public bool IsSetResponseTransportType() { return IsSetField(Tags.ResponseTransportType); }
-
-    public ResponseDestination ResponseDestination
-    {
-        get
-        {
-            ResponseDestination val = new();
-            GetField(val);
-            return val;
-        }
-        set  => SetField(value);
-    }
-
-    public void Set(ResponseDestination val) { ResponseDestination = val; }
-    public ResponseDestination Get(ResponseDestination val) { GetField(val); return val; }
-    public bool IsSet(ResponseDestination val) { return IsSetResponseDestination(); }
-    public bool IsSetResponseDestination() { return IsSetField(Tags.ResponseDestination); }
 
     public Text Text
     {
@@ -1081,213 +1489,69 @@ public class TradeCaptureReportAck : Message
     public bool IsSet(Text val) { return IsSetText(); }
     public bool IsSetText() { return IsSetField(Tags.Text); }
 
-    public EncodedTextLen EncodedTextLen
+    public LastQtyVariance LastQtyVariance
     {
         get
         {
-            EncodedTextLen val = new();
+            LastQtyVariance val = new();
             GetField(val);
             return val;
         }
         set  => SetField(value);
     }
 
-    public void Set(EncodedTextLen val) { EncodedTextLen = val; }
-    public EncodedTextLen Get(EncodedTextLen val) { GetField(val); return val; }
-    public bool IsSet(EncodedTextLen val) { return IsSetEncodedTextLen(); }
-    public bool IsSetEncodedTextLen() { return IsSetField(Tags.EncodedTextLen); }
+    public void Set(LastQtyVariance val) { LastQtyVariance = val; }
+    public LastQtyVariance Get(LastQtyVariance val) { GetField(val); return val; }
+    public bool IsSet(LastQtyVariance val) { return IsSetLastQtyVariance(); }
+    public bool IsSetLastQtyVariance() { return IsSetField(Tags.LastQtyVariance); }
 
-    public EncodedText EncodedText
+    public NoRegulatoryTradeIDs NoRegulatoryTradeIDs
     {
         get
         {
-            EncodedText val = new();
+            NoRegulatoryTradeIDs val = new();
             GetField(val);
             return val;
         }
         set  => SetField(value);
     }
 
-    public void Set(EncodedText val) { EncodedText = val; }
-    public EncodedText Get(EncodedText val) { GetField(val); return val; }
-    public bool IsSet(EncodedText val) { return IsSetEncodedText(); }
-    public bool IsSetEncodedText() { return IsSetField(Tags.EncodedText); }
+    public void Set(NoRegulatoryTradeIDs val) { NoRegulatoryTradeIDs = val; }
+    public NoRegulatoryTradeIDs Get(NoRegulatoryTradeIDs val) { GetField(val); return val; }
+    public bool IsSet(NoRegulatoryTradeIDs val) { return IsSetNoRegulatoryTradeIDs(); }
+    public bool IsSetNoRegulatoryTradeIDs() { return IsSetField(Tags.NoRegulatoryTradeIDs); }
 
-    public NoLegs NoLegs
+    public SalesBook SalesBook
     {
         get
         {
-            NoLegs val = new();
+            SalesBook val = new();
             GetField(val);
             return val;
         }
         set  => SetField(value);
     }
 
-    public void Set(NoLegs val) { NoLegs = val; }
-    public NoLegs Get(NoLegs val) { GetField(val); return val; }
-    public bool IsSet(NoLegs val) { return IsSetNoLegs(); }
-    public bool IsSetNoLegs() { return IsSetField(Tags.NoLegs); }
+    public void Set(SalesBook val) { SalesBook = val; }
+    public SalesBook Get(SalesBook val) { GetField(val); return val; }
+    public bool IsSet(SalesBook val) { return IsSetSalesBook(); }
+    public bool IsSetSalesBook() { return IsSetField(Tags.SalesBook); }
 
-    public ClearingFeeIndicator ClearingFeeIndicator
+    public AggregateFillsOperationType AggregateFillsOperationType
     {
         get
         {
-            ClearingFeeIndicator val = new();
+            AggregateFillsOperationType val = new();
             GetField(val);
             return val;
         }
         set  => SetField(value);
     }
 
-    public void Set(ClearingFeeIndicator val) { ClearingFeeIndicator = val; }
-    public ClearingFeeIndicator Get(ClearingFeeIndicator val) { GetField(val); return val; }
-    public bool IsSet(ClearingFeeIndicator val) { return IsSetClearingFeeIndicator(); }
-    public bool IsSetClearingFeeIndicator() { return IsSetField(Tags.ClearingFeeIndicator); }
-
-    public OrderCapacity OrderCapacity
-    {
-        get
-        {
-            OrderCapacity val = new();
-            GetField(val);
-            return val;
-        }
-        set  => SetField(value);
-    }
-
-    public void Set(OrderCapacity val) { OrderCapacity = val; }
-    public OrderCapacity Get(OrderCapacity val) { GetField(val); return val; }
-    public bool IsSet(OrderCapacity val) { return IsSetOrderCapacity(); }
-    public bool IsSetOrderCapacity() { return IsSetField(Tags.OrderCapacity); }
-
-    public OrderRestrictions OrderRestrictions
-    {
-        get
-        {
-            OrderRestrictions val = new();
-            GetField(val);
-            return val;
-        }
-        set  => SetField(value);
-    }
-
-    public void Set(OrderRestrictions val) { OrderRestrictions = val; }
-    public OrderRestrictions Get(OrderRestrictions val) { GetField(val); return val; }
-    public bool IsSet(OrderRestrictions val) { return IsSetOrderRestrictions(); }
-    public bool IsSetOrderRestrictions() { return IsSetField(Tags.OrderRestrictions); }
-
-    public CustOrderCapacity CustOrderCapacity
-    {
-        get
-        {
-            CustOrderCapacity val = new();
-            GetField(val);
-            return val;
-        }
-        set  => SetField(value);
-    }
-
-    public void Set(CustOrderCapacity val) { CustOrderCapacity = val; }
-    public CustOrderCapacity Get(CustOrderCapacity val) { GetField(val); return val; }
-    public bool IsSet(CustOrderCapacity val) { return IsSetCustOrderCapacity(); }
-    public bool IsSetCustOrderCapacity() { return IsSetField(Tags.CustOrderCapacity); }
-
-    public Account Account
-    {
-        get
-        {
-            Account val = new();
-            GetField(val);
-            return val;
-        }
-        set  => SetField(value);
-    }
-
-    public void Set(Account val) { Account = val; }
-    public Account Get(Account val) { GetField(val); return val; }
-    public bool IsSet(Account val) { return IsSetAccount(); }
-    public bool IsSetAccount() { return IsSetField(Tags.Account); }
-
-    public AcctIDSource AcctIDSource
-    {
-        get
-        {
-            AcctIDSource val = new();
-            GetField(val);
-            return val;
-        }
-        set  => SetField(value);
-    }
-
-    public void Set(AcctIDSource val) { AcctIDSource = val; }
-    public AcctIDSource Get(AcctIDSource val) { GetField(val); return val; }
-    public bool IsSet(AcctIDSource val) { return IsSetAcctIDSource(); }
-    public bool IsSetAcctIDSource() { return IsSetField(Tags.AcctIDSource); }
-
-    public AccountType AccountType
-    {
-        get
-        {
-            AccountType val = new();
-            GetField(val);
-            return val;
-        }
-        set  => SetField(value);
-    }
-
-    public void Set(AccountType val) { AccountType = val; }
-    public AccountType Get(AccountType val) { GetField(val); return val; }
-    public bool IsSet(AccountType val) { return IsSetAccountType(); }
-    public bool IsSetAccountType() { return IsSetField(Tags.AccountType); }
-
-    public PositionEffect PositionEffect
-    {
-        get
-        {
-            PositionEffect val = new();
-            GetField(val);
-            return val;
-        }
-        set  => SetField(value);
-    }
-
-    public void Set(PositionEffect val) { PositionEffect = val; }
-    public PositionEffect Get(PositionEffect val) { GetField(val); return val; }
-    public bool IsSet(PositionEffect val) { return IsSetPositionEffect(); }
-    public bool IsSetPositionEffect() { return IsSetField(Tags.PositionEffect); }
-
-    public PreallocMethod PreallocMethod
-    {
-        get
-        {
-            PreallocMethod val = new();
-            GetField(val);
-            return val;
-        }
-        set  => SetField(value);
-    }
-
-    public void Set(PreallocMethod val) { PreallocMethod = val; }
-    public PreallocMethod Get(PreallocMethod val) { GetField(val); return val; }
-    public bool IsSet(PreallocMethod val) { return IsSetPreallocMethod(); }
-    public bool IsSetPreallocMethod() { return IsSetField(Tags.PreallocMethod); }
-
-    public NoAllocs NoAllocs
-    {
-        get
-        {
-            NoAllocs val = new();
-            GetField(val);
-            return val;
-        }
-        set  => SetField(value);
-    }
-
-    public void Set(NoAllocs val) { NoAllocs = val; }
-    public NoAllocs Get(NoAllocs val) { GetField(val); return val; }
-    public bool IsSet(NoAllocs val) { return IsSetNoAllocs(); }
-    public bool IsSetNoAllocs() { return IsSetField(Tags.NoAllocs); }
+    public void Set(AggregateFillsOperationType val) { AggregateFillsOperationType = val; }
+    public AggregateFillsOperationType Get(AggregateFillsOperationType val) { GetField(val); return val; }
+    public bool IsSet(AggregateFillsOperationType val) { return IsSetAggregateFillsOperationType(); }
+    public bool IsSetAggregateFillsOperationType() { return IsSetField(Tags.AggregateFillsOperationType); }
 
     public class NoSecurityAltIDGroup : Group
     {
@@ -1343,10 +1607,10 @@ public class TradeCaptureReportAck : Message
 
     public class NoEventsGroup : Group
     {
-        public static int[] DefaultFieldOrder = [Tags.EventType, Tags.EventDate, Tags.EventPx, Tags.EventText, 0];
+        public static int[] DefaultFieldOrder = [Tags.EventType, Tags.EventDate, Tags.EventTimeUnit, Tags.EventTimePeriod, 0];
 
         [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
-        public static int[] fieldOrder = {Tags.EventType, Tags.EventDate, Tags.EventPx, Tags.EventText, 0};
+        public static int[] fieldOrder = {Tags.EventType, Tags.EventDate, Tags.EventTimeUnit, Tags.EventTimePeriod, 0};
 
         public NoEventsGroup()
           : base(Tags.NoEvents, Tags.EventType, DefaultFieldOrder)
@@ -1392,1464 +1656,720 @@ public class TradeCaptureReportAck : Message
         public bool IsSet(EventDate val) { return IsSetEventDate(); }
         public bool IsSetEventDate() { return IsSetField(Tags.EventDate); }
 
-        public EventPx EventPx
+        public EventTimeUnit EventTimeUnit
         {
             get
             {
-                EventPx val = new();
+                EventTimeUnit val = new();
                 GetField(val);
                 return val;
             }
             set  => SetField(value);
         }
 
-        public void Set(EventPx val) { EventPx = val; }
-        public EventPx Get(EventPx val) { GetField(val); return val; }
-        public bool IsSet(EventPx val) { return IsSetEventPx(); }
-        public bool IsSetEventPx() { return IsSetField(Tags.EventPx); }
+        public void Set(EventTimeUnit val) { EventTimeUnit = val; }
+        public EventTimeUnit Get(EventTimeUnit val) { GetField(val); return val; }
+        public bool IsSet(EventTimeUnit val) { return IsSetEventTimeUnit(); }
+        public bool IsSetEventTimeUnit() { return IsSetField(Tags.EventTimeUnit); }
 
-        public EventText EventText
+        public EventTimePeriod EventTimePeriod
         {
             get
             {
-                EventText val = new();
+                EventTimePeriod val = new();
                 GetField(val);
                 return val;
             }
             set  => SetField(value);
         }
 
-        public void Set(EventText val) { EventText = val; }
-        public EventText Get(EventText val) { GetField(val); return val; }
-        public bool IsSet(EventText val) { return IsSetEventText(); }
-        public bool IsSetEventText() { return IsSetField(Tags.EventText); }
+        public void Set(EventTimePeriod val) { EventTimePeriod = val; }
+        public EventTimePeriod Get(EventTimePeriod val) { GetField(val); return val; }
+        public bool IsSet(EventTimePeriod val) { return IsSetEventTimePeriod(); }
+        public bool IsSetEventTimePeriod() { return IsSetField(Tags.EventTimePeriod); }
     }
 
-    public class NoTrdRegTimestampsGroup : Group
+    public class NoInstrumentPartiesGroup : Group
     {
-        public static int[] DefaultFieldOrder = [Tags.TrdRegTimestamp, Tags.TrdRegTimestampType, Tags.TrdRegTimestampOrigin, 0];
+        public static int[] DefaultFieldOrder = [Tags.InstrumentPartyID, Tags.InstrumentPartyIDSource, Tags.InstrumentPartyRole, Tags.NoInstrumentPartySubIDs, 0];
 
         [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
-        public static int[] fieldOrder = {Tags.TrdRegTimestamp, Tags.TrdRegTimestampType, Tags.TrdRegTimestampOrigin, 0};
+        public static int[] fieldOrder = {Tags.InstrumentPartyID, Tags.InstrumentPartyIDSource, Tags.InstrumentPartyRole, Tags.NoInstrumentPartySubIDs, 0};
 
-        public NoTrdRegTimestampsGroup()
-          : base(Tags.NoTrdRegTimestamps, Tags.TrdRegTimestamp, DefaultFieldOrder)
+        public NoInstrumentPartiesGroup()
+          : base(Tags.NoInstrumentParties, Tags.InstrumentPartyID, DefaultFieldOrder)
         {
         }
 
         public override Group Clone()
         {
-            var clone = new NoTrdRegTimestampsGroup();
+            var clone = new NoInstrumentPartiesGroup();
             clone.CopyStateFrom(this);
             return clone;
         }
 
-        public TrdRegTimestamp TrdRegTimestamp
+        public InstrumentPartyID InstrumentPartyID
         {
             get
             {
-                TrdRegTimestamp val = new();
+                InstrumentPartyID val = new();
                 GetField(val);
                 return val;
             }
             set  => SetField(value);
         }
 
-        public void Set(TrdRegTimestamp val) { TrdRegTimestamp = val; }
-        public TrdRegTimestamp Get(TrdRegTimestamp val) { GetField(val); return val; }
-        public bool IsSet(TrdRegTimestamp val) { return IsSetTrdRegTimestamp(); }
-        public bool IsSetTrdRegTimestamp() { return IsSetField(Tags.TrdRegTimestamp); }
+        public void Set(InstrumentPartyID val) { InstrumentPartyID = val; }
+        public InstrumentPartyID Get(InstrumentPartyID val) { GetField(val); return val; }
+        public bool IsSet(InstrumentPartyID val) { return IsSetInstrumentPartyID(); }
+        public bool IsSetInstrumentPartyID() { return IsSetField(Tags.InstrumentPartyID); }
 
-        public TrdRegTimestampType TrdRegTimestampType
+        public InstrumentPartyIDSource InstrumentPartyIDSource
         {
             get
             {
-                TrdRegTimestampType val = new();
+                InstrumentPartyIDSource val = new();
                 GetField(val);
                 return val;
             }
             set  => SetField(value);
         }
 
-        public void Set(TrdRegTimestampType val) { TrdRegTimestampType = val; }
-        public TrdRegTimestampType Get(TrdRegTimestampType val) { GetField(val); return val; }
-        public bool IsSet(TrdRegTimestampType val) { return IsSetTrdRegTimestampType(); }
-        public bool IsSetTrdRegTimestampType() { return IsSetField(Tags.TrdRegTimestampType); }
+        public void Set(InstrumentPartyIDSource val) { InstrumentPartyIDSource = val; }
+        public InstrumentPartyIDSource Get(InstrumentPartyIDSource val) { GetField(val); return val; }
+        public bool IsSet(InstrumentPartyIDSource val) { return IsSetInstrumentPartyIDSource(); }
+        public bool IsSetInstrumentPartyIDSource() { return IsSetField(Tags.InstrumentPartyIDSource); }
 
-        public TrdRegTimestampOrigin TrdRegTimestampOrigin
+        public InstrumentPartyRole InstrumentPartyRole
         {
             get
             {
-                TrdRegTimestampOrigin val = new();
+                InstrumentPartyRole val = new();
                 GetField(val);
                 return val;
             }
             set  => SetField(value);
         }
 
-        public void Set(TrdRegTimestampOrigin val) { TrdRegTimestampOrigin = val; }
-        public TrdRegTimestampOrigin Get(TrdRegTimestampOrigin val) { GetField(val); return val; }
-        public bool IsSet(TrdRegTimestampOrigin val) { return IsSetTrdRegTimestampOrigin(); }
-        public bool IsSetTrdRegTimestampOrigin() { return IsSetField(Tags.TrdRegTimestampOrigin); }
+        public void Set(InstrumentPartyRole val) { InstrumentPartyRole = val; }
+        public InstrumentPartyRole Get(InstrumentPartyRole val) { GetField(val); return val; }
+        public bool IsSet(InstrumentPartyRole val) { return IsSetInstrumentPartyRole(); }
+        public bool IsSetInstrumentPartyRole() { return IsSetField(Tags.InstrumentPartyRole); }
+
+        public NoInstrumentPartySubIDs NoInstrumentPartySubIDs
+        {
+            get
+            {
+                NoInstrumentPartySubIDs val = new();
+                GetField(val);
+                return val;
+            }
+            set  => SetField(value);
+        }
+
+        public void Set(NoInstrumentPartySubIDs val) { NoInstrumentPartySubIDs = val; }
+        public NoInstrumentPartySubIDs Get(NoInstrumentPartySubIDs val) { GetField(val); return val; }
+        public bool IsSet(NoInstrumentPartySubIDs val) { return IsSetNoInstrumentPartySubIDs(); }
+        public bool IsSetNoInstrumentPartySubIDs() { return IsSetField(Tags.NoInstrumentPartySubIDs); }
+
+        public class NoInstrumentPartySubIDsGroup : Group
+        {
+            public static int[] DefaultFieldOrder = [Tags.InstrumentPartySubID, Tags.InstrumentPartySubIDType, 0];
+
+            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+            public static int[] fieldOrder = {Tags.InstrumentPartySubID, Tags.InstrumentPartySubIDType, 0};
+
+            public NoInstrumentPartySubIDsGroup()
+              : base(Tags.NoInstrumentPartySubIDs, Tags.InstrumentPartySubID, DefaultFieldOrder)
+            {
+            }
+
+            public override Group Clone()
+            {
+                var clone = new NoInstrumentPartySubIDsGroup();
+                clone.CopyStateFrom(this);
+                return clone;
+            }
+
+            public InstrumentPartySubID InstrumentPartySubID
+            {
+                get
+                {
+                    InstrumentPartySubID val = new();
+                    GetField(val);
+                    return val;
+                }
+                set  => SetField(value);
+            }
+
+            public void Set(InstrumentPartySubID val) { InstrumentPartySubID = val; }
+            public InstrumentPartySubID Get(InstrumentPartySubID val) { GetField(val); return val; }
+            public bool IsSet(InstrumentPartySubID val) { return IsSetInstrumentPartySubID(); }
+            public bool IsSetInstrumentPartySubID() { return IsSetField(Tags.InstrumentPartySubID); }
+
+            public InstrumentPartySubIDType InstrumentPartySubIDType
+            {
+                get
+                {
+                    InstrumentPartySubIDType val = new();
+                    GetField(val);
+                    return val;
+                }
+                set  => SetField(value);
+            }
+
+            public void Set(InstrumentPartySubIDType val) { InstrumentPartySubIDType = val; }
+            public InstrumentPartySubIDType Get(InstrumentPartySubIDType val) { GetField(val); return val; }
+            public bool IsSet(InstrumentPartySubIDType val) { return IsSetInstrumentPartySubIDType(); }
+            public bool IsSetInstrumentPartySubIDType() { return IsSetField(Tags.InstrumentPartySubIDType); }
+        }
     }
 
-    public class NoLegsGroup : Group
+    public class NoComplexEventsGroup : Group
     {
-        public static int[] DefaultFieldOrder = [Tags.LegSymbol, Tags.LegSymbolSfx, Tags.LegSecurityID, Tags.LegSecurityIDSource, Tags.NoLegSecurityAltID, Tags.LegProduct, Tags.LegCFICode, Tags.LegSecurityType, Tags.LegSecuritySubType, Tags.LegMaturityMonthYear, Tags.LegMaturityDate, Tags.LegCouponPaymentDate, Tags.LegIssueDate, Tags.LegRepoCollateralSecurityType, Tags.LegRepurchaseTerm, Tags.LegRepurchaseRate, Tags.LegFactor, Tags.LegCreditRating, Tags.LegInstrRegistry, Tags.LegCountryOfIssue, Tags.LegStateOrProvinceOfIssue, Tags.LegLocaleOfIssue, Tags.LegRedemptionDate, Tags.LegStrikePrice, Tags.LegStrikeCurrency, Tags.LegOptAttribute, Tags.LegContractMultiplier, Tags.LegCouponRate, Tags.LegSecurityExchange, Tags.LegIssuer, Tags.EncodedLegIssuerLen, Tags.EncodedLegIssuer, Tags.LegSecurityDesc, Tags.EncodedLegSecurityDescLen, Tags.EncodedLegSecurityDesc, Tags.LegRatioQty, Tags.LegSide, Tags.LegCurrency, Tags.LegPool, Tags.LegDatedDate, Tags.LegContractSettlMonth, Tags.LegInterestAccrualDate, Tags.LegQty, Tags.LegSwapType, Tags.NoLegStipulations, Tags.LegPositionEffect, Tags.LegCoveredOrUncovered, Tags.NoNestedPartyIDs, Tags.LegRefID, Tags.LegPrice, Tags.LegSettlType, Tags.LegSettlDate, Tags.LegLastPx, 0];
+        public static int[] DefaultFieldOrder = [Tags.ComplexEventType, Tags.ComplexEventPrice, Tags.ComplexEventPriceTimeType, Tags.ComplexEventCondition, Tags.NoComplexEventDates, Tags.ComplexRebate, 0];
 
         [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
-        public static int[] fieldOrder = {Tags.LegSymbol, Tags.LegSymbolSfx, Tags.LegSecurityID, Tags.LegSecurityIDSource, Tags.NoLegSecurityAltID, Tags.LegProduct, Tags.LegCFICode, Tags.LegSecurityType, Tags.LegSecuritySubType, Tags.LegMaturityMonthYear, Tags.LegMaturityDate, Tags.LegCouponPaymentDate, Tags.LegIssueDate, Tags.LegRepoCollateralSecurityType, Tags.LegRepurchaseTerm, Tags.LegRepurchaseRate, Tags.LegFactor, Tags.LegCreditRating, Tags.LegInstrRegistry, Tags.LegCountryOfIssue, Tags.LegStateOrProvinceOfIssue, Tags.LegLocaleOfIssue, Tags.LegRedemptionDate, Tags.LegStrikePrice, Tags.LegStrikeCurrency, Tags.LegOptAttribute, Tags.LegContractMultiplier, Tags.LegCouponRate, Tags.LegSecurityExchange, Tags.LegIssuer, Tags.EncodedLegIssuerLen, Tags.EncodedLegIssuer, Tags.LegSecurityDesc, Tags.EncodedLegSecurityDescLen, Tags.EncodedLegSecurityDesc, Tags.LegRatioQty, Tags.LegSide, Tags.LegCurrency, Tags.LegPool, Tags.LegDatedDate, Tags.LegContractSettlMonth, Tags.LegInterestAccrualDate, Tags.LegQty, Tags.LegSwapType, Tags.NoLegStipulations, Tags.LegPositionEffect, Tags.LegCoveredOrUncovered, Tags.NoNestedPartyIDs, Tags.LegRefID, Tags.LegPrice, Tags.LegSettlType, Tags.LegSettlDate, Tags.LegLastPx, 0};
+        public static int[] fieldOrder = {Tags.ComplexEventType, Tags.ComplexEventPrice, Tags.ComplexEventPriceTimeType, Tags.ComplexEventCondition, Tags.NoComplexEventDates, Tags.ComplexRebate, 0};
 
-        public NoLegsGroup()
-          : base(Tags.NoLegs, Tags.LegSymbol, DefaultFieldOrder)
+        public NoComplexEventsGroup()
+          : base(Tags.NoComplexEvents, Tags.ComplexEventType, DefaultFieldOrder)
         {
         }
 
         public override Group Clone()
         {
-            var clone = new NoLegsGroup();
+            var clone = new NoComplexEventsGroup();
             clone.CopyStateFrom(this);
             return clone;
         }
 
-        public LegSymbol LegSymbol
+        public ComplexEventType ComplexEventType
         {
             get
             {
-                LegSymbol val = new();
+                ComplexEventType val = new();
                 GetField(val);
                 return val;
             }
             set  => SetField(value);
         }
 
-        public void Set(LegSymbol val) { LegSymbol = val; }
-        public LegSymbol Get(LegSymbol val) { GetField(val); return val; }
-        public bool IsSet(LegSymbol val) { return IsSetLegSymbol(); }
-        public bool IsSetLegSymbol() { return IsSetField(Tags.LegSymbol); }
+        public void Set(ComplexEventType val) { ComplexEventType = val; }
+        public ComplexEventType Get(ComplexEventType val) { GetField(val); return val; }
+        public bool IsSet(ComplexEventType val) { return IsSetComplexEventType(); }
+        public bool IsSetComplexEventType() { return IsSetField(Tags.ComplexEventType); }
 
-        public LegSymbolSfx LegSymbolSfx
+        public ComplexEventPrice ComplexEventPrice
         {
             get
             {
-                LegSymbolSfx val = new();
+                ComplexEventPrice val = new();
                 GetField(val);
                 return val;
             }
             set  => SetField(value);
         }
 
-        public void Set(LegSymbolSfx val) { LegSymbolSfx = val; }
-        public LegSymbolSfx Get(LegSymbolSfx val) { GetField(val); return val; }
-        public bool IsSet(LegSymbolSfx val) { return IsSetLegSymbolSfx(); }
-        public bool IsSetLegSymbolSfx() { return IsSetField(Tags.LegSymbolSfx); }
+        public void Set(ComplexEventPrice val) { ComplexEventPrice = val; }
+        public ComplexEventPrice Get(ComplexEventPrice val) { GetField(val); return val; }
+        public bool IsSet(ComplexEventPrice val) { return IsSetComplexEventPrice(); }
+        public bool IsSetComplexEventPrice() { return IsSetField(Tags.ComplexEventPrice); }
 
-        public LegSecurityID LegSecurityID
+        public ComplexEventPriceTimeType ComplexEventPriceTimeType
         {
             get
             {
-                LegSecurityID val = new();
+                ComplexEventPriceTimeType val = new();
                 GetField(val);
                 return val;
             }
             set  => SetField(value);
         }
 
-        public void Set(LegSecurityID val) { LegSecurityID = val; }
-        public LegSecurityID Get(LegSecurityID val) { GetField(val); return val; }
-        public bool IsSet(LegSecurityID val) { return IsSetLegSecurityID(); }
-        public bool IsSetLegSecurityID() { return IsSetField(Tags.LegSecurityID); }
+        public void Set(ComplexEventPriceTimeType val) { ComplexEventPriceTimeType = val; }
+        public ComplexEventPriceTimeType Get(ComplexEventPriceTimeType val) { GetField(val); return val; }
+        public bool IsSet(ComplexEventPriceTimeType val) { return IsSetComplexEventPriceTimeType(); }
+        public bool IsSetComplexEventPriceTimeType() { return IsSetField(Tags.ComplexEventPriceTimeType); }
 
-        public LegSecurityIDSource LegSecurityIDSource
+        public ComplexEventCondition ComplexEventCondition
         {
             get
             {
-                LegSecurityIDSource val = new();
+                ComplexEventCondition val = new();
                 GetField(val);
                 return val;
             }
             set  => SetField(value);
         }
 
-        public void Set(LegSecurityIDSource val) { LegSecurityIDSource = val; }
-        public LegSecurityIDSource Get(LegSecurityIDSource val) { GetField(val); return val; }
-        public bool IsSet(LegSecurityIDSource val) { return IsSetLegSecurityIDSource(); }
-        public bool IsSetLegSecurityIDSource() { return IsSetField(Tags.LegSecurityIDSource); }
+        public void Set(ComplexEventCondition val) { ComplexEventCondition = val; }
+        public ComplexEventCondition Get(ComplexEventCondition val) { GetField(val); return val; }
+        public bool IsSet(ComplexEventCondition val) { return IsSetComplexEventCondition(); }
+        public bool IsSetComplexEventCondition() { return IsSetField(Tags.ComplexEventCondition); }
 
-        public NoLegSecurityAltID NoLegSecurityAltID
+        public NoComplexEventDates NoComplexEventDates
         {
             get
             {
-                NoLegSecurityAltID val = new();
+                NoComplexEventDates val = new();
                 GetField(val);
                 return val;
             }
             set  => SetField(value);
         }
 
-        public void Set(NoLegSecurityAltID val) { NoLegSecurityAltID = val; }
-        public NoLegSecurityAltID Get(NoLegSecurityAltID val) { GetField(val); return val; }
-        public bool IsSet(NoLegSecurityAltID val) { return IsSetNoLegSecurityAltID(); }
-        public bool IsSetNoLegSecurityAltID() { return IsSetField(Tags.NoLegSecurityAltID); }
+        public void Set(NoComplexEventDates val) { NoComplexEventDates = val; }
+        public NoComplexEventDates Get(NoComplexEventDates val) { GetField(val); return val; }
+        public bool IsSet(NoComplexEventDates val) { return IsSetNoComplexEventDates(); }
+        public bool IsSetNoComplexEventDates() { return IsSetField(Tags.NoComplexEventDates); }
 
-        public LegProduct LegProduct
+        public ComplexRebate ComplexRebate
         {
             get
             {
-                LegProduct val = new();
+                ComplexRebate val = new();
                 GetField(val);
                 return val;
             }
             set  => SetField(value);
         }
 
-        public void Set(LegProduct val) { LegProduct = val; }
-        public LegProduct Get(LegProduct val) { GetField(val); return val; }
-        public bool IsSet(LegProduct val) { return IsSetLegProduct(); }
-        public bool IsSetLegProduct() { return IsSetField(Tags.LegProduct); }
+        public void Set(ComplexRebate val) { ComplexRebate = val; }
+        public ComplexRebate Get(ComplexRebate val) { GetField(val); return val; }
+        public bool IsSet(ComplexRebate val) { return IsSetComplexRebate(); }
+        public bool IsSetComplexRebate() { return IsSetField(Tags.ComplexRebate); }
 
-        public LegCFICode LegCFICode
+        public class NoComplexEventDatesGroup : Group
         {
-            get
-            {
-                LegCFICode val = new();
-                GetField(val);
-                return val;
-            }
-            set  => SetField(value);
-        }
-
-        public void Set(LegCFICode val) { LegCFICode = val; }
-        public LegCFICode Get(LegCFICode val) { GetField(val); return val; }
-        public bool IsSet(LegCFICode val) { return IsSetLegCFICode(); }
-        public bool IsSetLegCFICode() { return IsSetField(Tags.LegCFICode); }
-
-        public LegSecurityType LegSecurityType
-        {
-            get
-            {
-                LegSecurityType val = new();
-                GetField(val);
-                return val;
-            }
-            set  => SetField(value);
-        }
-
-        public void Set(LegSecurityType val) { LegSecurityType = val; }
-        public LegSecurityType Get(LegSecurityType val) { GetField(val); return val; }
-        public bool IsSet(LegSecurityType val) { return IsSetLegSecurityType(); }
-        public bool IsSetLegSecurityType() { return IsSetField(Tags.LegSecurityType); }
-
-        public LegSecuritySubType LegSecuritySubType
-        {
-            get
-            {
-                LegSecuritySubType val = new();
-                GetField(val);
-                return val;
-            }
-            set  => SetField(value);
-        }
-
-        public void Set(LegSecuritySubType val) { LegSecuritySubType = val; }
-        public LegSecuritySubType Get(LegSecuritySubType val) { GetField(val); return val; }
-        public bool IsSet(LegSecuritySubType val) { return IsSetLegSecuritySubType(); }
-        public bool IsSetLegSecuritySubType() { return IsSetField(Tags.LegSecuritySubType); }
-
-        public LegMaturityMonthYear LegMaturityMonthYear
-        {
-            get
-            {
-                LegMaturityMonthYear val = new();
-                GetField(val);
-                return val;
-            }
-            set  => SetField(value);
-        }
-
-        public void Set(LegMaturityMonthYear val) { LegMaturityMonthYear = val; }
-        public LegMaturityMonthYear Get(LegMaturityMonthYear val) { GetField(val); return val; }
-        public bool IsSet(LegMaturityMonthYear val) { return IsSetLegMaturityMonthYear(); }
-        public bool IsSetLegMaturityMonthYear() { return IsSetField(Tags.LegMaturityMonthYear); }
-
-        public LegMaturityDate LegMaturityDate
-        {
-            get
-            {
-                LegMaturityDate val = new();
-                GetField(val);
-                return val;
-            }
-            set  => SetField(value);
-        }
-
-        public void Set(LegMaturityDate val) { LegMaturityDate = val; }
-        public LegMaturityDate Get(LegMaturityDate val) { GetField(val); return val; }
-        public bool IsSet(LegMaturityDate val) { return IsSetLegMaturityDate(); }
-        public bool IsSetLegMaturityDate() { return IsSetField(Tags.LegMaturityDate); }
-
-        public LegCouponPaymentDate LegCouponPaymentDate
-        {
-            get
-            {
-                LegCouponPaymentDate val = new();
-                GetField(val);
-                return val;
-            }
-            set  => SetField(value);
-        }
-
-        public void Set(LegCouponPaymentDate val) { LegCouponPaymentDate = val; }
-        public LegCouponPaymentDate Get(LegCouponPaymentDate val) { GetField(val); return val; }
-        public bool IsSet(LegCouponPaymentDate val) { return IsSetLegCouponPaymentDate(); }
-        public bool IsSetLegCouponPaymentDate() { return IsSetField(Tags.LegCouponPaymentDate); }
-
-        public LegIssueDate LegIssueDate
-        {
-            get
-            {
-                LegIssueDate val = new();
-                GetField(val);
-                return val;
-            }
-            set  => SetField(value);
-        }
-
-        public void Set(LegIssueDate val) { LegIssueDate = val; }
-        public LegIssueDate Get(LegIssueDate val) { GetField(val); return val; }
-        public bool IsSet(LegIssueDate val) { return IsSetLegIssueDate(); }
-        public bool IsSetLegIssueDate() { return IsSetField(Tags.LegIssueDate); }
-
-        public LegRepoCollateralSecurityType LegRepoCollateralSecurityType
-        {
-            get
-            {
-                LegRepoCollateralSecurityType val = new();
-                GetField(val);
-                return val;
-            }
-            set  => SetField(value);
-        }
-
-        public void Set(LegRepoCollateralSecurityType val) { LegRepoCollateralSecurityType = val; }
-        public LegRepoCollateralSecurityType Get(LegRepoCollateralSecurityType val) { GetField(val); return val; }
-        public bool IsSet(LegRepoCollateralSecurityType val) { return IsSetLegRepoCollateralSecurityType(); }
-        public bool IsSetLegRepoCollateralSecurityType() { return IsSetField(Tags.LegRepoCollateralSecurityType); }
-
-        public LegRepurchaseTerm LegRepurchaseTerm
-        {
-            get
-            {
-                LegRepurchaseTerm val = new();
-                GetField(val);
-                return val;
-            }
-            set  => SetField(value);
-        }
-
-        public void Set(LegRepurchaseTerm val) { LegRepurchaseTerm = val; }
-        public LegRepurchaseTerm Get(LegRepurchaseTerm val) { GetField(val); return val; }
-        public bool IsSet(LegRepurchaseTerm val) { return IsSetLegRepurchaseTerm(); }
-        public bool IsSetLegRepurchaseTerm() { return IsSetField(Tags.LegRepurchaseTerm); }
-
-        public LegRepurchaseRate LegRepurchaseRate
-        {
-            get
-            {
-                LegRepurchaseRate val = new();
-                GetField(val);
-                return val;
-            }
-            set  => SetField(value);
-        }
-
-        public void Set(LegRepurchaseRate val) { LegRepurchaseRate = val; }
-        public LegRepurchaseRate Get(LegRepurchaseRate val) { GetField(val); return val; }
-        public bool IsSet(LegRepurchaseRate val) { return IsSetLegRepurchaseRate(); }
-        public bool IsSetLegRepurchaseRate() { return IsSetField(Tags.LegRepurchaseRate); }
-
-        public LegFactor LegFactor
-        {
-            get
-            {
-                LegFactor val = new();
-                GetField(val);
-                return val;
-            }
-            set  => SetField(value);
-        }
-
-        public void Set(LegFactor val) { LegFactor = val; }
-        public LegFactor Get(LegFactor val) { GetField(val); return val; }
-        public bool IsSet(LegFactor val) { return IsSetLegFactor(); }
-        public bool IsSetLegFactor() { return IsSetField(Tags.LegFactor); }
-
-        public LegCreditRating LegCreditRating
-        {
-            get
-            {
-                LegCreditRating val = new();
-                GetField(val);
-                return val;
-            }
-            set  => SetField(value);
-        }
-
-        public void Set(LegCreditRating val) { LegCreditRating = val; }
-        public LegCreditRating Get(LegCreditRating val) { GetField(val); return val; }
-        public bool IsSet(LegCreditRating val) { return IsSetLegCreditRating(); }
-        public bool IsSetLegCreditRating() { return IsSetField(Tags.LegCreditRating); }
-
-        public LegInstrRegistry LegInstrRegistry
-        {
-            get
-            {
-                LegInstrRegistry val = new();
-                GetField(val);
-                return val;
-            }
-            set  => SetField(value);
-        }
-
-        public void Set(LegInstrRegistry val) { LegInstrRegistry = val; }
-        public LegInstrRegistry Get(LegInstrRegistry val) { GetField(val); return val; }
-        public bool IsSet(LegInstrRegistry val) { return IsSetLegInstrRegistry(); }
-        public bool IsSetLegInstrRegistry() { return IsSetField(Tags.LegInstrRegistry); }
-
-        public LegCountryOfIssue LegCountryOfIssue
-        {
-            get
-            {
-                LegCountryOfIssue val = new();
-                GetField(val);
-                return val;
-            }
-            set  => SetField(value);
-        }
-
-        public void Set(LegCountryOfIssue val) { LegCountryOfIssue = val; }
-        public LegCountryOfIssue Get(LegCountryOfIssue val) { GetField(val); return val; }
-        public bool IsSet(LegCountryOfIssue val) { return IsSetLegCountryOfIssue(); }
-        public bool IsSetLegCountryOfIssue() { return IsSetField(Tags.LegCountryOfIssue); }
-
-        public LegStateOrProvinceOfIssue LegStateOrProvinceOfIssue
-        {
-            get
-            {
-                LegStateOrProvinceOfIssue val = new();
-                GetField(val);
-                return val;
-            }
-            set  => SetField(value);
-        }
-
-        public void Set(LegStateOrProvinceOfIssue val) { LegStateOrProvinceOfIssue = val; }
-        public LegStateOrProvinceOfIssue Get(LegStateOrProvinceOfIssue val) { GetField(val); return val; }
-        public bool IsSet(LegStateOrProvinceOfIssue val) { return IsSetLegStateOrProvinceOfIssue(); }
-        public bool IsSetLegStateOrProvinceOfIssue() { return IsSetField(Tags.LegStateOrProvinceOfIssue); }
-
-        public LegLocaleOfIssue LegLocaleOfIssue
-        {
-            get
-            {
-                LegLocaleOfIssue val = new();
-                GetField(val);
-                return val;
-            }
-            set  => SetField(value);
-        }
-
-        public void Set(LegLocaleOfIssue val) { LegLocaleOfIssue = val; }
-        public LegLocaleOfIssue Get(LegLocaleOfIssue val) { GetField(val); return val; }
-        public bool IsSet(LegLocaleOfIssue val) { return IsSetLegLocaleOfIssue(); }
-        public bool IsSetLegLocaleOfIssue() { return IsSetField(Tags.LegLocaleOfIssue); }
-
-        public LegRedemptionDate LegRedemptionDate
-        {
-            get
-            {
-                LegRedemptionDate val = new();
-                GetField(val);
-                return val;
-            }
-            set  => SetField(value);
-        }
-
-        public void Set(LegRedemptionDate val) { LegRedemptionDate = val; }
-        public LegRedemptionDate Get(LegRedemptionDate val) { GetField(val); return val; }
-        public bool IsSet(LegRedemptionDate val) { return IsSetLegRedemptionDate(); }
-        public bool IsSetLegRedemptionDate() { return IsSetField(Tags.LegRedemptionDate); }
-
-        public LegStrikePrice LegStrikePrice
-        {
-            get
-            {
-                LegStrikePrice val = new();
-                GetField(val);
-                return val;
-            }
-            set  => SetField(value);
-        }
-
-        public void Set(LegStrikePrice val) { LegStrikePrice = val; }
-        public LegStrikePrice Get(LegStrikePrice val) { GetField(val); return val; }
-        public bool IsSet(LegStrikePrice val) { return IsSetLegStrikePrice(); }
-        public bool IsSetLegStrikePrice() { return IsSetField(Tags.LegStrikePrice); }
-
-        public LegStrikeCurrency LegStrikeCurrency
-        {
-            get
-            {
-                LegStrikeCurrency val = new();
-                GetField(val);
-                return val;
-            }
-            set  => SetField(value);
-        }
-
-        public void Set(LegStrikeCurrency val) { LegStrikeCurrency = val; }
-        public LegStrikeCurrency Get(LegStrikeCurrency val) { GetField(val); return val; }
-        public bool IsSet(LegStrikeCurrency val) { return IsSetLegStrikeCurrency(); }
-        public bool IsSetLegStrikeCurrency() { return IsSetField(Tags.LegStrikeCurrency); }
-
-        public LegOptAttribute LegOptAttribute
-        {
-            get
-            {
-                LegOptAttribute val = new();
-                GetField(val);
-                return val;
-            }
-            set  => SetField(value);
-        }
-
-        public void Set(LegOptAttribute val) { LegOptAttribute = val; }
-        public LegOptAttribute Get(LegOptAttribute val) { GetField(val); return val; }
-        public bool IsSet(LegOptAttribute val) { return IsSetLegOptAttribute(); }
-        public bool IsSetLegOptAttribute() { return IsSetField(Tags.LegOptAttribute); }
-
-        public LegContractMultiplier LegContractMultiplier
-        {
-            get
-            {
-                LegContractMultiplier val = new();
-                GetField(val);
-                return val;
-            }
-            set  => SetField(value);
-        }
-
-        public void Set(LegContractMultiplier val) { LegContractMultiplier = val; }
-        public LegContractMultiplier Get(LegContractMultiplier val) { GetField(val); return val; }
-        public bool IsSet(LegContractMultiplier val) { return IsSetLegContractMultiplier(); }
-        public bool IsSetLegContractMultiplier() { return IsSetField(Tags.LegContractMultiplier); }
-
-        public LegCouponRate LegCouponRate
-        {
-            get
-            {
-                LegCouponRate val = new();
-                GetField(val);
-                return val;
-            }
-            set  => SetField(value);
-        }
-
-        public void Set(LegCouponRate val) { LegCouponRate = val; }
-        public LegCouponRate Get(LegCouponRate val) { GetField(val); return val; }
-        public bool IsSet(LegCouponRate val) { return IsSetLegCouponRate(); }
-        public bool IsSetLegCouponRate() { return IsSetField(Tags.LegCouponRate); }
-
-        public LegSecurityExchange LegSecurityExchange
-        {
-            get
-            {
-                LegSecurityExchange val = new();
-                GetField(val);
-                return val;
-            }
-            set  => SetField(value);
-        }
-
-        public void Set(LegSecurityExchange val) { LegSecurityExchange = val; }
-        public LegSecurityExchange Get(LegSecurityExchange val) { GetField(val); return val; }
-        public bool IsSet(LegSecurityExchange val) { return IsSetLegSecurityExchange(); }
-        public bool IsSetLegSecurityExchange() { return IsSetField(Tags.LegSecurityExchange); }
-
-        public LegIssuer LegIssuer
-        {
-            get
-            {
-                LegIssuer val = new();
-                GetField(val);
-                return val;
-            }
-            set  => SetField(value);
-        }
-
-        public void Set(LegIssuer val) { LegIssuer = val; }
-        public LegIssuer Get(LegIssuer val) { GetField(val); return val; }
-        public bool IsSet(LegIssuer val) { return IsSetLegIssuer(); }
-        public bool IsSetLegIssuer() { return IsSetField(Tags.LegIssuer); }
-
-        public EncodedLegIssuerLen EncodedLegIssuerLen
-        {
-            get
-            {
-                EncodedLegIssuerLen val = new();
-                GetField(val);
-                return val;
-            }
-            set  => SetField(value);
-        }
-
-        public void Set(EncodedLegIssuerLen val) { EncodedLegIssuerLen = val; }
-        public EncodedLegIssuerLen Get(EncodedLegIssuerLen val) { GetField(val); return val; }
-        public bool IsSet(EncodedLegIssuerLen val) { return IsSetEncodedLegIssuerLen(); }
-        public bool IsSetEncodedLegIssuerLen() { return IsSetField(Tags.EncodedLegIssuerLen); }
-
-        public EncodedLegIssuer EncodedLegIssuer
-        {
-            get
-            {
-                EncodedLegIssuer val = new();
-                GetField(val);
-                return val;
-            }
-            set  => SetField(value);
-        }
-
-        public void Set(EncodedLegIssuer val) { EncodedLegIssuer = val; }
-        public EncodedLegIssuer Get(EncodedLegIssuer val) { GetField(val); return val; }
-        public bool IsSet(EncodedLegIssuer val) { return IsSetEncodedLegIssuer(); }
-        public bool IsSetEncodedLegIssuer() { return IsSetField(Tags.EncodedLegIssuer); }
-
-        public LegSecurityDesc LegSecurityDesc
-        {
-            get
-            {
-                LegSecurityDesc val = new();
-                GetField(val);
-                return val;
-            }
-            set  => SetField(value);
-        }
-
-        public void Set(LegSecurityDesc val) { LegSecurityDesc = val; }
-        public LegSecurityDesc Get(LegSecurityDesc val) { GetField(val); return val; }
-        public bool IsSet(LegSecurityDesc val) { return IsSetLegSecurityDesc(); }
-        public bool IsSetLegSecurityDesc() { return IsSetField(Tags.LegSecurityDesc); }
-
-        public EncodedLegSecurityDescLen EncodedLegSecurityDescLen
-        {
-            get
-            {
-                EncodedLegSecurityDescLen val = new();
-                GetField(val);
-                return val;
-            }
-            set  => SetField(value);
-        }
-
-        public void Set(EncodedLegSecurityDescLen val) { EncodedLegSecurityDescLen = val; }
-        public EncodedLegSecurityDescLen Get(EncodedLegSecurityDescLen val) { GetField(val); return val; }
-        public bool IsSet(EncodedLegSecurityDescLen val) { return IsSetEncodedLegSecurityDescLen(); }
-        public bool IsSetEncodedLegSecurityDescLen() { return IsSetField(Tags.EncodedLegSecurityDescLen); }
-
-        public EncodedLegSecurityDesc EncodedLegSecurityDesc
-        {
-            get
-            {
-                EncodedLegSecurityDesc val = new();
-                GetField(val);
-                return val;
-            }
-            set  => SetField(value);
-        }
-
-        public void Set(EncodedLegSecurityDesc val) { EncodedLegSecurityDesc = val; }
-        public EncodedLegSecurityDesc Get(EncodedLegSecurityDesc val) { GetField(val); return val; }
-        public bool IsSet(EncodedLegSecurityDesc val) { return IsSetEncodedLegSecurityDesc(); }
-        public bool IsSetEncodedLegSecurityDesc() { return IsSetField(Tags.EncodedLegSecurityDesc); }
-
-        public LegRatioQty LegRatioQty
-        {
-            get
-            {
-                LegRatioQty val = new();
-                GetField(val);
-                return val;
-            }
-            set  => SetField(value);
-        }
-
-        public void Set(LegRatioQty val) { LegRatioQty = val; }
-        public LegRatioQty Get(LegRatioQty val) { GetField(val); return val; }
-        public bool IsSet(LegRatioQty val) { return IsSetLegRatioQty(); }
-        public bool IsSetLegRatioQty() { return IsSetField(Tags.LegRatioQty); }
-
-        public LegSide LegSide
-        {
-            get
-            {
-                LegSide val = new();
-                GetField(val);
-                return val;
-            }
-            set  => SetField(value);
-        }
-
-        public void Set(LegSide val) { LegSide = val; }
-        public LegSide Get(LegSide val) { GetField(val); return val; }
-        public bool IsSet(LegSide val) { return IsSetLegSide(); }
-        public bool IsSetLegSide() { return IsSetField(Tags.LegSide); }
-
-        public LegCurrency LegCurrency
-        {
-            get
-            {
-                LegCurrency val = new();
-                GetField(val);
-                return val;
-            }
-            set  => SetField(value);
-        }
-
-        public void Set(LegCurrency val) { LegCurrency = val; }
-        public LegCurrency Get(LegCurrency val) { GetField(val); return val; }
-        public bool IsSet(LegCurrency val) { return IsSetLegCurrency(); }
-        public bool IsSetLegCurrency() { return IsSetField(Tags.LegCurrency); }
-
-        public LegPool LegPool
-        {
-            get
-            {
-                LegPool val = new();
-                GetField(val);
-                return val;
-            }
-            set  => SetField(value);
-        }
-
-        public void Set(LegPool val) { LegPool = val; }
-        public LegPool Get(LegPool val) { GetField(val); return val; }
-        public bool IsSet(LegPool val) { return IsSetLegPool(); }
-        public bool IsSetLegPool() { return IsSetField(Tags.LegPool); }
-
-        public LegDatedDate LegDatedDate
-        {
-            get
-            {
-                LegDatedDate val = new();
-                GetField(val);
-                return val;
-            }
-            set  => SetField(value);
-        }
-
-        public void Set(LegDatedDate val) { LegDatedDate = val; }
-        public LegDatedDate Get(LegDatedDate val) { GetField(val); return val; }
-        public bool IsSet(LegDatedDate val) { return IsSetLegDatedDate(); }
-        public bool IsSetLegDatedDate() { return IsSetField(Tags.LegDatedDate); }
-
-        public LegContractSettlMonth LegContractSettlMonth
-        {
-            get
-            {
-                LegContractSettlMonth val = new();
-                GetField(val);
-                return val;
-            }
-            set  => SetField(value);
-        }
-
-        public void Set(LegContractSettlMonth val) { LegContractSettlMonth = val; }
-        public LegContractSettlMonth Get(LegContractSettlMonth val) { GetField(val); return val; }
-        public bool IsSet(LegContractSettlMonth val) { return IsSetLegContractSettlMonth(); }
-        public bool IsSetLegContractSettlMonth() { return IsSetField(Tags.LegContractSettlMonth); }
-
-        public LegInterestAccrualDate LegInterestAccrualDate
-        {
-            get
-            {
-                LegInterestAccrualDate val = new();
-                GetField(val);
-                return val;
-            }
-            set  => SetField(value);
-        }
-
-        public void Set(LegInterestAccrualDate val) { LegInterestAccrualDate = val; }
-        public LegInterestAccrualDate Get(LegInterestAccrualDate val) { GetField(val); return val; }
-        public bool IsSet(LegInterestAccrualDate val) { return IsSetLegInterestAccrualDate(); }
-        public bool IsSetLegInterestAccrualDate() { return IsSetField(Tags.LegInterestAccrualDate); }
-
-        public LegQty LegQty
-        {
-            get
-            {
-                LegQty val = new();
-                GetField(val);
-                return val;
-            }
-            set  => SetField(value);
-        }
-
-        public void Set(LegQty val) { LegQty = val; }
-        public LegQty Get(LegQty val) { GetField(val); return val; }
-        public bool IsSet(LegQty val) { return IsSetLegQty(); }
-        public bool IsSetLegQty() { return IsSetField(Tags.LegQty); }
-
-        public LegSwapType LegSwapType
-        {
-            get
-            {
-                LegSwapType val = new();
-                GetField(val);
-                return val;
-            }
-            set  => SetField(value);
-        }
-
-        public void Set(LegSwapType val) { LegSwapType = val; }
-        public LegSwapType Get(LegSwapType val) { GetField(val); return val; }
-        public bool IsSet(LegSwapType val) { return IsSetLegSwapType(); }
-        public bool IsSetLegSwapType() { return IsSetField(Tags.LegSwapType); }
-
-        public NoLegStipulations NoLegStipulations
-        {
-            get
-            {
-                NoLegStipulations val = new();
-                GetField(val);
-                return val;
-            }
-            set  => SetField(value);
-        }
-
-        public void Set(NoLegStipulations val) { NoLegStipulations = val; }
-        public NoLegStipulations Get(NoLegStipulations val) { GetField(val); return val; }
-        public bool IsSet(NoLegStipulations val) { return IsSetNoLegStipulations(); }
-        public bool IsSetNoLegStipulations() { return IsSetField(Tags.NoLegStipulations); }
-
-        public LegPositionEffect LegPositionEffect
-        {
-            get
-            {
-                LegPositionEffect val = new();
-                GetField(val);
-                return val;
-            }
-            set  => SetField(value);
-        }
-
-        public void Set(LegPositionEffect val) { LegPositionEffect = val; }
-        public LegPositionEffect Get(LegPositionEffect val) { GetField(val); return val; }
-        public bool IsSet(LegPositionEffect val) { return IsSetLegPositionEffect(); }
-        public bool IsSetLegPositionEffect() { return IsSetField(Tags.LegPositionEffect); }
-
-        public LegCoveredOrUncovered LegCoveredOrUncovered
-        {
-            get
-            {
-                LegCoveredOrUncovered val = new();
-                GetField(val);
-                return val;
-            }
-            set  => SetField(value);
-        }
-
-        public void Set(LegCoveredOrUncovered val) { LegCoveredOrUncovered = val; }
-        public LegCoveredOrUncovered Get(LegCoveredOrUncovered val) { GetField(val); return val; }
-        public bool IsSet(LegCoveredOrUncovered val) { return IsSetLegCoveredOrUncovered(); }
-        public bool IsSetLegCoveredOrUncovered() { return IsSetField(Tags.LegCoveredOrUncovered); }
-
-        public NoNestedPartyIDs NoNestedPartyIDs
-        {
-            get
-            {
-                NoNestedPartyIDs val = new();
-                GetField(val);
-                return val;
-            }
-            set  => SetField(value);
-        }
-
-        public void Set(NoNestedPartyIDs val) { NoNestedPartyIDs = val; }
-        public NoNestedPartyIDs Get(NoNestedPartyIDs val) { GetField(val); return val; }
-        public bool IsSet(NoNestedPartyIDs val) { return IsSetNoNestedPartyIDs(); }
-        public bool IsSetNoNestedPartyIDs() { return IsSetField(Tags.NoNestedPartyIDs); }
-
-        public LegRefID LegRefID
-        {
-            get
-            {
-                LegRefID val = new();
-                GetField(val);
-                return val;
-            }
-            set  => SetField(value);
-        }
-
-        public void Set(LegRefID val) { LegRefID = val; }
-        public LegRefID Get(LegRefID val) { GetField(val); return val; }
-        public bool IsSet(LegRefID val) { return IsSetLegRefID(); }
-        public bool IsSetLegRefID() { return IsSetField(Tags.LegRefID); }
-
-        public LegPrice LegPrice
-        {
-            get
-            {
-                LegPrice val = new();
-                GetField(val);
-                return val;
-            }
-            set  => SetField(value);
-        }
-
-        public void Set(LegPrice val) { LegPrice = val; }
-        public LegPrice Get(LegPrice val) { GetField(val); return val; }
-        public bool IsSet(LegPrice val) { return IsSetLegPrice(); }
-        public bool IsSetLegPrice() { return IsSetField(Tags.LegPrice); }
-
-        public LegSettlType LegSettlType
-        {
-            get
-            {
-                LegSettlType val = new();
-                GetField(val);
-                return val;
-            }
-            set  => SetField(value);
-        }
-
-        public void Set(LegSettlType val) { LegSettlType = val; }
-        public LegSettlType Get(LegSettlType val) { GetField(val); return val; }
-        public bool IsSet(LegSettlType val) { return IsSetLegSettlType(); }
-        public bool IsSetLegSettlType() { return IsSetField(Tags.LegSettlType); }
-
-        public LegSettlDate LegSettlDate
-        {
-            get
-            {
-                LegSettlDate val = new();
-                GetField(val);
-                return val;
-            }
-            set  => SetField(value);
-        }
-
-        public void Set(LegSettlDate val) { LegSettlDate = val; }
-        public LegSettlDate Get(LegSettlDate val) { GetField(val); return val; }
-        public bool IsSet(LegSettlDate val) { return IsSetLegSettlDate(); }
-        public bool IsSetLegSettlDate() { return IsSetField(Tags.LegSettlDate); }
-
-        public LegLastPx LegLastPx
-        {
-            get
-            {
-                LegLastPx val = new();
-                GetField(val);
-                return val;
-            }
-            set  => SetField(value);
-        }
-
-        public void Set(LegLastPx val) { LegLastPx = val; }
-        public LegLastPx Get(LegLastPx val) { GetField(val); return val; }
-        public bool IsSet(LegLastPx val) { return IsSetLegLastPx(); }
-        public bool IsSetLegLastPx() { return IsSetField(Tags.LegLastPx); }
-
-        public class NoLegSecurityAltIDGroup : Group
-        {
-            public static int[] DefaultFieldOrder = [Tags.LegSecurityAltID, Tags.LegSecurityAltIDSource, 0];
+            public static int[] DefaultFieldOrder = [Tags.ComplexEventStartDate, Tags.ComplexEventEndDate, 0];
 
             [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
-            public static int[] fieldOrder = {Tags.LegSecurityAltID, Tags.LegSecurityAltIDSource, 0};
+            public static int[] fieldOrder = {Tags.ComplexEventStartDate, Tags.ComplexEventEndDate, 0};
 
-            public NoLegSecurityAltIDGroup()
-              : base(Tags.NoLegSecurityAltID, Tags.LegSecurityAltID, DefaultFieldOrder)
+            public NoComplexEventDatesGroup()
+              : base(Tags.NoComplexEventDates, Tags.ComplexEventStartDate, DefaultFieldOrder)
             {
             }
 
             public override Group Clone()
             {
-                var clone = new NoLegSecurityAltIDGroup();
+                var clone = new NoComplexEventDatesGroup();
                 clone.CopyStateFrom(this);
                 return clone;
             }
 
-            public LegSecurityAltID LegSecurityAltID
+            public ComplexEventStartDate ComplexEventStartDate
             {
                 get
                 {
-                    LegSecurityAltID val = new();
+                    ComplexEventStartDate val = new();
                     GetField(val);
                     return val;
                 }
                 set  => SetField(value);
             }
 
-            public void Set(LegSecurityAltID val) { LegSecurityAltID = val; }
-            public LegSecurityAltID Get(LegSecurityAltID val) { GetField(val); return val; }
-            public bool IsSet(LegSecurityAltID val) { return IsSetLegSecurityAltID(); }
-            public bool IsSetLegSecurityAltID() { return IsSetField(Tags.LegSecurityAltID); }
+            public void Set(ComplexEventStartDate val) { ComplexEventStartDate = val; }
+            public ComplexEventStartDate Get(ComplexEventStartDate val) { GetField(val); return val; }
+            public bool IsSet(ComplexEventStartDate val) { return IsSetComplexEventStartDate(); }
+            public bool IsSetComplexEventStartDate() { return IsSetField(Tags.ComplexEventStartDate); }
 
-            public LegSecurityAltIDSource LegSecurityAltIDSource
+            public ComplexEventEndDate ComplexEventEndDate
             {
                 get
                 {
-                    LegSecurityAltIDSource val = new();
+                    ComplexEventEndDate val = new();
                     GetField(val);
                     return val;
                 }
                 set  => SetField(value);
             }
 
-            public void Set(LegSecurityAltIDSource val) { LegSecurityAltIDSource = val; }
-            public LegSecurityAltIDSource Get(LegSecurityAltIDSource val) { GetField(val); return val; }
-            public bool IsSet(LegSecurityAltIDSource val) { return IsSetLegSecurityAltIDSource(); }
-            public bool IsSetLegSecurityAltIDSource() { return IsSetField(Tags.LegSecurityAltIDSource); }
-        }
-
-        public class NoLegStipulationsGroup : Group
-        {
-            public static int[] DefaultFieldOrder = [Tags.LegStipulationType, Tags.LegStipulationValue, 0];
-
-            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
-            public static int[] fieldOrder = {Tags.LegStipulationType, Tags.LegStipulationValue, 0};
-
-            public NoLegStipulationsGroup()
-              : base(Tags.NoLegStipulations, Tags.LegStipulationType, DefaultFieldOrder)
-            {
-            }
-
-            public override Group Clone()
-            {
-                var clone = new NoLegStipulationsGroup();
-                clone.CopyStateFrom(this);
-                return clone;
-            }
-
-            public LegStipulationType LegStipulationType
-            {
-                get
-                {
-                    LegStipulationType val = new();
-                    GetField(val);
-                    return val;
-                }
-                set  => SetField(value);
-            }
-
-            public void Set(LegStipulationType val) { LegStipulationType = val; }
-            public LegStipulationType Get(LegStipulationType val) { GetField(val); return val; }
-            public bool IsSet(LegStipulationType val) { return IsSetLegStipulationType(); }
-            public bool IsSetLegStipulationType() { return IsSetField(Tags.LegStipulationType); }
-
-            public LegStipulationValue LegStipulationValue
-            {
-                get
-                {
-                    LegStipulationValue val = new();
-                    GetField(val);
-                    return val;
-                }
-                set  => SetField(value);
-            }
-
-            public void Set(LegStipulationValue val) { LegStipulationValue = val; }
-            public LegStipulationValue Get(LegStipulationValue val) { GetField(val); return val; }
-            public bool IsSet(LegStipulationValue val) { return IsSetLegStipulationValue(); }
-            public bool IsSetLegStipulationValue() { return IsSetField(Tags.LegStipulationValue); }
-        }
-
-        public class NoNestedPartyIDsGroup : Group
-        {
-            public static int[] DefaultFieldOrder = [Tags.NestedPartyID, Tags.NestedPartyIDSource, Tags.NestedPartyRole, Tags.NoNestedPartySubIDs, 0];
-
-            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
-            public static int[] fieldOrder = {Tags.NestedPartyID, Tags.NestedPartyIDSource, Tags.NestedPartyRole, Tags.NoNestedPartySubIDs, 0};
-
-            public NoNestedPartyIDsGroup()
-              : base(Tags.NoNestedPartyIDs, Tags.NestedPartyID, DefaultFieldOrder)
-            {
-            }
-
-            public override Group Clone()
-            {
-                var clone = new NoNestedPartyIDsGroup();
-                clone.CopyStateFrom(this);
-                return clone;
-            }
-
-            public NestedPartyID NestedPartyID
-            {
-                get
-                {
-                    NestedPartyID val = new();
-                    GetField(val);
-                    return val;
-                }
-                set  => SetField(value);
-            }
-
-            public void Set(NestedPartyID val) { NestedPartyID = val; }
-            public NestedPartyID Get(NestedPartyID val) { GetField(val); return val; }
-            public bool IsSet(NestedPartyID val) { return IsSetNestedPartyID(); }
-            public bool IsSetNestedPartyID() { return IsSetField(Tags.NestedPartyID); }
-
-            public NestedPartyIDSource NestedPartyIDSource
-            {
-                get
-                {
-                    NestedPartyIDSource val = new();
-                    GetField(val);
-                    return val;
-                }
-                set  => SetField(value);
-            }
-
-            public void Set(NestedPartyIDSource val) { NestedPartyIDSource = val; }
-            public NestedPartyIDSource Get(NestedPartyIDSource val) { GetField(val); return val; }
-            public bool IsSet(NestedPartyIDSource val) { return IsSetNestedPartyIDSource(); }
-            public bool IsSetNestedPartyIDSource() { return IsSetField(Tags.NestedPartyIDSource); }
-
-            public NestedPartyRole NestedPartyRole
-            {
-                get
-                {
-                    NestedPartyRole val = new();
-                    GetField(val);
-                    return val;
-                }
-                set  => SetField(value);
-            }
-
-            public void Set(NestedPartyRole val) { NestedPartyRole = val; }
-            public NestedPartyRole Get(NestedPartyRole val) { GetField(val); return val; }
-            public bool IsSet(NestedPartyRole val) { return IsSetNestedPartyRole(); }
-            public bool IsSetNestedPartyRole() { return IsSetField(Tags.NestedPartyRole); }
-
-            public NoNestedPartySubIDs NoNestedPartySubIDs
-            {
-                get
-                {
-                    NoNestedPartySubIDs val = new();
-                    GetField(val);
-                    return val;
-                }
-                set  => SetField(value);
-            }
-
-            public void Set(NoNestedPartySubIDs val) { NoNestedPartySubIDs = val; }
-            public NoNestedPartySubIDs Get(NoNestedPartySubIDs val) { GetField(val); return val; }
-            public bool IsSet(NoNestedPartySubIDs val) { return IsSetNoNestedPartySubIDs(); }
-            public bool IsSetNoNestedPartySubIDs() { return IsSetField(Tags.NoNestedPartySubIDs); }
-
-            public class NoNestedPartySubIDsGroup : Group
-            {
-                public static int[] DefaultFieldOrder = [Tags.NestedPartySubID, Tags.NestedPartySubIDType, 0];
-
-                [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
-                public static int[] fieldOrder = {Tags.NestedPartySubID, Tags.NestedPartySubIDType, 0};
-
-                public NoNestedPartySubIDsGroup()
-                  : base(Tags.NoNestedPartySubIDs, Tags.NestedPartySubID, DefaultFieldOrder)
-                {
-                }
-
-                public override Group Clone()
-                {
-                    var clone = new NoNestedPartySubIDsGroup();
-                    clone.CopyStateFrom(this);
-                    return clone;
-                }
-
-                public NestedPartySubID NestedPartySubID
-                {
-                    get
-                    {
-                        NestedPartySubID val = new();
-                        GetField(val);
-                        return val;
-                    }
-                    set  => SetField(value);
-                }
-
-                public void Set(NestedPartySubID val) { NestedPartySubID = val; }
-                public NestedPartySubID Get(NestedPartySubID val) { GetField(val); return val; }
-                public bool IsSet(NestedPartySubID val) { return IsSetNestedPartySubID(); }
-                public bool IsSetNestedPartySubID() { return IsSetField(Tags.NestedPartySubID); }
-
-                public NestedPartySubIDType NestedPartySubIDType
-                {
-                    get
-                    {
-                        NestedPartySubIDType val = new();
-                        GetField(val);
-                        return val;
-                    }
-                    set  => SetField(value);
-                }
-
-                public void Set(NestedPartySubIDType val) { NestedPartySubIDType = val; }
-                public NestedPartySubIDType Get(NestedPartySubIDType val) { GetField(val); return val; }
-                public bool IsSet(NestedPartySubIDType val) { return IsSetNestedPartySubIDType(); }
-                public bool IsSetNestedPartySubIDType() { return IsSetField(Tags.NestedPartySubIDType); }
-            }
+            public void Set(ComplexEventEndDate val) { ComplexEventEndDate = val; }
+            public ComplexEventEndDate Get(ComplexEventEndDate val) { GetField(val); return val; }
+            public bool IsSet(ComplexEventEndDate val) { return IsSetComplexEventEndDate(); }
+            public bool IsSetComplexEventEndDate() { return IsSetField(Tags.ComplexEventEndDate); }
         }
     }
 
-    public class NoAllocsGroup : Group
+    public class NoOptionExerciseExpirationDatesGroup : Group
     {
-        public static int[] DefaultFieldOrder = [Tags.AllocAccount, Tags.AllocAcctIDSource, Tags.AllocSettlCurrency, Tags.IndividualAllocID, Tags.NoNested2PartyIDs, Tags.AllocQty, 0];
+        public static int[] DefaultFieldOrder = [Tags.OptionExerciseExpirationDate, Tags.OptionExerciseExpirationDateType, 0];
 
         [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
-        public static int[] fieldOrder = {Tags.AllocAccount, Tags.AllocAcctIDSource, Tags.AllocSettlCurrency, Tags.IndividualAllocID, Tags.NoNested2PartyIDs, Tags.AllocQty, 0};
+        public static int[] fieldOrder = {Tags.OptionExerciseExpirationDate, Tags.OptionExerciseExpirationDateType, 0};
 
-        public NoAllocsGroup()
-          : base(Tags.NoAllocs, Tags.AllocAccount, DefaultFieldOrder)
+        public NoOptionExerciseExpirationDatesGroup()
+          : base(Tags.NoOptionExerciseExpirationDates, Tags.OptionExerciseExpirationDate, DefaultFieldOrder)
         {
         }
 
         public override Group Clone()
         {
-            var clone = new NoAllocsGroup();
+            var clone = new NoOptionExerciseExpirationDatesGroup();
             clone.CopyStateFrom(this);
             return clone;
         }
 
-        public AllocAccount AllocAccount
+        public OptionExerciseExpirationDate OptionExerciseExpirationDate
         {
             get
             {
-                AllocAccount val = new();
+                OptionExerciseExpirationDate val = new();
                 GetField(val);
                 return val;
             }
             set  => SetField(value);
         }
 
-        public void Set(AllocAccount val) { AllocAccount = val; }
-        public AllocAccount Get(AllocAccount val) { GetField(val); return val; }
-        public bool IsSet(AllocAccount val) { return IsSetAllocAccount(); }
-        public bool IsSetAllocAccount() { return IsSetField(Tags.AllocAccount); }
+        public void Set(OptionExerciseExpirationDate val) { OptionExerciseExpirationDate = val; }
+        public OptionExerciseExpirationDate Get(OptionExerciseExpirationDate val) { GetField(val); return val; }
+        public bool IsSet(OptionExerciseExpirationDate val) { return IsSetOptionExerciseExpirationDate(); }
+        public bool IsSetOptionExerciseExpirationDate() { return IsSetField(Tags.OptionExerciseExpirationDate); }
 
-        public AllocAcctIDSource AllocAcctIDSource
+        public OptionExerciseExpirationDateType OptionExerciseExpirationDateType
         {
             get
             {
-                AllocAcctIDSource val = new();
+                OptionExerciseExpirationDateType val = new();
                 GetField(val);
                 return val;
             }
             set  => SetField(value);
         }
 
-        public void Set(AllocAcctIDSource val) { AllocAcctIDSource = val; }
-        public AllocAcctIDSource Get(AllocAcctIDSource val) { GetField(val); return val; }
-        public bool IsSet(AllocAcctIDSource val) { return IsSetAllocAcctIDSource(); }
-        public bool IsSetAllocAcctIDSource() { return IsSetField(Tags.AllocAcctIDSource); }
+        public void Set(OptionExerciseExpirationDateType val) { OptionExerciseExpirationDateType = val; }
+        public OptionExerciseExpirationDateType Get(OptionExerciseExpirationDateType val) { GetField(val); return val; }
+        public bool IsSet(OptionExerciseExpirationDateType val) { return IsSetOptionExerciseExpirationDateType(); }
+        public bool IsSetOptionExerciseExpirationDateType() { return IsSetField(Tags.OptionExerciseExpirationDateType); }
+    }
 
-        public AllocSettlCurrency AllocSettlCurrency
+    public class NoStreamsGroup : Group
+    {
+        public static int[] DefaultFieldOrder = [Tags.StreamType, Tags.StreamDesc, Tags.StreamPaySide, Tags.StreamReceiveSide, Tags.StreamEffectiveDateAdjusted, Tags.StreamTerminationDateAdjusted, Tags.StreamFirstRegularPeriodStartDateUnadjusted, Tags.StreamLastRegularPeriodEndDateUnadjusted, Tags.PaymentStreamType, Tags.PaymentStreamPaymentFrequencyPeriod, Tags.PaymentStreamPaymentFrequencyUnit, Tags.PaymentStreamResetFrequencyPeriod, Tags.PaymentStreamResetFrequencyUnit, 0];
+
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        public static int[] fieldOrder = {Tags.StreamType, Tags.StreamDesc, Tags.StreamPaySide, Tags.StreamReceiveSide, Tags.StreamEffectiveDateAdjusted, Tags.StreamTerminationDateAdjusted, Tags.StreamFirstRegularPeriodStartDateUnadjusted, Tags.StreamLastRegularPeriodEndDateUnadjusted, Tags.PaymentStreamType, Tags.PaymentStreamPaymentFrequencyPeriod, Tags.PaymentStreamPaymentFrequencyUnit, Tags.PaymentStreamResetFrequencyPeriod, Tags.PaymentStreamResetFrequencyUnit, 0};
+
+        public NoStreamsGroup()
+          : base(Tags.NoStreams, Tags.StreamType, DefaultFieldOrder)
+        {
+        }
+
+        public override Group Clone()
+        {
+            var clone = new NoStreamsGroup();
+            clone.CopyStateFrom(this);
+            return clone;
+        }
+
+        public StreamType StreamType
         {
             get
             {
-                AllocSettlCurrency val = new();
+                StreamType val = new();
                 GetField(val);
                 return val;
             }
             set  => SetField(value);
         }
 
-        public void Set(AllocSettlCurrency val) { AllocSettlCurrency = val; }
-        public AllocSettlCurrency Get(AllocSettlCurrency val) { GetField(val); return val; }
-        public bool IsSet(AllocSettlCurrency val) { return IsSetAllocSettlCurrency(); }
-        public bool IsSetAllocSettlCurrency() { return IsSetField(Tags.AllocSettlCurrency); }
+        public void Set(StreamType val) { StreamType = val; }
+        public StreamType Get(StreamType val) { GetField(val); return val; }
+        public bool IsSet(StreamType val) { return IsSetStreamType(); }
+        public bool IsSetStreamType() { return IsSetField(Tags.StreamType); }
 
-        public IndividualAllocID IndividualAllocID
+        public StreamDesc StreamDesc
         {
             get
             {
-                IndividualAllocID val = new();
+                StreamDesc val = new();
                 GetField(val);
                 return val;
             }
             set  => SetField(value);
         }
 
-        public void Set(IndividualAllocID val) { IndividualAllocID = val; }
-        public IndividualAllocID Get(IndividualAllocID val) { GetField(val); return val; }
-        public bool IsSet(IndividualAllocID val) { return IsSetIndividualAllocID(); }
-        public bool IsSetIndividualAllocID() { return IsSetField(Tags.IndividualAllocID); }
+        public void Set(StreamDesc val) { StreamDesc = val; }
+        public StreamDesc Get(StreamDesc val) { GetField(val); return val; }
+        public bool IsSet(StreamDesc val) { return IsSetStreamDesc(); }
+        public bool IsSetStreamDesc() { return IsSetField(Tags.StreamDesc); }
 
-        public NoNested2PartyIDs NoNested2PartyIDs
+        public StreamPaySide StreamPaySide
         {
             get
             {
-                NoNested2PartyIDs val = new();
+                StreamPaySide val = new();
                 GetField(val);
                 return val;
             }
             set  => SetField(value);
         }
 
-        public void Set(NoNested2PartyIDs val) { NoNested2PartyIDs = val; }
-        public NoNested2PartyIDs Get(NoNested2PartyIDs val) { GetField(val); return val; }
-        public bool IsSet(NoNested2PartyIDs val) { return IsSetNoNested2PartyIDs(); }
-        public bool IsSetNoNested2PartyIDs() { return IsSetField(Tags.NoNested2PartyIDs); }
+        public void Set(StreamPaySide val) { StreamPaySide = val; }
+        public StreamPaySide Get(StreamPaySide val) { GetField(val); return val; }
+        public bool IsSet(StreamPaySide val) { return IsSetStreamPaySide(); }
+        public bool IsSetStreamPaySide() { return IsSetField(Tags.StreamPaySide); }
 
-        public AllocQty AllocQty
+        public StreamReceiveSide StreamReceiveSide
         {
             get
             {
-                AllocQty val = new();
+                StreamReceiveSide val = new();
                 GetField(val);
                 return val;
             }
             set  => SetField(value);
         }
 
-        public void Set(AllocQty val) { AllocQty = val; }
-        public AllocQty Get(AllocQty val) { GetField(val); return val; }
-        public bool IsSet(AllocQty val) { return IsSetAllocQty(); }
-        public bool IsSetAllocQty() { return IsSetField(Tags.AllocQty); }
+        public void Set(StreamReceiveSide val) { StreamReceiveSide = val; }
+        public StreamReceiveSide Get(StreamReceiveSide val) { GetField(val); return val; }
+        public bool IsSet(StreamReceiveSide val) { return IsSetStreamReceiveSide(); }
+        public bool IsSetStreamReceiveSide() { return IsSetField(Tags.StreamReceiveSide); }
 
-        public class NoNested2PartyIDsGroup : Group
+        public StreamEffectiveDateAdjusted StreamEffectiveDateAdjusted
         {
-            public static int[] DefaultFieldOrder = [Tags.Nested2PartyID, Tags.Nested2PartyIDSource, Tags.Nested2PartyRole, Tags.NoNested2PartySubIDs, 0];
-
-            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
-            public static int[] fieldOrder = {Tags.Nested2PartyID, Tags.Nested2PartyIDSource, Tags.Nested2PartyRole, Tags.NoNested2PartySubIDs, 0};
-
-            public NoNested2PartyIDsGroup()
-              : base(Tags.NoNested2PartyIDs, Tags.Nested2PartyID, DefaultFieldOrder)
+            get
             {
+                StreamEffectiveDateAdjusted val = new();
+                GetField(val);
+                return val;
             }
-
-            public override Group Clone()
-            {
-                var clone = new NoNested2PartyIDsGroup();
-                clone.CopyStateFrom(this);
-                return clone;
-            }
-
-            public Nested2PartyID Nested2PartyID
-            {
-                get
-                {
-                    Nested2PartyID val = new();
-                    GetField(val);
-                    return val;
-                }
-                set  => SetField(value);
-            }
-
-            public void Set(Nested2PartyID val) { Nested2PartyID = val; }
-            public Nested2PartyID Get(Nested2PartyID val) { GetField(val); return val; }
-            public bool IsSet(Nested2PartyID val) { return IsSetNested2PartyID(); }
-            public bool IsSetNested2PartyID() { return IsSetField(Tags.Nested2PartyID); }
-
-            public Nested2PartyIDSource Nested2PartyIDSource
-            {
-                get
-                {
-                    Nested2PartyIDSource val = new();
-                    GetField(val);
-                    return val;
-                }
-                set  => SetField(value);
-            }
-
-            public void Set(Nested2PartyIDSource val) { Nested2PartyIDSource = val; }
-            public Nested2PartyIDSource Get(Nested2PartyIDSource val) { GetField(val); return val; }
-            public bool IsSet(Nested2PartyIDSource val) { return IsSetNested2PartyIDSource(); }
-            public bool IsSetNested2PartyIDSource() { return IsSetField(Tags.Nested2PartyIDSource); }
-
-            public Nested2PartyRole Nested2PartyRole
-            {
-                get
-                {
-                    Nested2PartyRole val = new();
-                    GetField(val);
-                    return val;
-                }
-                set  => SetField(value);
-            }
-
-            public void Set(Nested2PartyRole val) { Nested2PartyRole = val; }
-            public Nested2PartyRole Get(Nested2PartyRole val) { GetField(val); return val; }
-            public bool IsSet(Nested2PartyRole val) { return IsSetNested2PartyRole(); }
-            public bool IsSetNested2PartyRole() { return IsSetField(Tags.Nested2PartyRole); }
-
-            public NoNested2PartySubIDs NoNested2PartySubIDs
-            {
-                get
-                {
-                    NoNested2PartySubIDs val = new();
-                    GetField(val);
-                    return val;
-                }
-                set  => SetField(value);
-            }
-
-            public void Set(NoNested2PartySubIDs val) { NoNested2PartySubIDs = val; }
-            public NoNested2PartySubIDs Get(NoNested2PartySubIDs val) { GetField(val); return val; }
-            public bool IsSet(NoNested2PartySubIDs val) { return IsSetNoNested2PartySubIDs(); }
-            public bool IsSetNoNested2PartySubIDs() { return IsSetField(Tags.NoNested2PartySubIDs); }
-
-            public class NoNested2PartySubIDsGroup : Group
-            {
-                public static int[] DefaultFieldOrder = [Tags.Nested2PartySubID, Tags.Nested2PartySubIDType, 0];
-
-                [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
-                public static int[] fieldOrder = {Tags.Nested2PartySubID, Tags.Nested2PartySubIDType, 0};
-
-                public NoNested2PartySubIDsGroup()
-                  : base(Tags.NoNested2PartySubIDs, Tags.Nested2PartySubID, DefaultFieldOrder)
-                {
-                }
-
-                public override Group Clone()
-                {
-                    var clone = new NoNested2PartySubIDsGroup();
-                    clone.CopyStateFrom(this);
-                    return clone;
-                }
-
-                public Nested2PartySubID Nested2PartySubID
-                {
-                    get
-                    {
-                        Nested2PartySubID val = new();
-                        GetField(val);
-                        return val;
-                    }
-                    set  => SetField(value);
-                }
-
-                public void Set(Nested2PartySubID val) { Nested2PartySubID = val; }
-                public Nested2PartySubID Get(Nested2PartySubID val) { GetField(val); return val; }
-                public bool IsSet(Nested2PartySubID val) { return IsSetNested2PartySubID(); }
-                public bool IsSetNested2PartySubID() { return IsSetField(Tags.Nested2PartySubID); }
-
-                public Nested2PartySubIDType Nested2PartySubIDType
-                {
-                    get
-                    {
-                        Nested2PartySubIDType val = new();
-                        GetField(val);
-                        return val;
-                    }
-                    set  => SetField(value);
-                }
-
-                public void Set(Nested2PartySubIDType val) { Nested2PartySubIDType = val; }
-                public Nested2PartySubIDType Get(Nested2PartySubIDType val) { GetField(val); return val; }
-                public bool IsSet(Nested2PartySubIDType val) { return IsSetNested2PartySubIDType(); }
-                public bool IsSetNested2PartySubIDType() { return IsSetField(Tags.Nested2PartySubIDType); }
-            }
+            set  => SetField(value);
         }
+
+        public void Set(StreamEffectiveDateAdjusted val) { StreamEffectiveDateAdjusted = val; }
+        public StreamEffectiveDateAdjusted Get(StreamEffectiveDateAdjusted val) { GetField(val); return val; }
+        public bool IsSet(StreamEffectiveDateAdjusted val) { return IsSetStreamEffectiveDateAdjusted(); }
+        public bool IsSetStreamEffectiveDateAdjusted() { return IsSetField(Tags.StreamEffectiveDateAdjusted); }
+
+        public StreamTerminationDateAdjusted StreamTerminationDateAdjusted
+        {
+            get
+            {
+                StreamTerminationDateAdjusted val = new();
+                GetField(val);
+                return val;
+            }
+            set  => SetField(value);
+        }
+
+        public void Set(StreamTerminationDateAdjusted val) { StreamTerminationDateAdjusted = val; }
+        public StreamTerminationDateAdjusted Get(StreamTerminationDateAdjusted val) { GetField(val); return val; }
+        public bool IsSet(StreamTerminationDateAdjusted val) { return IsSetStreamTerminationDateAdjusted(); }
+        public bool IsSetStreamTerminationDateAdjusted() { return IsSetField(Tags.StreamTerminationDateAdjusted); }
+
+        public StreamFirstRegularPeriodStartDateUnadjusted StreamFirstRegularPeriodStartDateUnadjusted
+        {
+            get
+            {
+                StreamFirstRegularPeriodStartDateUnadjusted val = new();
+                GetField(val);
+                return val;
+            }
+            set  => SetField(value);
+        }
+
+        public void Set(StreamFirstRegularPeriodStartDateUnadjusted val) { StreamFirstRegularPeriodStartDateUnadjusted = val; }
+        public StreamFirstRegularPeriodStartDateUnadjusted Get(StreamFirstRegularPeriodStartDateUnadjusted val) { GetField(val); return val; }
+        public bool IsSet(StreamFirstRegularPeriodStartDateUnadjusted val) { return IsSetStreamFirstRegularPeriodStartDateUnadjusted(); }
+        public bool IsSetStreamFirstRegularPeriodStartDateUnadjusted() { return IsSetField(Tags.StreamFirstRegularPeriodStartDateUnadjusted); }
+
+        public StreamLastRegularPeriodEndDateUnadjusted StreamLastRegularPeriodEndDateUnadjusted
+        {
+            get
+            {
+                StreamLastRegularPeriodEndDateUnadjusted val = new();
+                GetField(val);
+                return val;
+            }
+            set  => SetField(value);
+        }
+
+        public void Set(StreamLastRegularPeriodEndDateUnadjusted val) { StreamLastRegularPeriodEndDateUnadjusted = val; }
+        public StreamLastRegularPeriodEndDateUnadjusted Get(StreamLastRegularPeriodEndDateUnadjusted val) { GetField(val); return val; }
+        public bool IsSet(StreamLastRegularPeriodEndDateUnadjusted val) { return IsSetStreamLastRegularPeriodEndDateUnadjusted(); }
+        public bool IsSetStreamLastRegularPeriodEndDateUnadjusted() { return IsSetField(Tags.StreamLastRegularPeriodEndDateUnadjusted); }
+
+        public PaymentStreamType PaymentStreamType
+        {
+            get
+            {
+                PaymentStreamType val = new();
+                GetField(val);
+                return val;
+            }
+            set  => SetField(value);
+        }
+
+        public void Set(PaymentStreamType val) { PaymentStreamType = val; }
+        public PaymentStreamType Get(PaymentStreamType val) { GetField(val); return val; }
+        public bool IsSet(PaymentStreamType val) { return IsSetPaymentStreamType(); }
+        public bool IsSetPaymentStreamType() { return IsSetField(Tags.PaymentStreamType); }
+
+        public PaymentStreamPaymentFrequencyPeriod PaymentStreamPaymentFrequencyPeriod
+        {
+            get
+            {
+                PaymentStreamPaymentFrequencyPeriod val = new();
+                GetField(val);
+                return val;
+            }
+            set  => SetField(value);
+        }
+
+        public void Set(PaymentStreamPaymentFrequencyPeriod val) { PaymentStreamPaymentFrequencyPeriod = val; }
+        public PaymentStreamPaymentFrequencyPeriod Get(PaymentStreamPaymentFrequencyPeriod val) { GetField(val); return val; }
+        public bool IsSet(PaymentStreamPaymentFrequencyPeriod val) { return IsSetPaymentStreamPaymentFrequencyPeriod(); }
+        public bool IsSetPaymentStreamPaymentFrequencyPeriod() { return IsSetField(Tags.PaymentStreamPaymentFrequencyPeriod); }
+
+        public PaymentStreamPaymentFrequencyUnit PaymentStreamPaymentFrequencyUnit
+        {
+            get
+            {
+                PaymentStreamPaymentFrequencyUnit val = new();
+                GetField(val);
+                return val;
+            }
+            set  => SetField(value);
+        }
+
+        public void Set(PaymentStreamPaymentFrequencyUnit val) { PaymentStreamPaymentFrequencyUnit = val; }
+        public PaymentStreamPaymentFrequencyUnit Get(PaymentStreamPaymentFrequencyUnit val) { GetField(val); return val; }
+        public bool IsSet(PaymentStreamPaymentFrequencyUnit val) { return IsSetPaymentStreamPaymentFrequencyUnit(); }
+        public bool IsSetPaymentStreamPaymentFrequencyUnit() { return IsSetField(Tags.PaymentStreamPaymentFrequencyUnit); }
+
+        public PaymentStreamResetFrequencyPeriod PaymentStreamResetFrequencyPeriod
+        {
+            get
+            {
+                PaymentStreamResetFrequencyPeriod val = new();
+                GetField(val);
+                return val;
+            }
+            set  => SetField(value);
+        }
+
+        public void Set(PaymentStreamResetFrequencyPeriod val) { PaymentStreamResetFrequencyPeriod = val; }
+        public PaymentStreamResetFrequencyPeriod Get(PaymentStreamResetFrequencyPeriod val) { GetField(val); return val; }
+        public bool IsSet(PaymentStreamResetFrequencyPeriod val) { return IsSetPaymentStreamResetFrequencyPeriod(); }
+        public bool IsSetPaymentStreamResetFrequencyPeriod() { return IsSetField(Tags.PaymentStreamResetFrequencyPeriod); }
+
+        public PaymentStreamResetFrequencyUnit PaymentStreamResetFrequencyUnit
+        {
+            get
+            {
+                PaymentStreamResetFrequencyUnit val = new();
+                GetField(val);
+                return val;
+            }
+            set  => SetField(value);
+        }
+
+        public void Set(PaymentStreamResetFrequencyUnit val) { PaymentStreamResetFrequencyUnit = val; }
+        public PaymentStreamResetFrequencyUnit Get(PaymentStreamResetFrequencyUnit val) { GetField(val); return val; }
+        public bool IsSet(PaymentStreamResetFrequencyUnit val) { return IsSetPaymentStreamResetFrequencyUnit(); }
+        public bool IsSetPaymentStreamResetFrequencyUnit() { return IsSetField(Tags.PaymentStreamResetFrequencyUnit); }
+    }
+
+    public class NoRegulatoryTradeIDsGroup : Group
+    {
+        public static int[] DefaultFieldOrder = [Tags.RegulatoryTradeID, Tags.RegulatoryTradeIDSource, Tags.RegulatoryTradeIDEvent, Tags.RegulatoryTradeIDType, Tags.RegulatoryLegRefID, 0];
+
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        public static int[] fieldOrder = {Tags.RegulatoryTradeID, Tags.RegulatoryTradeIDSource, Tags.RegulatoryTradeIDEvent, Tags.RegulatoryTradeIDType, Tags.RegulatoryLegRefID, 0};
+
+        public NoRegulatoryTradeIDsGroup()
+          : base(Tags.NoRegulatoryTradeIDs, Tags.RegulatoryTradeID, DefaultFieldOrder)
+        {
+        }
+
+        public override Group Clone()
+        {
+            var clone = new NoRegulatoryTradeIDsGroup();
+            clone.CopyStateFrom(this);
+            return clone;
+        }
+
+        public RegulatoryTradeID RegulatoryTradeID
+        {
+            get
+            {
+                RegulatoryTradeID val = new();
+                GetField(val);
+                return val;
+            }
+            set  => SetField(value);
+        }
+
+        public void Set(RegulatoryTradeID val) { RegulatoryTradeID = val; }
+        public RegulatoryTradeID Get(RegulatoryTradeID val) { GetField(val); return val; }
+        public bool IsSet(RegulatoryTradeID val) { return IsSetRegulatoryTradeID(); }
+        public bool IsSetRegulatoryTradeID() { return IsSetField(Tags.RegulatoryTradeID); }
+
+        public RegulatoryTradeIDSource RegulatoryTradeIDSource
+        {
+            get
+            {
+                RegulatoryTradeIDSource val = new();
+                GetField(val);
+                return val;
+            }
+            set  => SetField(value);
+        }
+
+        public void Set(RegulatoryTradeIDSource val) { RegulatoryTradeIDSource = val; }
+        public RegulatoryTradeIDSource Get(RegulatoryTradeIDSource val) { GetField(val); return val; }
+        public bool IsSet(RegulatoryTradeIDSource val) { return IsSetRegulatoryTradeIDSource(); }
+        public bool IsSetRegulatoryTradeIDSource() { return IsSetField(Tags.RegulatoryTradeIDSource); }
+
+        public RegulatoryTradeIDEvent RegulatoryTradeIDEvent
+        {
+            get
+            {
+                RegulatoryTradeIDEvent val = new();
+                GetField(val);
+                return val;
+            }
+            set  => SetField(value);
+        }
+
+        public void Set(RegulatoryTradeIDEvent val) { RegulatoryTradeIDEvent = val; }
+        public RegulatoryTradeIDEvent Get(RegulatoryTradeIDEvent val) { GetField(val); return val; }
+        public bool IsSet(RegulatoryTradeIDEvent val) { return IsSetRegulatoryTradeIDEvent(); }
+        public bool IsSetRegulatoryTradeIDEvent() { return IsSetField(Tags.RegulatoryTradeIDEvent); }
+
+        public RegulatoryTradeIDType RegulatoryTradeIDType
+        {
+            get
+            {
+                RegulatoryTradeIDType val = new();
+                GetField(val);
+                return val;
+            }
+            set  => SetField(value);
+        }
+
+        public void Set(RegulatoryTradeIDType val) { RegulatoryTradeIDType = val; }
+        public RegulatoryTradeIDType Get(RegulatoryTradeIDType val) { GetField(val); return val; }
+        public bool IsSet(RegulatoryTradeIDType val) { return IsSetRegulatoryTradeIDType(); }
+        public bool IsSetRegulatoryTradeIDType() { return IsSetField(Tags.RegulatoryTradeIDType); }
+
+        public RegulatoryLegRefID RegulatoryLegRefID
+        {
+            get
+            {
+                RegulatoryLegRefID val = new();
+                GetField(val);
+                return val;
+            }
+            set  => SetField(value);
+        }
+
+        public void Set(RegulatoryLegRefID val) { RegulatoryLegRefID = val; }
+        public RegulatoryLegRefID Get(RegulatoryLegRefID val) { GetField(val); return val; }
+        public bool IsSet(RegulatoryLegRefID val) { return IsSetRegulatoryLegRefID(); }
+        public bool IsSetRegulatoryLegRefID() { return IsSetField(Tags.RegulatoryLegRefID); }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
@@ -18,8 +18,10 @@ public class FileLog : ILog
     private System.IO.StreamWriter? _messageLog;
     private System.IO.StreamWriter? _eventLog;
 
-    private readonly string _messageLogFileName;
-    private readonly string _eventLogFileName;
+    private readonly string _fileLogPath; // FixPortal Enhancement
+    private string _messageLogFileName; // FixPortal Enhancement
+    private string _eventLogFileName; // FixPortal Enhancement
+    
 
     /// <summary>
     ///
@@ -31,15 +33,12 @@ public class FileLog : ILog
     /// <param name="sessionId"></param>
     public FileLog(string fileLogPath, SessionID sessionId)
     {
-        string prefix = Prefix(sessionId);
+        #region  CP Enhancement
+        _fileLogPath = Enhancements.Utility.ParsePath(StringUtil.FixSlashes(fileLogPath)); 
+        _sessionPrefix = Prefix(sessionId);
 
-        string normalizedPath = StringUtil.FixSlashes(fileLogPath);
-
-        if (!System.IO.Directory.Exists(normalizedPath))
-            System.IO.Directory.CreateDirectory(normalizedPath);
-
-        _messageLogFileName = System.IO.Path.Combine(normalizedPath, prefix + ".messages.current.log");
-        _eventLogFileName = System.IO.Path.Combine(normalizedPath, prefix + ".event.current.log");
+        InitialiseLogs(_fileLogPath, true);
+        #endregion  
     }
 
     public static string Prefix(SessionID sessionId)
@@ -116,6 +115,7 @@ public class FileLog : ILog
         lock (_sync)
         {
             DisposedCheck();
+			DirectoryCheck();   //	CP Enhancement
             EnsureMessageLogInit();
             _messageLog.WriteLine(DateTimeConverter.ToFIX(DateTime.UtcNow, TimeStampPrecision.Millisecond) + " : " + msg);
         }
@@ -126,6 +126,7 @@ public class FileLog : ILog
         lock (_sync)
         {
             DisposedCheck();
+			DirectoryCheck();   //	CP Enhancement
             EnsureMessageLogInit();
             _messageLog.WriteLine(DateTimeConverter.ToFIX(DateTime.UtcNow, TimeStampPrecision.Millisecond) + " : " + msg);
         }
@@ -136,6 +137,7 @@ public class FileLog : ILog
         lock (_sync)
         {
             DisposedCheck();
+            DirectoryCheck();   //	CP Enhancement
             EnsureEventLogInit();
             _eventLog.WriteLine(DateTimeConverter.ToFIX(DateTime.UtcNow, TimeStampPrecision.Millisecond) + " : " + s);
         }
@@ -171,5 +173,57 @@ public class FileLog : ILog
             _disposed = true;
         }
     }
+    #endregion
+
+    #region CP Enhancement
+
+    
+    private readonly string _sessionPrefix;
+    private DateTime _creationDate; 
+    private string? _currentFileLogPath;
+    private void DirectoryCheck()
+    {
+        if (_creationDate.CompareTo(DateTime.Now.Date) == 0) return;
+        EvaluateCandidateLog();
+    }
+    private void EvaluateCandidateLog()
+    {
+        var normalizedPath = Enhancements.Utility.ParsePath(StringUtil.FixSlashes(_fileLogPath));
+
+        if (normalizedPath != _currentFileLogPath)
+        {
+            InitialiseLogs(normalizedPath, false);
+        }
+    }
+
+    private void InitialiseLogs(string normalizedPath, bool initOnly)
+    {
+        _creationDate = DateTime.Now.Date;
+
+        if (!System.IO.Directory.Exists(normalizedPath))
+            System.IO.Directory.CreateDirectory(normalizedPath);
+
+        _messageLogFileName = System.IO.Path.Combine(normalizedPath, _sessionPrefix + ".messages.current.log");
+        _eventLogFileName = System.IO.Path.Combine(normalizedPath, _sessionPrefix + ".event.current.log");
+
+        if (initOnly)
+            return;
+
+        _currentFileLogPath = normalizedPath;
+
+        EnsureMessageLogInit();
+        EnsureEventLogInit();
+    }
+
+    #region ILog Members   
+    public void LogOn() { }
+    public void LogOff() { }
+    public void OnIncomingAndOutgoing((int Id, string Raw, string Xml, string Json) message) { }
+    public void OnRejectionEvent(string originalMessage, string rejectionText)
+    {
+        OnEvent(rejectionText);
+    }
+    #endregion
+
     #endregion
 }

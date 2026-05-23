@@ -185,6 +185,22 @@ public class Logon : Message
     public bool IsSet(Password val) { return IsSetPassword(); }
     public bool IsSetPassword() { return IsSetField(Tags.Password); }
 
+    public NewPassword NewPassword
+    {
+        get
+        {
+            NewPassword val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(NewPassword val) { NewPassword = val; }
+    public NewPassword Get(NewPassword val) { GetField(val); return val; }
+    public bool IsSet(NewPassword val) { return IsSetNewPassword(); }
+    public bool IsSetNewPassword() { return IsSetField(Tags.NewPassword); }
+
     public DefaultApplVerID DefaultApplVerID
     {
         get
@@ -200,6 +216,22 @@ public class Logon : Message
     public DefaultApplVerID Get(DefaultApplVerID val) { GetField(val); return val; }
     public bool IsSet(DefaultApplVerID val) { return IsSetDefaultApplVerID(); }
     public bool IsSetDefaultApplVerID() { return IsSetField(Tags.DefaultApplVerID); }
+
+    public SessionStatus SessionStatus
+    {
+        get
+        {
+            SessionStatus val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(SessionStatus val) { SessionStatus = val; }
+    public SessionStatus Get(SessionStatus val) { GetField(val); return val; }
+    public bool IsSet(SessionStatus val) { return IsSetSessionStatus(); }
+    public bool IsSetSessionStatus() { return IsSetField(Tags.SessionStatus); }
 
     public NoMsgTypes NoMsgTypes
     {

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +13,12 @@ namespace QuickFix;
 /// </summary>
 public class FieldMap : IEnumerable<KeyValuePair<int, IField>> {
     private SortedDictionary<int, IField> _fields = new();
+
+    #region CP Enhancement
+		
+	public bool AllowStringTruncationForCharFields { get; set; }
+		
+    #endregion
 
     /// FIXME sorted dict is a hack to get quasi-correct field order
     private Dictionary<int, List<Group>> _groups = new();
@@ -445,7 +451,7 @@ public class FieldMap : IEnumerable<KeyValuePair<int, IField>> {
         if (fld is FieldBase<char> charField)
             return charField.Value;
 
-        return CharConverter.Convert(fld.ToString());
+        return CharConverter.Convert(fld.ToString(), AllowStringTruncationForCharFields); // FixPortal Enhancement
     }
 
     /// <summary>

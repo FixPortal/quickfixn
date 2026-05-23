@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace QuickFix.Logger;
 
@@ -59,5 +59,17 @@ public class ScreenLog : ILog
         // Nothing to dispose of
     }
     ~ScreenLog() => Dispose(false);
+    #endregion
+
+    #region CP Enhancement
+
+    public void LogOn() { }
+    public void LogOff() { }
+    public void OnIncomingAndOutgoing((int Id, string Raw, string Xml, string Json) message) { }
+    public void OnRejectionEvent(string originalMessage, string rejectionText)
+    {
+        OnEvent(rejectionText);
+    }
+
     #endregion
 }

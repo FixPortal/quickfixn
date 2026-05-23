@@ -91,8 +91,8 @@ namespace UnitTests
             ex = Assert.Throws(typeof(ConfigError), delegate { new SessionSchedule(settings); })!;
             Assert.That(ex.Message, Does.Contain("StartDay/EndDay are not compatible with 'Weekdays' setting"));
         }
-
         [Test]
+
         public void TestCtor_NonStopSession()
         {
             SettingsDictionary settings = new SettingsDictionary();
@@ -708,5 +708,46 @@ namespace UnitTests
             Assert.That(sched.IsSessionTime(new DateTime(2024, 05, 24, 11, 00, 00, DateTimeKind.Utc)), Is.False);
             Assert.That(sched.IsSessionTime(new DateTime(2024, 05, 24, 11, 00, 10, DateTimeKind.Utc)), Is.False);
         }
+        //#region CP Enhancement
+        //[Test]
+        //[TestCase("22:35:00", "22:30:00", "Sun,Mon,Tue,Wed,Thu,Fri,Sat", "04/05/2020 22:35", true)]
+        //[TestCase("22:35:00", "22:30:00", "Sun,Mon,Tue,Wed,Thu,Fri,Sat", "05/05/2020 22:35", true)]
+        //[TestCase("22:35:00", "22:30:00", "Sun,Mon,Tue,Wed,Thu,Fri,Sat", "06/05/2020 22:35", true)]
+        //[TestCase("22:35:00", "22:30:00", "Sun,Mon,Tue,Wed,Thu,Fri,Sat", "07/05/2020 22:35", true)]
+        //[TestCase("22:35:00", "22:30:00", "Sun,Mon,Tue,Wed,Thu,Fri,Sat", "08/05/2020 22:35", true)]
+        //[TestCase("22:35:00", "22:30:00", "Sun,Mon,Tue,Wed,Thu,Fri,Sat", "09/05/2020 22:35", true)]
+        //[TestCase("22:35:00", "22:30:00", "Sun,Mon,Tue,Wed,Thu,Fri,Sat", "10/05/2020 22:35", true)]
+        //[TestCase("22:35:00", "22:30:00", "Mon,Tue,Wed,Thu,Fri,Sat", "04/05/2020 22:25", false)]
+        //[TestCase("22:35:00", "22:30:00", "Sun,Tue,Wed,Thu,Fri,Sat", "05/05/2020 22:25", false)]
+        //[TestCase("22:35:00", "22:30:00", "Sun,Mon,Wed,Thu,Fri,Sat", "06/05/2020 22:25", false)]
+        //[TestCase("22:35:00", "22:30:00", "Sun,Mon,Tue,Thu,Fri,Sat", "07/05/2020 22:25", false)]
+        //[TestCase("22:35:00", "22:30:00", "Sun,Mon,Tue,Wed,Fri,Sat", "08/05/2020 22:25", false)]
+        //[TestCase("22:35:00", "22:30:00", "Sun,Mon,Tue,Wed,Thu,Sat", "09/05/2020 22:25", false)]
+        //[TestCase("22:35:00", "22:30:00", "Sun,Mon,Tue,Wed,Thu,Fri", "10/05/2020 22:25", false)]
+        //[TestCase("22:35:00", "22:30:00", "Sun,Tue,Wed,Thu,Fri,Sat", "04/05/2020 22:40", false)]
+        //[TestCase("22:35:00", "22:30:00", "Sun,Mon,Wed,Thu,Fri,Sat", "05/05/2020 22:40", false)]
+        //[TestCase("22:35:00", "22:30:00", "Sun,Mon,Tue,Thu,Fri,Sat", "06/05/2020 22:40", false)]
+        //[TestCase("22:35:00", "22:30:00", "Sun,Mon,Tue,Wed,Fri,Sat", "07/05/2020 22:40", false)]
+        //[TestCase("22:35:00", "22:30:00", "Sun,Mon,Tue,Wed,Thu,Sat", "08/05/2020 22:40", false)]
+        //[TestCase("22:35:00", "22:30:00", "Sun,Mon,Tue,Wed,Thu,Fri", "09/05/2020 22:40", false)]
+        //[TestCase("22:35:00", "22:30:00", "Mon,Tue,Wed,Thu,Fri,Sat", "10/05/2020 22:40", false)]
+        //public void testDailySessions_Crossing_Days(string startTime, string endTime, string daysOfWeek, string candidateDate, bool anticipatedResult)
+        //{
+        //    var candidate = ConvertStringToUTC(candidateDate);
+        //    QuickFix.SettingsDictionary settings = new QuickFix.SettingsDictionary();
+        //    settings.SetString(QuickFix.SessionSettings.START_TIME, startTime);
+        //    settings.SetString(QuickFix.SessionSettings.END_TIME, endTime);
+        //    settings.SetString(QuickFix.SessionSettings.DAYS_OF_WEEK, daysOfWeek);
+        //    QuickFix.SessionSchedule sched = new QuickFix.SessionSchedule(settings);
+        //    Assert.That(sched.IsSessionTime(sched.AdjustUtcDateTime(candidate)) ==  anticipatedResult);
+        //}
+
+        //private DateTime ConvertStringToUTC(string candidate)
+        //{
+        //    const string pattern = @"(?<Day>\d{2})/(?<Month>\d{2})/(?<Year>\d{4})\s(?<Hour>\d{2}):(?<Minute>\d{2})";
+        //    var match = Regex.Match(candidate, pattern);
+        //    return new DateTime(Int32.Parse(match.Groups["Year"].Value), Int32.Parse(match.Groups["Month"].Value), Int32.Parse(match.Groups["Day"].Value), Int32.Parse(match.Groups["Hour"].Value), Int32.Parse(match.Groups["Minute"].Value), 0, DateTimeKind.Utc);
+        //}
+        //#endregion
     }
 }

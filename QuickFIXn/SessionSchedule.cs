@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace QuickFix
@@ -60,7 +60,7 @@ namespace QuickFix
             if (utc.Kind != DateTimeKind.Utc)
                 throw new ArgumentException("Only UTC time is supported", nameof(utc));
 
-            if(UseLocalTime)
+            if (UseLocalTime)
                 return utc.ToLocalTime();
 
             return TimeZone==null ? utc : TimeZoneInfo.ConvertTimeFromUtc(utc, TimeZone);

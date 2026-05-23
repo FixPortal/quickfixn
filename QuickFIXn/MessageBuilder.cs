@@ -1,4 +1,4 @@
-﻿namespace QuickFix
+namespace QuickFix
 {
     internal class MessageBuilder
     {

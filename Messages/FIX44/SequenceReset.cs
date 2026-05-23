@@ -52,4 +52,20 @@ public class SequenceReset : Message
     public NewSeqNo Get(NewSeqNo val) { GetField(val); return val; }
     public bool IsSet(NewSeqNo val) { return IsSetNewSeqNo(); }
     public bool IsSetNewSeqNo() { return IsSetField(Tags.NewSeqNo); }
+
+    public MessageEncoding MessageEncoding
+    {
+        get
+        {
+            MessageEncoding val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(MessageEncoding val) { MessageEncoding = val; }
+    public MessageEncoding Get(MessageEncoding val) { GetField(val); return val; }
+    public bool IsSet(MessageEncoding val) { return IsSetMessageEncoding(); }
+    public bool IsSetMessageEncoding() { return IsSetField(Tags.MessageEncoding); }
 }

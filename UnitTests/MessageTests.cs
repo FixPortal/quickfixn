@@ -13,6 +13,7 @@ namespace UnitTests
     {
         private readonly IMessageFactory _defaultMsgFactory = new DefaultMessageFactory();
 
+
         [Test]
         public void IdentifyTypeTest()
         {

@@ -54,4 +54,20 @@ public class ResendRequest : Message
     public EndSeqNo Get(EndSeqNo val) { GetField(val); return val; }
     public bool IsSet(EndSeqNo val) { return IsSetEndSeqNo(); }
     public bool IsSetEndSeqNo() { return IsSetField(Tags.EndSeqNo); }
+
+    public MessageEncoding MessageEncoding
+    {
+        get
+        {
+            MessageEncoding val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(MessageEncoding val) { MessageEncoding = val; }
+    public MessageEncoding Get(MessageEncoding val) { GetField(val); return val; }
+    public bool IsSet(MessageEncoding val) { return IsSetMessageEncoding(); }
+    public bool IsSetMessageEncoding() { return IsSetField(Tags.MessageEncoding); }
 }

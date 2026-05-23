@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace QuickFix.Logger;
 
@@ -29,4 +29,13 @@ public class FileLogFactory : ILogFactory
             _settings.Get().GetString(SessionSettings.FILE_LOG_PATH),
             new SessionID("Non", "Session", "Log"));
     }
+
+    #region CP Enhancement
+
+    public ILog Create(SessionID sessionID, Enhancements.DataDictionary.VersionInfo dataDictionaryVersionInfo)
+    {
+        return Create(sessionID);
+    }
+
+    #endregion
 }

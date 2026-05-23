@@ -235,10 +235,10 @@ public class ConfirmationRequest : Message
 
     public class NoOrdersGroup : Group
     {
-        public static int[] DefaultFieldOrder = [Tags.ClOrdID, Tags.OrderID, Tags.SecondaryOrderID, Tags.SecondaryClOrdID, Tags.ListID, Tags.NoNested2PartyIDs, Tags.OrderQty, Tags.OrderAvgPx, Tags.OrderBookingQty, 0];
+        public static int[] DefaultFieldOrder = [Tags.ClOrdID, Tags.OrderID, Tags.SecondaryOrderID, Tags.SecondaryClOrdID, Tags.ListID, Tags.NoNested2PartyIDs, Tags.OrderQty, Tags.OrderAvgPx, 0];
 
         [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
-        public static int[] fieldOrder = {Tags.ClOrdID, Tags.OrderID, Tags.SecondaryOrderID, Tags.SecondaryClOrdID, Tags.ListID, Tags.NoNested2PartyIDs, Tags.OrderQty, Tags.OrderAvgPx, Tags.OrderBookingQty, 0};
+        public static int[] fieldOrder = {Tags.ClOrdID, Tags.OrderID, Tags.SecondaryOrderID, Tags.SecondaryClOrdID, Tags.ListID, Tags.NoNested2PartyIDs, Tags.OrderQty, Tags.OrderAvgPx, 0};
 
         public NoOrdersGroup()
           : base(Tags.NoOrders, Tags.ClOrdID, DefaultFieldOrder)
@@ -379,22 +379,6 @@ public class ConfirmationRequest : Message
         public OrderAvgPx Get(OrderAvgPx val) { GetField(val); return val; }
         public bool IsSet(OrderAvgPx val) { return IsSetOrderAvgPx(); }
         public bool IsSetOrderAvgPx() { return IsSetField(Tags.OrderAvgPx); }
-
-        public OrderBookingQty OrderBookingQty
-        {
-            get
-            {
-                OrderBookingQty val = new();
-                GetField(val);
-                return val;
-            }
-            set  => SetField(value);
-        }
-
-        public void Set(OrderBookingQty val) { OrderBookingQty = val; }
-        public OrderBookingQty Get(OrderBookingQty val) { GetField(val); return val; }
-        public bool IsSet(OrderBookingQty val) { return IsSetOrderBookingQty(); }
-        public bool IsSetOrderBookingQty() { return IsSetField(Tags.OrderBookingQty); }
 
         public class NoNested2PartyIDsGroup : Group
         {

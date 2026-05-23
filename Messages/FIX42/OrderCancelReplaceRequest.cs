@@ -81,6 +81,38 @@ public class OrderCancelReplaceRequest : Message
     public bool IsSet(ExecBroker val) { return IsSetExecBroker(); }
     public bool IsSetExecBroker() { return IsSetField(Tags.ExecBroker); }
 
+    public LocateBroker LocateBroker
+    {
+        get
+        {
+            LocateBroker val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(LocateBroker val) { LocateBroker = val; }
+    public LocateBroker Get(LocateBroker val) { GetField(val); return val; }
+    public bool IsSet(LocateBroker val) { return IsSetLocateBroker(); }
+    public bool IsSetLocateBroker() { return IsSetField(Tags.LocateBroker); }
+
+    public LocateIdentifier LocateIdentifier
+    {
+        get
+        {
+            LocateIdentifier val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(LocateIdentifier val) { LocateIdentifier = val; }
+    public LocateIdentifier Get(LocateIdentifier val) { GetField(val); return val; }
+    public bool IsSet(LocateIdentifier val) { return IsSetLocateIdentifier(); }
+    public bool IsSetLocateIdentifier() { return IsSetField(Tags.LocateIdentifier); }
+
     public OrigClOrdID OrigClOrdID
     {
         get
@@ -1152,6 +1184,102 @@ public class OrderCancelReplaceRequest : Message
     public ClearingAccount Get(ClearingAccount val) { GetField(val); return val; }
     public bool IsSet(ClearingAccount val) { return IsSetClearingAccount(); }
     public bool IsSetClearingAccount() { return IsSetField(Tags.ClearingAccount); }
+
+    public BTOrderInst BTOrderInst
+    {
+        get
+        {
+            BTOrderInst val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(BTOrderInst val) { BTOrderInst = val; }
+    public BTOrderInst Get(BTOrderInst val) { GetField(val); return val; }
+    public bool IsSet(BTOrderInst val) { return IsSetBTOrderInst(); }
+    public bool IsSetBTOrderInst() { return IsSetField(Tags.BTOrderInst); }
+
+    public UnderlyingSymbol UnderlyingSymbol
+    {
+        get
+        {
+            UnderlyingSymbol val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(UnderlyingSymbol val) { UnderlyingSymbol = val; }
+    public UnderlyingSymbol Get(UnderlyingSymbol val) { GetField(val); return val; }
+    public bool IsSet(UnderlyingSymbol val) { return IsSetUnderlyingSymbol(); }
+    public bool IsSetUnderlyingSymbol() { return IsSetField(Tags.UnderlyingSymbol); }
+
+    public UnderlyingSecurityType UnderlyingSecurityType
+    {
+        get
+        {
+            UnderlyingSecurityType val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(UnderlyingSecurityType val) { UnderlyingSecurityType = val; }
+    public UnderlyingSecurityType Get(UnderlyingSecurityType val) { GetField(val); return val; }
+    public bool IsSet(UnderlyingSecurityType val) { return IsSetUnderlyingSecurityType(); }
+    public bool IsSetUnderlyingSecurityType() { return IsSetField(Tags.UnderlyingSecurityType); }
+
+    public Anonymous Anonymous
+    {
+        get
+        {
+            Anonymous val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(Anonymous val) { Anonymous = val; }
+    public Anonymous Get(Anonymous val) { GetField(val); return val; }
+    public bool IsSet(Anonymous val) { return IsSetAnonymous(); }
+    public bool IsSetAnonymous() { return IsSetField(Tags.Anonymous); }
+
+    public NoTradeFeature NoTradeFeature
+    {
+        get
+        {
+            NoTradeFeature val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(NoTradeFeature val) { NoTradeFeature = val; }
+    public NoTradeFeature Get(NoTradeFeature val) { GetField(val); return val; }
+    public bool IsSet(NoTradeFeature val) { return IsSetNoTradeFeature(); }
+    public bool IsSetNoTradeFeature() { return IsSetField(Tags.NoTradeFeature); }
+
+    public NoTradeKey NoTradeKey
+    {
+        get
+        {
+            NoTradeKey val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(NoTradeKey val) { NoTradeKey = val; }
+    public NoTradeKey Get(NoTradeKey val) { GetField(val); return val; }
+    public bool IsSet(NoTradeKey val) { return IsSetNoTradeKey(); }
+    public bool IsSetNoTradeKey() { return IsSetField(Tags.NoTradeKey); }
 
     public class NoAllocsGroup : Group
     {

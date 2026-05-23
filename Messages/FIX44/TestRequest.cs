@@ -36,4 +36,20 @@ public class TestRequest : Message
     public TestReqID Get(TestReqID val) { GetField(val); return val; }
     public bool IsSet(TestReqID val) { return IsSetTestReqID(); }
     public bool IsSetTestReqID() { return IsSetField(Tags.TestReqID); }
+
+    public MessageEncoding MessageEncoding
+    {
+        get
+        {
+            MessageEncoding val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(MessageEncoding val) { MessageEncoding = val; }
+    public MessageEncoding Get(MessageEncoding val) { GetField(val); return val; }
+    public bool IsSet(MessageEncoding val) { return IsSetMessageEncoding(); }
+    public bool IsSetMessageEncoding() { return IsSetField(Tags.MessageEncoding); }
 }

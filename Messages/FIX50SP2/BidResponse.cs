@@ -64,10 +64,10 @@ public class BidResponse : Message
 
     public class NoBidComponentsGroup : Group
     {
-        public static int[] DefaultFieldOrder = [Tags.Commission, Tags.CommType, Tags.CommCurrency, Tags.FundRenewWaiv, Tags.ListID, Tags.Country, Tags.Side, Tags.Price, Tags.PriceType, Tags.FairValue, Tags.NetGrossInd, Tags.SettlType, Tags.SettlDate, Tags.TradingSessionID, Tags.TradingSessionSubID, Tags.Text, Tags.EncodedTextLen, Tags.EncodedText, 0];
+        public static int[] DefaultFieldOrder = [Tags.Commission, Tags.CommType, Tags.CommCurrency, Tags.FundRenewWaiv, Tags.CommissionRate, Tags.CommissionValueType, Tags.CommissionMode, Tags.ListID, Tags.Country, Tags.Side, Tags.Price, Tags.PriceType, Tags.FairValue, Tags.NetGrossInd, Tags.SettlType, Tags.SettlDate, Tags.TradingSessionID, Tags.TradingSessionSubID, Tags.Text, Tags.EncodedTextLen, Tags.EncodedText, 0];
 
         [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
-        public static int[] fieldOrder = {Tags.Commission, Tags.CommType, Tags.CommCurrency, Tags.FundRenewWaiv, Tags.ListID, Tags.Country, Tags.Side, Tags.Price, Tags.PriceType, Tags.FairValue, Tags.NetGrossInd, Tags.SettlType, Tags.SettlDate, Tags.TradingSessionID, Tags.TradingSessionSubID, Tags.Text, Tags.EncodedTextLen, Tags.EncodedText, 0};
+        public static int[] fieldOrder = {Tags.Commission, Tags.CommType, Tags.CommCurrency, Tags.FundRenewWaiv, Tags.CommissionRate, Tags.CommissionValueType, Tags.CommissionMode, Tags.ListID, Tags.Country, Tags.Side, Tags.Price, Tags.PriceType, Tags.FairValue, Tags.NetGrossInd, Tags.SettlType, Tags.SettlDate, Tags.TradingSessionID, Tags.TradingSessionSubID, Tags.Text, Tags.EncodedTextLen, Tags.EncodedText, 0};
 
         public NoBidComponentsGroup()
           : base(Tags.NoBidComponents, Tags.Commission, DefaultFieldOrder)
@@ -144,6 +144,54 @@ public class BidResponse : Message
         public FundRenewWaiv Get(FundRenewWaiv val) { GetField(val); return val; }
         public bool IsSet(FundRenewWaiv val) { return IsSetFundRenewWaiv(); }
         public bool IsSetFundRenewWaiv() { return IsSetField(Tags.FundRenewWaiv); }
+
+        public CommissionRate CommissionRate
+        {
+            get
+            {
+                CommissionRate val = new();
+                GetField(val);
+                return val;
+            }
+            set  => SetField(value);
+        }
+
+        public void Set(CommissionRate val) { CommissionRate = val; }
+        public CommissionRate Get(CommissionRate val) { GetField(val); return val; }
+        public bool IsSet(CommissionRate val) { return IsSetCommissionRate(); }
+        public bool IsSetCommissionRate() { return IsSetField(Tags.CommissionRate); }
+
+        public CommissionValueType CommissionValueType
+        {
+            get
+            {
+                CommissionValueType val = new();
+                GetField(val);
+                return val;
+            }
+            set  => SetField(value);
+        }
+
+        public void Set(CommissionValueType val) { CommissionValueType = val; }
+        public CommissionValueType Get(CommissionValueType val) { GetField(val); return val; }
+        public bool IsSet(CommissionValueType val) { return IsSetCommissionValueType(); }
+        public bool IsSetCommissionValueType() { return IsSetField(Tags.CommissionValueType); }
+
+        public CommissionMode CommissionMode
+        {
+            get
+            {
+                CommissionMode val = new();
+                GetField(val);
+                return val;
+            }
+            set  => SetField(value);
+        }
+
+        public void Set(CommissionMode val) { CommissionMode = val; }
+        public CommissionMode Get(CommissionMode val) { GetField(val); return val; }
+        public bool IsSet(CommissionMode val) { return IsSetCommissionMode(); }
+        public bool IsSetCommissionMode() { return IsSetField(Tags.CommissionMode); }
 
         public ListID ListID
         {

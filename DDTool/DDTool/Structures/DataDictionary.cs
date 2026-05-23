@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using DDTool.Exceptions;
 
 namespace DDTool.Structures;
 
-public class DataDictionary {
+public class DataDictionary
+{
     /// <summary>
     /// This is purely informative.  You can set it to nonsense if you want.
     /// </summary>
@@ -12,7 +14,7 @@ public class DataDictionary {
     public string SourceFile { get; }
 
     /// <summary>
-    /// Optional "customname" attribute on root ‹fix› tag
+    /// Optional "customname" attribute on root fix tag
     /// </summary>
     public string? CustomName { get; set; }
 
@@ -25,11 +27,8 @@ public class DataDictionary {
     public Dictionary<string, DDField> FieldsByName { get; } = new();
     public Dictionary<string, DDMessage> Messages { get; } = new();
 
-    /// <summary>
-    /// This does not initiate parsing.
-    /// </summary>
-    /// <param name="sourceFile"></param>
-    public DataDictionary(string sourceFile) {
+    public DataDictionary(string sourceFile)
+    {
         SourceFile = sourceFile;
     }
 
@@ -44,14 +43,42 @@ public class DataDictionary {
         {
             var prefix = IsFIXT ? "FIXT" : "FIX";
             var svcPack = ServicePack is null ? "" : $"SP{ServicePack}";
-            return $"{prefix}.{MajorVersion}.{MinorVersion}{svcPack}";
+            var defaultIdentifier =  $"{prefix}.{MajorVersion}.{MinorVersion}{svcPack}";
+            // FixPortal Enhancement
+            return _centerpriseDesiredOrder.TryGetValue(defaultIdentifier, out var value) ? $"{value}_{defaultIdentifier}" : defaultIdentifier;
         }
     }
+
+    private readonly Dictionary<string, int> _centerpriseDesiredOrder = new()
+    {
+        { "FIX.4.0", 1 },
+        { "FIX.4.1", 2 },
+        { "FIX.4.3", 3 },
+        { "FIX.5.0", 4 },
+        { "FIX.5.0SP1", 5 },
+        { "FIX.5.0SP2", 6 },
+        { "FIXT.1.1", 7 },
+        { "FIX.4.2", 8 },
+        { "FIX.4.4", 8 },
+    };
 
     /// <summary>
     /// Returns e.g. "FIX42", "FIXT11", "FIX50SP2"
     /// </summary>
-    public string IdentifierNoDots => Identifier.Replace(".", "");
+    public string IdentifierNoDots
+    {
+        // FixPortal Enhancement
+        get
+        {
+            Regex regex = new(@"(?:1_)?(FIXT?\.\d\.\d(?:SP\d+)?)");
+
+            Match match = regex.Match(Identifier);
+
+            return match.Success ?
+                match.Groups[1].Value.Replace(".", "") :
+                Identifier.Replace(".", "");
+        }
+    }
 
     /// <summary>
     /// Name to use for dir and project

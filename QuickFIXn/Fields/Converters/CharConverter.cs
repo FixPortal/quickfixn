@@ -8,7 +8,7 @@ namespace QuickFix.Fields.Converters
     /// <summary>
     /// Converts char to/from string
     /// </summary>
-    public static class CharConverter
+    public static class CharConverter 
     {
         /// <summary>
         /// Convert string to char
@@ -28,5 +28,16 @@ namespace QuickFix.Fields.Converters
         {
             return c.ToString();
         }
+
+        #region CP Enhancement
+
+        public static char Convert(string c, bool allowTruncation)
+        {
+            if (c.Length == 0 || (c.Length != 1 && !allowTruncation))
+                throw new FieldConvertError("could not convert string to char, str=" + c);
+            return c[0];
+        }
+
+        #endregion
     }
 }

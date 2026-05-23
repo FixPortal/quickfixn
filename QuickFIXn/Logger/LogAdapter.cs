@@ -28,6 +28,15 @@ internal class LogAdapter : ILogger, IDisposable
         {
             _log.OnOutgoing(formatter(state, exception));
         }
+        // FixPortal Enhancement
+        else if (eventId == LogEventIds.RejectionEvent && state is RejectionEventState rejection)
+        {
+            _log.OnRejectionEvent(rejection.OriginalMessage, rejection.RejectionText);
+        }
+        else if (eventId == LogEventIds.IncomingAndOutgoing && state is IncomingAndOutgoingState iao)
+        {
+            _log.OnIncomingAndOutgoing((iao.Id, iao.Raw, iao.Xml, iao.Json));
+        }
         else
         {
             _log.OnEvent(formatter(state, exception));
@@ -42,4 +51,15 @@ internal class LogAdapter : ILogger, IDisposable
     {
         _log.Dispose();
     }
+}
+
+// FixPortal Enhancement - structured state types for CP log events
+public record RejectionEventState(string OriginalMessage, string RejectionText)
+{
+    public override string ToString() => RejectionText;
+}
+
+public record IncomingAndOutgoingState(int Id, string Raw, string Xml, string Json)
+{
+    public override string ToString() => Raw;
 }

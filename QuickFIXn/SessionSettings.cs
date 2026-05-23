@@ -1,4 +1,4 @@
-﻿using QuickFix.ObjectPooling;
+using QuickFix.ObjectPooling;
 using System.Collections.Generic;
 using System.IO;
 
@@ -85,6 +85,21 @@ public class SessionSettings
 
     #endregion
 
+	#region CP Enhancement
+
+	public const string DATA_DICTIONARY_REVISION = "DataDictionaryRevision";
+	public const string DATA_DICTIONARY_SOURCE = "DataDictionarySource";
+	public const string DATA_DICTIONARY_DEFAULT_SUPPORTED = "DataDictionaryDefaultSupported";
+	public const string SESSION_TYPE = "SessionType";
+	public const string SESSION_SUPPORTS_UPLOAD = "SessionSupportsUpload";
+	public const string SESSION_BROKER = "SessionBroker";
+	public const string VALIDATE_FIELD_ENUM_VALUES = "ValidateFieldEnumValues";
+	public const string ALLOW_STRING_TRUNCATION_FOR_CHAR_FIELDS = "AllowStringTruncationForCharFields";
+	public const string SESSION_DESCRIPTION = "Description";
+	public const string PASSWORD = "Password";
+
+    #endregion
+
     #region Private Members
 
     private SettingsDictionary _defaults = new();
@@ -141,6 +156,8 @@ public class SessionSettings
             string targetSubId = SessionID.NOT_SET;
             string targetLocId = SessionID.NOT_SET;
 
+
+
             if (dict.Has(SESSION_QUALIFIER))
                 sessionQualifier = dict.GetString(SESSION_QUALIFIER);
             if (dict.Has(SENDERSUBID))
@@ -151,8 +168,33 @@ public class SessionSettings
                 targetSubId = dict.GetString(TARGETSUBID);
             if (dict.Has(TARGETLOCID))
                 targetLocId = dict.GetString(TARGETLOCID);
-            SessionID sessionId = new SessionID(dict.GetString(BEGINSTRING), dict.GetString(SENDERCOMPID), senderSubId, senderLocId, dict.GetString(TARGETCOMPID), targetSubId, targetLocId, sessionQualifier);
+
+            #region CP Enhancement
+
+			string sessionBroker = SessionID.NOT_SET; 
+			string sessionType = SessionID.NOT_SET;
+			string host = SessionID.NOT_SET;
+			string port = SessionID.NOT_SET;
+			bool sessionSupportsUpload = false;
+			string sessionDescription = SessionID.NOT_SET;
+			if (dict.Has(SESSION_TYPE))
+				sessionType = dict.GetString(SESSION_TYPE);
+			if (dict.Has(SOCKET_ACCEPT_HOST))
+				host = dict.GetString(SOCKET_ACCEPT_HOST);
+			if (dict.Has(SOCKET_ACCEPT_PORT))
+				port = dict.GetString(SOCKET_ACCEPT_PORT);
+			if (dict.Has(SESSION_SUPPORTS_UPLOAD))
+				sessionSupportsUpload = dict.GetBool(SESSION_SUPPORTS_UPLOAD);
+			if (dict.Has(SESSION_BROKER))
+				sessionBroker = dict.GetString(SESSION_BROKER);
+			if (dict.Has(SESSION_DESCRIPTION))
+				sessionDescription = dict.GetString(SESSION_DESCRIPTION);
+                
+			SessionID sessionId = new SessionID(dict.GetString(BEGINSTRING), dict.GetString(SENDERCOMPID), senderSubId,	senderLocId, dict.GetString(TARGETCOMPID), targetSubId, targetLocId, sessionQualifier, sessionType, host, port, sessionSupportsUpload, sessionBroker, sessionDescription); 
             Set(sessionId, dict);
+				
+            #endregion
+                
         }
     }
 

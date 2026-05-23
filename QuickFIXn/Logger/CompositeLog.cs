@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace QuickFix.Logger;
 
@@ -68,4 +68,24 @@ internal class CompositeLog : ILog
     }
 
     ~CompositeLog() => Dispose(false);
+
+    #region CP Enhancement
+	
+    public void LogOn() { }
+    public void LogOff() { }
+
+    public void OnIncomingAndOutgoing((int Id, string Raw, string Xml, string Json) message)
+    {
+        DisposedCheck();
+        foreach (var log in _logs)
+            log.OnIncomingAndOutgoing((message.Id, message.Raw, message.Xml, message.Json));
+    }
+    public void OnRejectionEvent(string originalMessage, string rejectionText)
+    {
+        DisposedCheck();
+        foreach (var log in _logs)
+            log.OnRejectionEvent(originalMessage, rejectionText);
+    }
+	
+    #endregion
 }

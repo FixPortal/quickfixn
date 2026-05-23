@@ -69,6 +69,22 @@ public class Reject : Message
     public bool IsSet(RefMsgType val) { return IsSetRefMsgType(); }
     public bool IsSetRefMsgType() { return IsSetField(Tags.RefMsgType); }
 
+    public RefApplVerID RefApplVerID
+    {
+        get
+        {
+            RefApplVerID val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(RefApplVerID val) { RefApplVerID = val; }
+    public RefApplVerID Get(RefApplVerID val) { GetField(val); return val; }
+    public bool IsSet(RefApplVerID val) { return IsSetRefApplVerID(); }
+    public bool IsSetRefApplVerID() { return IsSetField(Tags.RefApplVerID); }
+
     public SessionRejectReason SessionRejectReason
     {
         get

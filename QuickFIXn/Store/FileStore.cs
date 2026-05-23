@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Buffers;
 using System.Collections.Generic;
 using System.Text;
@@ -63,7 +63,7 @@ public class FileStore : IMessageStore
     /// <param name="sessionId"></param>
     public FileStore(string path, SessionID sessionId)
     {
-        string normalizedPath = StringUtil.FixSlashes(path);
+        string normalizedPath = Enhancements.Utility.ParsePath(StringUtil.FixSlashes(path)); // FixPortal Enhancement
 
         if (!System.IO.Directory.Exists(normalizedPath))
             System.IO.Directory.CreateDirectory(normalizedPath);

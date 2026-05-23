@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
@@ -58,9 +58,10 @@ public class SessionDynamicTest
     }
 
     private const string Host = "127.0.0.1";
-    private const int ConnectPort = 55100;
-    private const int AcceptPort = 55101;
-    private const int AcceptPort2 = 55102;
+    // FixPortal Enhancement; port configuration didn't work locally so changed
+    private int ConnectPort;// = 55200;
+    private int AcceptPort;// = 55201;
+    private int AcceptPort2; // = 55202;
     private const string ServerCompId = "dummy";
     private const string StaticInitiatorCompId = "ini01";
     private const string StaticAcceptorCompId = "acc01";
@@ -75,6 +76,15 @@ public class SessionDynamicTest
     private Dictionary<string, SocketState> _sessions = new();
     private HashSet<string> _loggedOnCompIDs = new();
     private Socket? _listenSocket;
+
+    static int FreeTcpPort()
+    {
+        TcpListener l = new TcpListener(IPAddress.Loopback, 0);
+        l.Start();
+        int port = ((IPEndPoint)l.LocalEndpoint).Port;
+        l.Stop();
+        return port;
+    }
 
     private static SettingsDictionary CreateSessionConfig(bool isInitiator)
     {
@@ -239,8 +249,11 @@ public class SessionDynamicTest
         socketState.Socket.BeginReceive(socketState.RxBuffer, 0, socketState.RxBuffer.Length, SocketFlags.None, ProcessRxData, socketState);
     }
 
-    private Socket ConnectToEngine(int port = AcceptPort, int numRetries = 3)
+    private Socket ConnectToEngine(int port = 0, int numRetries = 3)
     {
+        if (port == 0)
+            port = AcceptPort;
+
         var address = IPAddress.Parse(Host);
         var endpoint = new IPEndPoint(address, port);
         var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -356,6 +369,11 @@ public class SessionDynamicTest
         _sessions = new Dictionary<string, SocketState>();
         _loggedOnCompIDs = new HashSet<string>();
         ClearLogs();
+
+        AcceptPort = FreeTcpPort();
+        ConnectPort = AcceptPort + 1;
+        AcceptPort2 = AcceptPort + 2;
+
     }
 
     [TearDown]
@@ -468,6 +486,55 @@ public class SessionDynamicTest
         Assert.That(_acceptor.RemoveSession(CreateSessionId(StaticAcceptorCompId), true), Is.True, "Failed to remove active session");
         Assert.That(WaitForDisconnect(socket01), Is.True, "Socket still connected after session removed");
         Assert.That(IsLoggedOn(StaticAcceptorCompId), Is.False, "Session still logged on after being removed");
+    }
+
+    // FixPortal Enhancement
+    [Test]
+    public void RemoveSessionFreesPortWhenItWasTheLastSessionOnIt()
+    {
+        StartEngine(false);
+        if (_acceptor is null)
+            throw new AssertionException("_acceptor is null");
+
+        // Add a dynamic session on its own dedicated port and confirm it accepts a logon.
+        const string dynamicCompId = "acc10";
+        SessionID sessionId = CreateSessionId(dynamicCompId);
+        SettingsDictionary sessionConfig = CreateSessionConfig(false);
+        sessionConfig.SetString(SessionSettings.SOCKET_ACCEPT_PORT, AcceptPort2.ToString());
+        Assert.That(_acceptor.AddSession(sessionId, sessionConfig), Is.True, "Failed to add dynamic session");
+
+        using (var socket = ConnectToEngine(AcceptPort2))
+        {
+            SendLogon(socket, dynamicCompId);
+            Assert.That(WaitForLogonStatus(dynamicCompId), Is.True, "Failed to logon dynamic session");
+        }
+
+        // Removing the only session on AcceptPort2 must free the port.
+        // Shutdown() is synchronous, but give the OS a moment to fully release the listener.
+        Assert.That(_acceptor.RemoveSession(sessionId, true), Is.True, "Failed to remove dynamic session");
+
+        var endpoint = new IPEndPoint(IPAddress.Parse(Host), AcceptPort2);
+        bool portReleased = false;
+        var deadline = DateTime.UtcNow.AddSeconds(5);
+        // OS-level port release has no callback — spin-wait until the port refuses a connection.
+        while (DateTime.UtcNow < deadline)
+        {
+            using var probe = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            probe.Blocking = true;
+            try
+            {
+                probe.Connect(endpoint);
+                // Still accepting — wait and retry.
+                Thread.Sleep(50);
+            }
+            catch (SocketException)
+            {
+                portReleased = true;
+                break;
+            }
+        }
+        Assert.That(portReleased, Is.True,
+            "Port was still accepting connections after its last session was removed");
     }
 
     [Test]

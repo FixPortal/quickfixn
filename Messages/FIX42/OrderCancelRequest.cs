@@ -141,6 +141,38 @@ public class OrderCancelRequest : Message
     public bool IsSet(ExecBroker val) { return IsSetExecBroker(); }
     public bool IsSetExecBroker() { return IsSetField(Tags.ExecBroker); }
 
+    public LocateBroker LocateBroker
+    {
+        get
+        {
+            LocateBroker val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(LocateBroker val) { LocateBroker = val; }
+    public LocateBroker Get(LocateBroker val) { GetField(val); return val; }
+    public bool IsSet(LocateBroker val) { return IsSetLocateBroker(); }
+    public bool IsSetLocateBroker() { return IsSetField(Tags.LocateBroker); }
+
+    public LocateIdentifier LocateIdentifier
+    {
+        get
+        {
+            LocateIdentifier val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(LocateIdentifier val) { LocateIdentifier = val; }
+    public LocateIdentifier Get(LocateIdentifier val) { GetField(val); return val; }
+    public bool IsSet(LocateIdentifier val) { return IsSetLocateIdentifier(); }
+    public bool IsSetLocateIdentifier() { return IsSetField(Tags.LocateIdentifier); }
+
     public Symbol Symbol
     {
         get
@@ -588,4 +620,52 @@ public class OrderCancelRequest : Message
     public EncodedText Get(EncodedText val) { GetField(val); return val; }
     public bool IsSet(EncodedText val) { return IsSetEncodedText(); }
     public bool IsSetEncodedText() { return IsSetField(Tags.EncodedText); }
+
+    public BTOrderInst BTOrderInst
+    {
+        get
+        {
+            BTOrderInst val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(BTOrderInst val) { BTOrderInst = val; }
+    public BTOrderInst Get(BTOrderInst val) { GetField(val); return val; }
+    public bool IsSet(BTOrderInst val) { return IsSetBTOrderInst(); }
+    public bool IsSetBTOrderInst() { return IsSetField(Tags.BTOrderInst); }
+
+    public UnderlyingSymbol UnderlyingSymbol
+    {
+        get
+        {
+            UnderlyingSymbol val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(UnderlyingSymbol val) { UnderlyingSymbol = val; }
+    public UnderlyingSymbol Get(UnderlyingSymbol val) { GetField(val); return val; }
+    public bool IsSet(UnderlyingSymbol val) { return IsSetUnderlyingSymbol(); }
+    public bool IsSetUnderlyingSymbol() { return IsSetField(Tags.UnderlyingSymbol); }
+
+    public UnderlyingSecurityType UnderlyingSecurityType
+    {
+        get
+        {
+            UnderlyingSecurityType val = new();
+            GetField(val);
+            return val;
+        }
+        set  => SetField(value);
+    }
+
+    public void Set(UnderlyingSecurityType val) { UnderlyingSecurityType = val; }
+    public UnderlyingSecurityType Get(UnderlyingSecurityType val) { GetField(val); return val; }
+    public bool IsSet(UnderlyingSecurityType val) { return IsSetUnderlyingSecurityType(); }
+    public bool IsSetUnderlyingSecurityType() { return IsSetField(Tags.UnderlyingSecurityType); }
 }

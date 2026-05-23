@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Frozen;
 using System.Collections.Generic;
 
@@ -60,7 +60,7 @@ public class DDField
             case "EXCHANGE": return typeof(Fields.StringField);
             case "UTCTIMESTAMP": return typeof(Fields.DateTimeField);
             case "BOOLEAN": return typeof(Fields.BooleanField);
-            case "LOCALMKTDATE": return typeof(Fields.StringField);
+            case "LOCALMKTDATE": return typeof(Fields.DateOnlyField); // FixPortal Enhancement
             case "LOCALMKTTIME": return typeof(Fields.StringField);
             case "DATA": return typeof(Fields.StringField);
             case "FLOAT": return typeof(Fields.DecimalField);

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace QuickFix
 {
@@ -168,37 +168,47 @@ namespace QuickFix
     }
 
     #region Tag Exceptions
-
-    /// <summary>
+	    /// <summary>
     /// Base class for tag-related errors
     /// </summary>
-    public abstract class TagException : QuickFIXException
+	public abstract class TagException : QuickFIXException // FixPortal Enhancement			
     {
         protected int _field;
 
         public int Field { get { return _field; } }
         public FixValues.SessionRejectReason sessionRejectReason;
 
-        public TagException(string msg, int field)
-            : base(msg)
-        {
-            this._field = field;
-            this.sessionRejectReason = new QuickFix.FixValues.SessionRejectReason(FixValues.SessionRejectReason.OTHER.Value, msg);
-        }
+		#region CP Enhancement
+		
+		protected string _value;
 
-        public TagException(int field, FixValues.SessionRejectReason reason)
-            : base(reason.Description)
-        {
-            this._field = field;
-            this.sessionRejectReason = reason;
-        }
+		public string Value => _value;
+		
+		public TagException(string msg, int field, string value = "")
+			: base(msg)
+		{
+			this._field = field;
+			this._value = value;
+			this.sessionRejectReason = new QuickFix.FixValues.SessionRejectReason(FixValues.SessionRejectReason.OTHER.Value, msg);
+		}
+		public TagException(int field, FixValues.SessionRejectReason reason, string value = "")
+			: base(reason.Description)
+		{
+			this._field = field;
+			this._value = value;
+			this.sessionRejectReason = reason;
+		}
+		public TagException(int field, FixValues.SessionRejectReason reason, System.Exception innerException, string value = "")
+			: base(reason.Description, innerException)
+		{
+			this._field = field;
+			this._value = value;
+			this.sessionRejectReason = reason;
+		}
+		
+		#endregion
+		
 
-        public TagException(int field, FixValues.SessionRejectReason reason, System.Exception innerException)
-            : base(reason.Description, innerException)
-        {
-            this._field = field;
-            this.sessionRejectReason = reason;
-        }
     }
     /// <summary>
     /// Tag is not in the correct order
@@ -243,10 +253,16 @@ namespace QuickFix
     /// <summary>
     /// Field has a value that is out of range
     /// </summary>
-    public class IncorrectTagValue : TagException
+    public class IncorrectTagValue : TagException //CP Enhancement			
     {
-        public IncorrectTagValue(int field) : base(field, FixValues.SessionRejectReason.VALUE_IS_INCORRECT) { }
+		#region CP Enhancement
+			
+		public IncorrectTagValue(int field, string value = "") : base(field, FixValues.SessionRejectReason.VALUE_IS_INCORRECT, value) { }
+		
+		#endregion
+
     }
+	
     /// <summary>
     /// Repeated tag not part of repeating group
     /// </summary>

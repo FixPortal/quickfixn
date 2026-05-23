@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text;
 using QuickFix.Fields;
 using System.Text.Json;
@@ -15,6 +15,13 @@ namespace QuickFix;
 /// </summary>
 public class Message : FieldMap
 {
+    #region CP Enhancement		
+    // capture the raw message before we potentially manipulate it
+    // The message itself is used as a key when trying to identify a given message at various points in the process so we need to
+    public string RawMessage { get; private set; }
+		
+    #endregion
+
     public const char SOH = '\u0001';
 
     /// <summary>
@@ -358,6 +365,8 @@ public class Message : FieldMap
         IMessageFactory? msgFactory = null,
         bool ignoreBody = false)
     {
+        RawMessage = msgstr; // FixPortal Enhancement
+
         Clear();
 
         bool expectingHeader = true;

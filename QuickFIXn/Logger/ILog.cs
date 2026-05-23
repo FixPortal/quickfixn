@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace QuickFix.Logger;
 
@@ -29,4 +29,13 @@ public interface ILog : IDisposable
     /// </summary>
     /// <param name="s">event description</param>
     void OnEvent(string s);
+
+    #region CP Enhancement
+
+    void OnRejectionEvent(string originalMessage, string eventText);
+    void LogOn();
+    void LogOff();
+    void OnIncomingAndOutgoing((int Id, string Raw, string Xml, string Json) message);
+
+    #endregion
 }
