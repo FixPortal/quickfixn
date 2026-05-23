@@ -1,17 +1,18 @@
 #!/usr/bin/env python
 """
-Build 10_FIX50SP2_CP_QF.xml by merging CP-specific customizations from FIX44
+Build 10_FIX50SP2_FP_QF.xml by merging FixPortal-specific customizations from FIX44
 into the upstream FIX50SP2 spec.
 
 Input files:
   - Base: spec/fix/FIX50SP2.xml
-  - CP source: spec/Centerprise/9_FIX44_CP_QF.xml
+  - FixPortal source: spec/FixPortal/9_FIX44_FP_QF.xml
   - Upstream FIX44: spec/fix/FIX44.xml
 
-Output: spec/Centerprise/10_FIX50SP2_CP_QF.xml
+Output: spec/FixPortal/10_FIX50SP2_FP_QF.xml
 """
 
 import xml.etree.ElementTree as ET
+from defusedxml.ElementTree import parse as safe_parse
 import copy
 import os
 import sys
@@ -20,22 +21,22 @@ from collections import OrderedDict
 # -- Paths -----------------------------------------------------------------
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FIX50SP2_PATH = os.path.join(BASE_DIR, "spec", "fix", "FIX50SP2.xml")
-CP_FIX44_PATH = os.path.join(BASE_DIR, "spec", "Centerprise", "9_FIX44_CP_QF.xml")
+FP_FIX44_PATH = os.path.join(BASE_DIR, "spec", "FixPortal", "9_FIX44_FP_QF.xml")
 UP_FIX44_PATH = os.path.join(BASE_DIR, "spec", "fix", "FIX44.xml")
-OUTPUT_PATH   = os.path.join(BASE_DIR, "spec", "Centerprise", "10_FIX50SP2_CP_QF.xml")
+OUTPUT_PATH   = os.path.join(BASE_DIR, "spec", "FixPortal", "10_FIX50SP2_FP_QF.xml")
 
 # -- Conflict resolution constants ----------------------------------------
-SKIP_CP_TAGS = set(range(22086, 22092))        # 22086-22091: PartyAltID -> 1516-1521 in SP2
+SKIP_FP_TAGS = set(range(22086, 22092))        # 22086-22091: PartyAltID -> 1516-1521 in SP2
 COLLISION_SP2_WINS = set(range(1586, 1606))     # 1586-1605
 COLLISION_SP2_WINS.add(327)                     # HaltReasonInt
-TAG47_CP_ENUMS = {"NC", "CL", "ST", "IN", "MP", "OF", "OT", "BU"}
-# Tags where CP redefines as a different field - skip enum merge
+TAG47_FP_ENUMS = {"NC", "CL", "ST", "IN", "MP", "OF", "OT", "BU"}
+# Tags where FixPortal redefines as a different field - skip enum merge
 SKIP_ENUM_MERGE_TAGS = {800} | set(range(1586, 1606))
 
 # -- Helpers ---------------------------------------------------------------
 
 def parse_xml(path):
-    tree = ET.parse(path)
+    tree = safe_parse(path)  # nosem: defusedxml is the recommended safe parser
     return tree.getroot()
 
 
@@ -129,25 +130,25 @@ def merge_fields(sp2_fields, cp_fields, up44_fields):
     merged = copy.deepcopy(sp2_fields)
     merged_idx = build_field_index(merged)
 
-    # CP-specific tags: in CP but NOT in upstream FIX44
+    # FixPortal-specific tags: in FixPortal but NOT in upstream FIX44
     cp_specific = {t for t in cp_idx if t not in up44_idx}
 
     for tag in sorted(cp_specific):
-        if tag in SKIP_CP_TAGS:
+        if tag in SKIP_FP_TAGS:
             log.append("SKIP tag %d (%s): PartyAltID range -> 1516-1521 in SP2" %
                        (tag, cp_idx[tag].get('name')))
             continue
         if tag in sp2_idx:
-            log.append("COLLISION tag %d: SP2 '%s' wins over CP '%s'" %
+            log.append("COLLISION tag %d: SP2 '%s' wins over FixPortal '%s'" %
                        (tag, sp2_idx[tag].get('name'), cp_idx[tag].get('name')))
             continue
         new_f = copy.deepcopy(cp_idx[tag])
         merged.append(new_f)
         log.append("ADD tag %d: %s (%s)" % (tag, cp_idx[tag].get('name'), cp_idx[tag].get('type')))
 
-    # Enum merges: fields in BOTH SP2 and CP FIX44
+    # Enum merges: fields in BOTH SP2 and FixPortal FIX44
     for tag in sorted(cp_idx):
-        if tag not in sp2_idx or tag in SKIP_CP_TAGS or tag in SKIP_ENUM_MERGE_TAGS:
+        if tag not in sp2_idx or tag in SKIP_FP_TAGS or tag in SKIP_ENUM_MERGE_TAGS:
             continue
         up_enums  = get_enum_set(up44_idx[tag]) if tag in up44_idx else set()
         cp_enums  = get_enum_set(cp_idx[tag])
@@ -157,7 +158,7 @@ def merge_fields(sp2_fields, cp_fields, up44_fields):
         new_enums = cp_specific_enums - sp2_enums
 
         if tag == 47:
-            new_enums = new_enums & TAG47_CP_ENUMS  # only known CP additions
+            new_enums = new_enums & TAG47_FP_ENUMS  # only known FixPortal additions
 
         if new_enums:
             target = merged_idx[tag]
@@ -193,14 +194,14 @@ def merge_components(sp2_comps, cp_comps, up44_comps):
         is_cp_specific = (name not in up44_idx)
 
         if name not in sp2_idx:
-            # Not in SP2 -> add it (whether CP-specific or not, if it's needed)
+            # Not in SP2 -> add it (whether FixPortal-specific or not, if it's needed)
             if is_cp_specific or name not in up44_idx:
                 new_comp = copy.deepcopy(cp_comp)
                 merged.append(new_comp)
                 log.append("ADD component '%s'" % name)
             continue
 
-        # In both SP2 and CP: append CP-specific children
+        # In both SP2 and FixPortal: append FixPortal-specific children
         up_keys  = get_child_keys(up44_idx[name]) if name in up44_idx else set()
         cp_keys  = get_child_keys(cp_comp)
         sp2_keys = get_child_keys(merged_idx[name])
@@ -215,7 +216,7 @@ def merge_components(sp2_comps, cp_comps, up44_comps):
                     nc = copy.deepcopy(ch)
                     nc.set('required', 'N')
                     target.append(nc)
-            log.append("AUGMENT component '%s': +%d CP children" % (name, len(new_kids)))
+            log.append("AUGMENT component '%s': +%d FixPortal children" % (name, len(new_kids)))
 
     return merged, log
 
@@ -276,17 +277,17 @@ def merge_messages(sp2_msgs, cp_msgs, up44_msgs):
 
 def main():
     print("=" * 70)
-    print("Building 10_FIX50SP2_CP_QF.xml")
+    print("Building 10_FIX50SP2_FP_QF.xml")
     print("=" * 70)
 
     print("\nParsing inputs...")
     sp2  = parse_xml(FIX50SP2_PATH)
-    cp   = parse_xml(CP_FIX44_PATH)
+    FixPortal   = parse_xml(FP_FIX44_PATH)
     up44 = parse_xml(UP_FIX44_PATH)
 
-    sp2_f, cp_f, up_f = sp2.find('fields'),     cp.find('fields'),     up44.find('fields')
-    sp2_c, cp_c, up_c = sp2.find('components'),  cp.find('components'),  up44.find('components')
-    sp2_m, cp_m, up_m = sp2.find('messages'),    cp.find('messages'),    up44.find('messages')
+    sp2_f, cp_f, up_f = sp2.find('fields'),     FixPortal.find('fields'),     up44.find('fields')
+    sp2_c, cp_c, up_c = sp2.find('components'),  FixPortal.find('components'),  up44.find('components')
+    sp2_m, cp_m, up_m = sp2.find('messages'),    FixPortal.find('messages'),    up44.find('messages')
 
     print("  SP2 : %d fields, %d comps, %d msgs" % (len(sp2_f), len(sp2_c), len(sp2_m)))
     print("  CP44: %d fields, %d comps, %d msgs" % (len(cp_f), len(cp_c), len(cp_m)))
@@ -316,7 +317,7 @@ def main():
     out.set('type', 'FIX')
     out.set('servicepack', '2')
     out.set('minor', '0')
-    out.set('name', 'FIX50SP2_CP_QF')
+    out.set('name', 'FIX50SP2_FP_QF')
 
     ET.SubElement(out, 'header')
     ET.SubElement(out, 'trailer')
@@ -357,12 +358,12 @@ def main():
             if t in fi:
                 print("  Tag %d: %s (SP2 wins)" % (t, fi[t].get('name')))
 
-        # Tag 47 CP enums
+        # Tag 47 FixPortal enums
         if 47 in fi:
             enums = get_enum_set(fi[47])
-            found = TAG47_CP_ENUMS & enums
-            print("  Tag 47 Rule80A: %d/%d CP enums present: %s" %
-                  (len(found), len(TAG47_CP_ENUMS), sorted(found)))
+            found = TAG47_FP_ENUMS & enums
+            print("  Tag 47 Rule80A: %d/%d FixPortal enums present: %s" %
+                  (len(found), len(TAG47_FP_ENUMS), sorted(found)))
 
         # Tag 800
         if 800 in fi:

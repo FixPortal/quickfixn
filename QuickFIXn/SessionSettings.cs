@@ -85,7 +85,7 @@ public class SessionSettings
 
     #endregion
 
-	#region CP Enhancement
+	#region FixPortal Enhancement
 
 	public const string DATA_DICTIONARY_REVISION = "DataDictionaryRevision";
 	public const string DATA_DICTIONARY_SOURCE = "DataDictionarySource";
@@ -169,7 +169,7 @@ public class SessionSettings
             if (dict.Has(TARGETLOCID))
                 targetLocId = dict.GetString(TARGETLOCID);
 
-            #region CP Enhancement
+            #region FixPortal Enhancement
 
 			string sessionBroker = SessionID.NOT_SET; 
 			string sessionType = SessionID.NOT_SET;

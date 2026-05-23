@@ -297,7 +297,7 @@ namespace TradeClient
 
         #region field query private methods
 
-		#region CP Enhancement
+		#region FixPortal Enhancement
         private OrderID QueryOrderID()
         {
             Console.WriteLine();

@@ -43,7 +43,7 @@ namespace QuickFix
 
         private readonly string _id;
 
-		#region CP Enhancement
+		#region FixPortal Enhancement
 		
 		private readonly string _host;
 		private readonly string _port;

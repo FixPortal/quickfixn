@@ -49,7 +49,7 @@ public class ScreenLogFactory : ILogFactory
         return new ScreenLog(true, true, true);
     }
 
-    #region CP Enhancement
+    #region FixPortal Enhancement
     public ILog Create(SessionID sessionID, Enhancements.DataDictionary.VersionInfo dataDictionaryVersionInfo)
     {
         return Create(sessionID);

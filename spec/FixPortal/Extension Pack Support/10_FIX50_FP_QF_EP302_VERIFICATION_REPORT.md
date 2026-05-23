@@ -1,8 +1,8 @@
-# 10_FIX50_CP_QF.xml — EP302 Rebuild Verification Report
+# 10_FIX50_FP_QF.xml — EP302 Rebuild Verification Report
 
 **Date:** 2026-04-04
-**File:** `QFService/quickfix-n/spec/Centerprise/10_FIX50_CP_QF.xml` (53,219 lines)
-**Sources:** `FIX_Latest_EP302.xml` (Orchestra EP302, 2026-03-20) + `9_FIX44_CP_QF.xml` (Centerprise additions)
+**File:** `QFService/quickfix-n/spec/FixPortal/10_FIX50_FP_QF.xml` (53,219 lines)
+**Sources:** `FIX_Latest_EP302.xml` (Orchestra EP302, 2026-03-20) + `9_FIX44_FP_QF.xml` (FixPortal additions)
 
 ---
 
@@ -24,7 +24,7 @@
 | Source | Fields |
 |---|---|
 | EP302 | 6,189 |
-| FIX44 CP | 1,628 |
+| FIX44 FixPortal | 1,628 |
 | Overlapping | 1,200 |
 | EP302-only | 4,989 |
 | FIX44-only | 428 |
@@ -81,7 +81,7 @@
 | Source | Components |
 |---|---|
 | EP302 | 167 |
-| FIX44 CP | 128 |
+| FIX44 FixPortal | 128 |
 | Shared | 37 |
 | EP302-only | 130 |
 | FIX44-only (carried) | 89 (91 minus 2 retired) |
@@ -138,7 +138,7 @@ Unreferenced: `StandardHeader`, `StandardTrailer` (implicit in QuickFIX), `LegBe
 | Source | Total | Admin | Non-Admin |
 |---|---|---|---|
 | EP302 | 173 | 0 | 173 |
-| FIX44 CP | ~95 | 8 | ~87 |
+| FIX44 FixPortal | ~95 | 8 | ~87 |
 | **Output** | **173** | **0** | **173** |
 
 Admin messages (0, 1, 2, 3, 4, 5, A, n) correctly excluded — **PASS**
@@ -161,7 +161,7 @@ Admin messages (0, 1, 2, 3, 4, 5, A, n) correctly excluded — **PASS**
 
 ### Critical Message Deep Verification
 
-| Message | EP302 Base | CP Additions | Inline→Component | Status |
+| Message | EP302 Base | FixPortal additions | Inline→Component | Status |
 |---|---|---|---|---|
 | NewOrderSingle (D) | All present | ~28 appended | Parties, UndInstrmtGrp, PreAllocGrp | **PASS** |
 | ExecutionReport (8) | All present | ~134 appended | Parties, UndInstrmtGrp | **PASS** |
@@ -180,7 +180,7 @@ Admin messages (0, 1, 2, 3, 4, 5, A, n) correctly excluded — **PASS**
 | Check | Result |
 |---|---|
 | XML well-formedness | **PASS** |
-| Root attributes (`major="5"`, `minor="0"`, `type="FIX"`, `servicepack="2"`, `name="FIX50_CP_QF"`) | **PASS** |
+| Root attributes (`major="5"`, `minor="0"`, `type="FIX"`, `servicepack="2"`, `name="FIX50_FP_QF"`) | **PASS** |
 | Header present and empty | **PASS** |
 | Trailer present and empty | **PASS** |
 | Section ordering (header, trailer, messages, components, fields) | **PASS** |
@@ -191,14 +191,14 @@ Admin messages (0, 1, 2, 3, 4, 5, A, n) correctly excluded — **PASS**
 | No duplicate field names (6,604 unique) | **PASS** |
 | No duplicate component names (256 unique) | **PASS** |
 | No duplicate message types (173 unique) | **PASS** |
-| Orphan fields | 47 (informational — session fields, custom CP fields) |
+| Orphan fields | 47 (informational — session fields, custom FixPortal fields) |
 | Orphan components | 6 (informational — StandardHeader/Trailer + 4 unused) |
 
 ---
 
 ## 6. Verdict
 
-**ALL CHECKS PASS.** The rebuilt `10_FIX50_CP_QF.xml` is structurally sound, referentially complete, and correctly implements all merge rules from the EP302 base with FIX44 Centerprise additions.
+**ALL CHECKS PASS.** The rebuilt `10_FIX50_FP_QF.xml` is structurally sound, referentially complete, and correctly implements all merge rules from the EP302 base with FIX44 FixPortal additions.
 
 ### Key Improvements Over Previous Version
 

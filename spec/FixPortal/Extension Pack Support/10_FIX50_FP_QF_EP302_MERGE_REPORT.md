@@ -1,14 +1,14 @@
-# 10_FIX50_CP_QF.xml — EP302 Merge Report
+# 10_FIX50_FP_QF.xml — EP302 Merge Report
 
 **Date:** 2026-04-04
-**Sources:** `FIX_Latest_EP302.xml` (base, Orchestra EP302) + `9_FIX44_CP_QF.xml` (Centerprise additions)
-**Output:** `10_FIX50_CP_QF.xml` — FIX 5.0 application dictionary (empty header/trailer)
+**Sources:** `FIX_Latest_EP302.xml` (base, Orchestra EP302) + `9_FIX44_FP_QF.xml` (FixPortal additions)
+**Output:** `10_FIX50_FP_QF.xml` — FIX 5.0 application dictionary (empty header/trailer)
 
 ---
 
 ## 1. Overview
 
-| Section | EP302 | FIX44 CP | Overlap | Merged (expected) |
+| Section | EP302 | FIX44 FixPortal | Overlap | Merged (expected) |
 |---|---|---|---|---|
 | Fields | 6,189 | 1,628 | 1,200 | ~6,617 |
 | Components | 167 | 128 | 37 | ~258 |
@@ -77,9 +77,9 @@ Plus ~10 FLOAT→AMT changes and 2 LOCALMKTDATE→LOCALMKTTIME changes — all E
 
 ### 2.4 FIX44 Extra Enums to Append (83 fields)
 
-Key fields with significant CP enum additions:
+Key fields with significant FixPortal enum additions:
 
-| Tag | Name | Notable CP Enums |
+| Tag | Name | Notable FixPortal Enums |
 |---|---|---|
 | 22 | SecurityIDSource | +P (Markit RED), +S (FIGI), +406 (BBG XML), +410 (BBG derivative) |
 | 65 | SymbolSfx | +ILB, ILBP, PI, W |
@@ -112,7 +112,7 @@ Confirmed FIX44-only (deprecated post-FIX 4.3, not in EP302). Carry as `type="ST
 Carried verbatim. Includes:
 - Deprecated FIX tags: 20 (ExecTransType), 47 (Rule80A), 76 (ExecBroker), 109 (ClientID), 204 (CustomerOrFirm), 465 (QuantityType)
 - Bloomberg algo fields: ~100 fields (BMOA 6102–6200, Berenberg 7113–7180)
-- Custom CP fields: 5020–5975, 6203–6886, 8013–8932, 9009–9906, 10009–10015, 20000–23007
+- Custom FixPortal fields: 5020–5975, 6203–6886, 8013–8932, 9009–9906, 10009–10015, 20000–23007
 
 ---
 
@@ -134,14 +134,14 @@ EP302 (Orchestra-generated) renders groups inline within messages. FIX44 wraps g
 
 Of the 87 FIX44 group-wrappers:
 - **75** have equivalent inline groups in EP302 — structurally redundant but needed for backward compatibility
-- **12** are CP-custom groups not in EP302 — must be carried verbatim
+- **12** are FixPortal-custom groups not in EP302 — must be carried verbatim
 
 > [!important] Decision Required
 > How to handle the 75 redundant group-wrappers. Options:
 > 1. **Keep wrapper components** — carry FIX44 wrapper components so existing code referencing them by name still works. Update group contents to EP302's expanded field lists.
 > 2. **Drop wrappers, use inline only** — EP302 style. Simpler but breaks any code referencing wrapper component names.
 >
-> **Recommendation:** Option 1 for the wrappers used in CP messages (Parties, PreAllocGrp, Stipulations, UndInstrmtGrp, etc.). Drop unused wrappers.
+> **Recommendation:** Option 1 for the wrappers used in FixPortal messages (Parties, PreAllocGrp, Stipulations, UndInstrmtGrp, etc.). Drop unused wrappers.
 
 ### 3.3 FIX44-Only: True Custom Components (4)
 
@@ -149,10 +149,10 @@ Of the 87 FIX44 group-wrappers:
 |---|---|
 | `Algos_BMOA` | Bloomberg algo parameters |
 | `Algos_Berenberg` | Berenberg algo parameters |
-| `HedgeData` | CP hedge fields |
-| `Interlisted_Settlement` | CP interlisted settlement |
+| `HedgeData` | FixPortal hedge fields |
+| `Interlisted_Settlement` | FixPortal interlisted settlement |
 
-### 3.4 FIX44-Only: CP-Custom Group Wrappers (12)
+### 3.4 FIX44-Only: FixPortal-custom Group Wrappers (12)
 
 | Component | Group |
 |---|---|
@@ -236,37 +236,37 @@ Heartbeat (0), TestRequest (1), ResendRequest (2), Reject (3), SequenceReset (4)
 
 | Message | EP302 | FIX44 | Decision |
 |---|---|---|---|
-| OrderCancelRequest (F) | N | Y | **Override to Y** (FIX44 standard, not a CP change) |
+| OrderCancelRequest (F) | N | Y | **Override to Y** (FIX44 standard, not a FixPortal change) |
 | OrderCancelReject (9) | N | Y | **Keep N** (EP302 wins, no override) |
 | OrderCancelReplaceRequest (G) | N | Y | **Keep N** (EP302 wins) |
 
-### 4.5 CP Additions — Critical Messages
+### 4.5 FixPortal additions — Critical Messages
 
-#### NewOrderSingle (D) — 22 CP additions
+#### NewOrderSingle (D) — 22 FixPortal additions
 
 Fields: `LocateBroker`, `LocateIdentifier`, `NumDaysInterest`, `CustomerOrFirm`, `TrdType`, `TrdSubType`, `SecondaryTrdType`, `TradeContinuation`, `Tenor`, `ApplyRestriction`, `StagedOrderIsInquiry`, `Ccy1MarketType`, `Ccy2MarketType`, `AutoOrdType`, `AllocationType`, `FixingDate`, `BTOrderInst`, `RegulationID`, `RetailOrder`, `DisplayInst`, `Account_BMO`, `Routable`, `OrderAttributeTypes`
 Components: `ExecRuleNameGrp`, `Notes`, `Algos_Berenberg`, `Algos_BMOA`
 
-#### ExecutionReport (8) — ~100+ CP additions
+#### ExecutionReport (8) — ~100+ FixPortal additions
 
-Largest message. CP fields span trade IDs, pricing/hedge, convertible bonds, regulatory/clearing, settlement/currency, FI-specific, auction, book/alloc, display, swap/FX, client pricing, basket, and custom fields. Plus CP components: `ClrInstGrp`, `PositionAmountData`, `QuotQualGrp`, `RelatedInstrumentGrp`, `ClientCustomDataGrp`, `CompDealerQuoteGrp`, `HedgeData`, `RefPriceGrp`, `ReferenceIDGrp`, `PriceQualifierGrp`, `Notes`, `Interlisted_Settlement`.
+Largest message. FixPortal fields span trade IDs, pricing/hedge, convertible bonds, regulatory/clearing, settlement/currency, FI-specific, auction, book/alloc, display, swap/FX, client pricing, basket, and custom fields. Plus FixPortal components: `ClrInstGrp`, `PositionAmountData`, `QuotQualGrp`, `RelatedInstrumentGrp`, `ClientCustomDataGrp`, `CompDealerQuoteGrp`, `HedgeData`, `RefPriceGrp`, `ReferenceIDGrp`, `PriceQualifierGrp`, `Notes`, `Interlisted_Settlement`.
 
-#### OrderCancelRequest (F) — 4 CP additions
+#### OrderCancelRequest (F) — 4 FixPortal additions
 
 Fields: `LocateBroker`, `LocateIdentifier`, `ApplyRestriction`, `BTOrderInst`
-Component: `Stipulations` (not in EP302 for this message — treat as CP addition)
+Component: `Stipulations` (not in EP302 for this message — treat as FixPortal addition)
 
-#### OrderCancelReplaceRequest (G) — 16 CP additions
+#### OrderCancelReplaceRequest (G) — 16 FixPortal additions
 
 Fields: `LocateBroker`, `LocateIdentifier`, `Rule80A`, `CustomerOrFirm`, `StrikeTime`, `TrdType`, `TrdSubType`, `SecondaryTrdType`, `TradeContinuation`, `SpottingProcess`, `CrossIndicator`, `Tenor`, `ApplyRestriction`, `ValidSeconds`, `DueInSeconds`, `StagedOrderIsInquiry`, `AutoConfirm`, `AutoOrdType`, `BTOrderInst`
 Components: `ExecRuleNameGrp`, `Notes`
 
-#### OrderCancelReject (9) — 7 CP additions
+#### OrderCancelReject (9) — 7 FixPortal additions
 
 Fields: `Side`, `ExecID`, `NOE`, `StrikePrice`, `ExpireDate`, `ExpireTime`, `PositionEffect`
 
 > [!note] NOE Reference
-> The CP addition `NOE` at tag 800 must be referenced as `OrderBookingQty` (the EP302 name) in the merged dictionary.
+> The FixPortal addition `NOE` at tag 800 must be referenced as `OrderBookingQty` (the EP302 name) in the merged dictionary.
 
 ### 4.6 Other Required Attribute Conflicts (EP302 wins)
 
@@ -298,7 +298,7 @@ FIX44 uses named components where EP302 inlines the group directly:
 
 | # | Item | Options | Recommendation |
 |---|---|---|---|
-| 1 | Group wrapper components (75 redundant) | Keep wrappers / Drop and use inline | Keep wrappers referenced by CP messages; drop unused ones |
+| 1 | Group wrapper components (75 redundant) | Keep wrappers / Drop and use inline | Keep wrappers referenced by FixPortal messages; drop unused ones |
 | 2 | PartyAltIDGrp / PartyAltSubGrp (tags 22086–22091) | Keep with rename / Retire in favour of EP302 standard | Retire — use EP302 `PartyAltIDs` / `AltPtysSubGrp` (as per previous decision) |
 | 3 | FloatingRateIndex field/component name collision | Verify QuickFIX/n handles it | Investigate before merge |
 | 4 | Tag 2174 LegIndexAnnexDate (FIX44 type PERCENTAGE) | FIX44 bug? | Use EP302 LOCALMKTDATE |

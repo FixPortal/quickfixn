@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -29,7 +29,7 @@ namespace QuickFix.Fields.Converters
             return c.ToString();
         }
 
-        #region CP Enhancement
+        #region FixPortal Enhancement
 
         public static char Convert(string c, bool allowTruncation)
         {

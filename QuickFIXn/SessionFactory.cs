@@ -24,7 +24,7 @@ public class SessionFactory
         IMessageStoreFactory storeFactory,
         IQuickFixLoggerFactory? loggerFactory = null,        
         IMessageFactory? messageFactory = null, 
-        IQFCoreSetup? dictionaryLoader = null) //	CP Enhancement
+        IQFCoreSetup? dictionaryLoader = null) //	FixPortal Enhancement
     {
         // TODO: for V2, consider ONLY instantiating MessageFactory in the Create() method,
         //   and removing instance var _messageFactory altogether.
@@ -37,7 +37,7 @@ public class SessionFactory
         _loggerFactory = loggerFactory ?? NullQuickFixLoggerFactory.Instance;
         _messageFactory = messageFactory ?? new DefaultMessageFactory();
 
-        #region CP Enhancement
+        #region FixPortal Enhancement
         Console.WriteLine("[SessionFactory] " + _messageFactory.GetType().FullName);
         _dataDictionaryResolver =
             new Dictionary<DataDictionarySource,
@@ -63,7 +63,7 @@ public class SessionFactory
 
     public Session Create(SessionID sessionId, SettingsDictionary settings)
     {
-        #region CP Enhancement
+        #region FixPortal Enhancement
 
         var defaultDataDictionarySupported = false;
         var dataDictionarySource = DataDictionarySource.File;
@@ -88,7 +88,7 @@ public class SessionFactory
         {
             useDataDictionary = settings.GetBool(SessionSettings.USE_DATA_DICTIONARY);
 
-            #region CP Enhancement
+            #region FixPortal Enhancement
 
             if (useDataDictionary)
             {
@@ -209,7 +209,7 @@ public class SessionFactory
         return session;
     }
 
-    #region CP Enhancement
+    #region FixPortal Enhancement
 
     protected readonly IQFCoreSetup? _dictionaryLoader;
 
@@ -280,7 +280,7 @@ public class SessionFactory
         string beginString, DataDictionarySource dataDictionarySource, int dataDictonaryVersion,
         bool defaultSupported)
     {
-        #region CP Enhancement
+        #region FixPortal Enhancement
 
         var sourceParameter = new DictionarySourceParameter
         {
@@ -309,7 +309,7 @@ public class SessionFactory
         if (settings.Has(SessionSettings.ALLOW_UNKNOWN_MSG_FIELDS))
             ddCopy.AllowUnknownMessageFields = settings.GetBool(SessionSettings.ALLOW_UNKNOWN_MSG_FIELDS);
 
-        #region CP Enhancement
+        #region FixPortal Enhancement
         
         if (settings.Has(SessionSettings.ALLOW_STRING_TRUNCATION_FOR_CHAR_FIELDS))
             ddCopy.AllowStringTruncationForCharFields = settings.GetBool(SessionSettings.ALLOW_STRING_TRUNCATION_FOR_CHAR_FIELDS);

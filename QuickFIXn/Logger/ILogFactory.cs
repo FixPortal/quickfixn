@@ -29,7 +29,7 @@ public interface ILogFactory
     /// Create a log instance for a session
     /// </summary>
     /// <param name="sessionId">session ID usually used for configuration access</param>
-    /// <param name="dataDictionaryVersionInfo">CP Enhancement containing details of DataDictionary used in creation of log</param>
+    /// <param name="dataDictionaryVersionInfo">FixPortal Enhancement containing details of DataDictionary used in creation of log</param>
     /// <returns></returns>
-    ILog Create(SessionID sessionId, Enhancements.DataDictionary.VersionInfo dataDictionaryVersionInfo); //CP Enhancement
+    ILog Create(SessionID sessionId, Enhancements.DataDictionary.VersionInfo dataDictionaryVersionInfo); //FixPortal Enhancement
 }

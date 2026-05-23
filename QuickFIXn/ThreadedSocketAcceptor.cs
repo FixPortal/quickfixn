@@ -60,7 +60,7 @@ namespace QuickFix
         /// <param name="settings"></param>
         /// <param name="loggerFactory">If null, a NullQuickFixLoggerFactory (which produces no logs) will be used.</param>
         /// <param name="messageFactory">If null, a DefaultMessageFactory will be created (using settings parameters)</param>
-        /// <param name="dictionaryLoader">CP Enhancement</param>
+        /// <param name="dictionaryLoader">FixPortal Enhancement</param>
         public ThreadedSocketAcceptor(
             IApplication application,
             IMessageStoreFactory storeFactory,
@@ -116,7 +116,7 @@ namespace QuickFix
 
         #endregion
 
-		#region CP Enhancement
+		#region FixPortal Enhancement
 
 		public IEnumerable<IPEndPoint> EndPoints()
 		{

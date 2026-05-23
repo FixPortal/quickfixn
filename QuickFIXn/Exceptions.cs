@@ -178,7 +178,7 @@ namespace QuickFix
         public int Field { get { return _field; } }
         public FixValues.SessionRejectReason sessionRejectReason;
 
-		#region CP Enhancement
+		#region FixPortal Enhancement
 		
 		protected string _value;
 
@@ -253,9 +253,9 @@ namespace QuickFix
     /// <summary>
     /// Field has a value that is out of range
     /// </summary>
-    public class IncorrectTagValue : TagException //CP Enhancement			
+    public class IncorrectTagValue : TagException //FixPortal Enhancement			
     {
-		#region CP Enhancement
+		#region FixPortal Enhancement
 			
 		public IncorrectTagValue(int field, string value = "") : base(field, FixValues.SessionRejectReason.VALUE_IS_INCORRECT, value) { }
 		

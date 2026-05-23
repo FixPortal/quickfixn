@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 using QuickFix;
@@ -54,7 +54,7 @@ BeginString = FIX.4.4
             acceptor.Start();
             acceptor.Dispose();
         }
-		#region CP Enhancement
+		#region FixPortal Enhancement
 		private static ThreadedSocketAcceptor CreateAcceptor_CP()
         {
 			QuickFix.Enhancements.DataDictionary.IQFCoreSetup setup = NSubstitute.Substitute.For<QuickFix.Enhancements.DataDictionary.IQFCoreSetup>();

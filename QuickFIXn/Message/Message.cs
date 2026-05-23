@@ -15,7 +15,7 @@ namespace QuickFix;
 /// </summary>
 public class Message : FieldMap
 {
-    #region CP Enhancement		
+    #region FixPortal Enhancement		
     // capture the raw message before we potentially manipulate it
     // The message itself is used as a key when trying to identify a given message at various points in the process so we need to
     public string RawMessage { get; private set; }

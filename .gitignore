@@ -1,4 +1,5 @@
 QuickFIXn.suo
+__pycache__/
 QuickFIXn/bin/*
 QuickFIXn/obj/*
 UnitTests/bin/*
