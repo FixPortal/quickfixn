@@ -18,10 +18,12 @@ public class FileLog : ILog
     private System.IO.StreamWriter? _messageLog;
     private System.IO.StreamWriter? _eventLog;
 
-    private readonly string _fileLogPath; // FixPortal Enhancement
-    private string _messageLogFileName; // FixPortal Enhancement
-    private string _eventLogFileName; // FixPortal Enhancement
-    
+    // FP Enhancement: 2026-05-24 — keep the parsed log root + the day-rotated current message/event filenames so DirectoryCheck() can re-roll the log files when the date changes (see InitialiseLogs / DirectoryCheck below).
+    private readonly string _fileLogPath;
+    private string _messageLogFileName;
+    private string _eventLogFileName;
+
+
 
     /// <summary>
     ///
@@ -33,12 +35,11 @@ public class FileLog : ILog
     /// <param name="sessionId"></param>
     public FileLog(string fileLogPath, SessionID sessionId)
     {
-        #region  FixPortal Enhancement
-        _fileLogPath = Enhancements.Utility.ParsePath(StringUtil.FixSlashes(fileLogPath)); 
+        // FP Enhancement: 2026-05-24 — defer file creation until first write (InitialiseLogs with initOnly:true) and pre-resolve the parsed path so DirectoryCheck() can date-rotate later.
+        _fileLogPath = Enhancements.Utility.ParsePath(StringUtil.FixSlashes(fileLogPath));
         _sessionPrefix = Prefix(sessionId);
 
         InitialiseLogs(_fileLogPath, true);
-        #endregion  
     }
 
     public static string Prefix(SessionID sessionId)
@@ -115,7 +116,7 @@ public class FileLog : ILog
         lock (_sync)
         {
             DisposedCheck();
-			DirectoryCheck();   //	FixPortal Enhancement
+            DirectoryCheck();
             EnsureMessageLogInit();
             _messageLog.WriteLine(DateTimeConverter.ToFIX(DateTime.UtcNow, TimeStampPrecision.Millisecond) + " : " + msg);
         }
@@ -126,7 +127,7 @@ public class FileLog : ILog
         lock (_sync)
         {
             DisposedCheck();
-			DirectoryCheck();   //	FixPortal Enhancement
+            DirectoryCheck();
             EnsureMessageLogInit();
             _messageLog.WriteLine(DateTimeConverter.ToFIX(DateTime.UtcNow, TimeStampPrecision.Millisecond) + " : " + msg);
         }
@@ -137,7 +138,7 @@ public class FileLog : ILog
         lock (_sync)
         {
             DisposedCheck();
-            DirectoryCheck();   //	FixPortal Enhancement
+            DirectoryCheck();
             EnsureEventLogInit();
             _eventLog.WriteLine(DateTimeConverter.ToFIX(DateTime.UtcNow, TimeStampPrecision.Millisecond) + " : " + s);
         }
@@ -175,11 +176,9 @@ public class FileLog : ILog
     }
     #endregion
 
-    #region FixPortal Enhancement
-
-    
+    // FP Enhancement: 2026-05-24 — date-aware log rotation. Each write calls DirectoryCheck() to see if the day has rolled over; if so, EvaluateCandidateLog() re-resolves the log directory (so ParsePath's {DATE:...} token, if present, expands fresh) and reinitialises the streams. The streams themselves are created lazily so a session that never writes leaves no empty files behind.
     private readonly string _sessionPrefix;
-    private DateTime _creationDate; 
+    private DateTime _creationDate;
     private string? _currentFileLogPath;
     private void DirectoryCheck()
     {
@@ -215,7 +214,7 @@ public class FileLog : ILog
         EnsureEventLogInit();
     }
 
-    #region ILog Members   
+    // FP Enhancement: 2026-05-24 — ILog hooks for the extended message-tracking and rejection-notification flows; FileLog routes rejections into the event log and ignores the tracked-message tuple (sinks that care about XML/JSON live elsewhere).
     public void LogOn() { }
     public void LogOff() { }
     public void OnIncomingAndOutgoing((int Id, string Raw, string Xml, string Json) message) { }
@@ -223,7 +222,4 @@ public class FileLog : ILog
     {
         OnEvent(rejectionText);
     }
-    #endregion
-
-    #endregion
 }

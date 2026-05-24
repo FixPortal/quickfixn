@@ -41,15 +41,13 @@ namespace QuickFix
             IMessageStoreFactory storeFactory,
             SessionSettings settings,
             ILogFactory? logFactory = null,
-            IMessageFactory? messageFactory = null,
-            QuickFix.Enhancements.DataDictionary.IQFCoreSetup? dictionaryLoader = null) // FixPortal Enhancement
+            IMessageFactory? messageFactory = null)
             : this(
                 application,
                 storeFactory,
                 settings,
                 logFactory is null ? NullQuickFixLoggerFactory.Instance : new LogFactoryAdapter(logFactory),
-                messageFactory,
-                dictionaryLoader)
+                messageFactory)
         { }
 
         /// <summary>
@@ -60,14 +58,12 @@ namespace QuickFix
         /// <param name="settings"></param>
         /// <param name="loggerFactory">If null, a NullQuickFixLoggerFactory (which produces no logs) will be used.</param>
         /// <param name="messageFactory">If null, a DefaultMessageFactory will be created (using settings parameters)</param>
-        /// <param name="dictionaryLoader">FixPortal Enhancement</param>
         public ThreadedSocketAcceptor(
             IApplication application,
             IMessageStoreFactory storeFactory,
             SessionSettings settings,
             ILoggerFactory? loggerFactory = null,
-            IMessageFactory? messageFactory = null,
-            QuickFix.Enhancements.DataDictionary.IQFCoreSetup? dictionaryLoader = null) // FixPortal Enhancement)
+            IMessageFactory? messageFactory = null)
             : this(
                 application,
                 storeFactory,
@@ -75,8 +71,7 @@ namespace QuickFix
                 loggerFactory is null
                     ? NullQuickFixLoggerFactory.Instance
                     : new MelQuickFixLoggerFactory(loggerFactory),
-                messageFactory,
-                dictionaryLoader)
+                messageFactory)
         { }
 
         private ThreadedSocketAcceptor(
@@ -84,8 +79,7 @@ namespace QuickFix
             IMessageStoreFactory storeFactory,
             SessionSettings settings,
             IQuickFixLoggerFactory qfLoggerFactory,
-            IMessageFactory? messageFactory = null,
-            QuickFix.Enhancements.DataDictionary.IQFCoreSetup? dictionaryLoader = null) // FixPortal Enhancement)
+            IMessageFactory? messageFactory = null)
         {
             if (qfLoggerFactory is LogFactoryAdapter lfa)
             {
@@ -97,7 +91,7 @@ namespace QuickFix
             }
             IMessageFactory mf = messageFactory ?? new DefaultMessageFactory();
             _settings = settings;
-            _sessionFactory = new SessionFactory(application, storeFactory, qfLoggerFactory, mf, dictionaryLoader);
+            _sessionFactory = new SessionFactory(application, storeFactory, qfLoggerFactory, mf);
             _qfLoggerFactory = qfLoggerFactory;
 
             try
@@ -116,15 +110,12 @@ namespace QuickFix
 
         #endregion
 
-		#region FixPortal Enhancement
+        // FP Enhancement: 2026-05-24 — expose the listening endpoints so operations/tests can observe which ports the acceptor is bound to.
+        public IEnumerable<IPEndPoint> EndPoints()
+        {
+            return _socketDescriptorForAddress.Values.Select(socketDescriptor => socketDescriptor.Address);
+        }
 
-		public IEnumerable<IPEndPoint> EndPoints()
-		{
-			return _socketDescriptorForAddress.Values.Select(socketDescriptor => socketDescriptor.Address);
-		}
-		
-		#endregion
-	
         #region Private Methods
 
         private AcceptorSocketDescriptor GetAcceptorSocketDescriptor(SettingsDictionary dict)
@@ -424,7 +415,7 @@ namespace QuickFix
         }
 
 
-        // FixPortal Enhancement: free a listening port when its last session is removed
+        // FP Enhancement: 2026-05-24 — free the listening port when the last session on it is removed. Upstream's RemoveSession leaks the AcceptorSocketDescriptor and its reactor, so the bound port stays held — a long-running acceptor that dynamically cycles sessions eventually starves on ports. We track which descriptor became empty during the loop and shut it down after the iteration to avoid mutating the dictionary while traversing it.
         /// <summary>
         /// Ad-hoc removal of an existing session
         /// </summary>

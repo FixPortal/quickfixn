@@ -61,8 +61,7 @@ public class ScreenLog : ILog
     ~ScreenLog() => Dispose(false);
     #endregion
 
-    #region FixPortal Enhancement
-
+    // FP Enhancement: 2026-05-24 — ILog hooks for the FixPortal extended logging. ScreenLog routes rejections into OnEvent so they surface in the console; tracked-message tuples are ignored (file-backed sinks are the place for those).
     public void LogOn() { }
     public void LogOff() { }
     public void OnIncomingAndOutgoing((int Id, string Raw, string Xml, string Json) message) { }
@@ -70,6 +69,4 @@ public class ScreenLog : ILog
     {
         OnEvent(rejectionText);
     }
-
-    #endregion
 }

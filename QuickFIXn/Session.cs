@@ -6,6 +6,7 @@ using QuickFix.Fields;
 using QuickFix.Fields.Converters;
 using QuickFix.Logger;
 using QuickFix.Store;
+using QuickFix.Util;
 
 namespace QuickFix
 {
@@ -17,7 +18,7 @@ namespace QuickFix
     /// of 1 and ending when the session is reset. The Session could span many sequential
     /// connections (it cannot operate on multiple connections simultaneously).
     /// </summary>
-    public class Session : IDisposable // FixPortal Enhancement
+    public class Session : IDisposable
     {
         private static readonly Dictionary<SessionID, Session> Sessions = new();
         private static readonly HashSet<string> AdminMsgTypes = ["0", "A", "1", "2", "3", "4", "5"];
@@ -28,7 +29,8 @@ namespace QuickFix
         private readonly SessionState _state;
         private readonly IMessageFactory _msgFactory;
         private readonly bool _appDoesEarlyIntercept;
-        private readonly bool _appHandlesRejection; // FixPortal Enhancement
+        // FP Enhancement: 2026-05-24 — cache whether the application opts into the rejection-notification callback (see IApplicationMessageRejection / NotifyMessageRejected).
+        private readonly bool _appHandlesRejection;
 
         private const LogLevel MessagesLogLevel = LogLevel.Information;
 
@@ -222,6 +224,9 @@ namespace QuickFix
         /// </summary>
         internal bool IsResendRequested => _state.ResendRequested();
 
+        public int[] RedactFieldsInLogs { get; set; } = [];
+        public string RedactionLogText { get; set; } = "<redacted>";
+
         #endregion
 
         internal Session(
@@ -239,7 +244,7 @@ namespace QuickFix
             _schedule = sessionSchedule;
             _msgFactory = msgFactory;
             _appDoesEarlyIntercept = app is IApplicationExt;
-            _appHandlesRejection = app is IApplicationMessageRejection; // FixPortal Enhancement
+            _appHandlesRejection = app is IApplicationMessageRejection;
 
             Application = app;
             SessionID = sessId;
@@ -251,16 +256,8 @@ namespace QuickFix
                 ? DataDictionaryProvider.GetApplicationDataDictionary(SenderDefaultApplVerID)
                 : SessionDataDictionary;
 
-            #region FixPortal Enhancement
-            SessionID.DataDictionary = ApplicationDataDictionary;
-            #endregion
 
-            ILogger logger = loggerFactory.CreateSessionLogger(sessId,
-                new Enhancements.DataDictionary.VersionInfo // FixPortal Enhancement
-                {
-                    Name = ApplicationDataDictionary.Name,
-                    Id = ApplicationDataDictionary.DictionaryID
-                });
+            ILogger logger = loggerFactory.CreateSessionLogger(sessId);
 
             _state = new SessionState(isInitiator, logger, heartBtInt, storeFactory.Create(sessId));
 
@@ -380,7 +377,8 @@ namespace QuickFix
                                {"MessageType", Message.GetMsgType(message)}
                            }))
                     {
-                        Log.Log(MessagesLogLevel, LogEventIds.OutgoingMessage, "{Message}", message);
+                        Log.Log(MessagesLogLevel, LogEventIds.OutgoingMessage, "{Message}",
+                            LogAssist.RedactSensitiveFields(message, RedactFieldsInLogs, RedactionLogText));
                     }
                 }
 
@@ -553,13 +551,15 @@ namespace QuickFix
                                {"MessageType", Message.GetMsgType(msgStr)}
                            }))
                     {
-                        Log.Log(MessagesLogLevel, LogEventIds.IncomingMessage, "{Message}", msgStr);
+                        Log.Log(MessagesLogLevel, LogEventIds.IncomingMessage, "{Message}",
+                            LogAssist.RedactSensitiveFields(msgStr, RedactFieldsInLogs, RedactionLogText));
                     }
                 }
             }
             catch (Exception)
             {
-                Log.Log(MessagesLogLevel, LogEventIds.IncomingMessage, "{Message}", msgStr);
+                Log.Log(MessagesLogLevel, LogEventIds.IncomingMessage, "{Message}",
+                    LogAssist.RedactSensitiveFields(msgStr, RedactFieldsInLogs, RedactionLogText));
             }
 
             MessageBuilder msgBuilder = new MessageBuilder(
@@ -623,7 +623,8 @@ namespace QuickFix
                     NextLogon(message);
                 else if (MsgType.LOGOUT.Equals(msgType))
                     NextLogout(message);
-                else if (!IsLoggedOn && msgType != "5") // FixPortal Enhancement
+                // FP Enhancement: 2026-05-24 — tolerate a Logout (msgtype 5) arriving before logon completes; FIX spec permits it and disconnecting abruptly hides the counterparty's reason.
+                else if (!IsLoggedOn && msgType != "5")
                     Disconnect($"Received msg type '{msgType}' when not logged on");
                 else if (MsgType.HEARTBEAT.Equals(msgType))
                     NextHeartbeat(message);
@@ -640,7 +641,8 @@ namespace QuickFix
                     _state.IncrNextTargetMsgSeqNum();
                 }
 
-                LogExtended(message, msgType); // FixPortal Enhancement
+                // FP Enhancement: 2026-05-24 — emit incoming-message XML/JSON via Log.OnIncomingAndOutgoing when the SessionID has a tracked LogId (see LogExtended below).
+                LogExtended(message, msgType);
 
             }
             catch (InvalidMessage e)
@@ -673,6 +675,21 @@ namespace QuickFix
                 {
                     Log.Log(LogLevel.Error, uvx, "{Message}", uvx.ToString());
                     GenerateLogout(uvx.Message);
+                    _state.IncrNextTargetMsgSeqNum();
+                }
+            }
+            catch (MessageFactoryNotFound mfnf)
+            {
+                if (MsgType.LOGOUT.Equals(msgBuilder.MsgType.Value))
+                {
+                    NextLogout(message!);
+                }
+                else
+                {
+                    // We shouldn't send that question to the counterparty, but local devs should see it
+                    Log.Log(LogLevel.Error, mfnf,
+                        "{Message} (Did you forget a message package dependency?)", mfnf.ToString());
+                    GenerateLogout(mfnf.Message);
                     _state.IncrNextTargetMsgSeqNum();
                 }
             }
@@ -1064,7 +1081,8 @@ namespace QuickFix
             {
                 Application.FromAdmin(msg, SessionID);
 
-                if (msgType == MsgType.REJECT) // FixPortal Enhancement
+                // FP Enhancement: 2026-05-24 — dispatch IApplicationMessageRejection.OnMessageRejected after FromAdmin for inbound session-level Reject messages.
+                if (msgType == MsgType.REJECT)
                 {
                     var reason = msg.IsSetField(Tags.Text) ? msg.GetString(Tags.Text) : "Session-level reject received";
                     NotifyMessageRejected(msg, reason);
@@ -1423,7 +1441,8 @@ namespace QuickFix
             GenerateReject(msgBuilder.RejectableMessage(), reason, field);
         }
        
-        public void GenerateReject(Message message, FixValues.SessionRejectReason reason, int field = 0, string value = "") //	FixPortal Enhancement
+        // FP Enhancement: 2026-05-24 — optional `value` parameter carries the offending field value into the reject log line; backward-compatible (defaults to empty).
+        public void GenerateReject(Message message, FixValues.SessionRejectReason reason, int field = 0, string value = "")
         {
             string beginString = SessionID.BeginString;
 
@@ -1477,13 +1496,15 @@ namespace QuickFix
                 else
                     PopulateSessionRejectReason(reject, field, reason.Description, true);
 
-                Log.OnRejectionEvent(message.RawMessage, $"Message {msgSeqNum} Rejected: {reason.Description} (Field={field}, Value={value})"); // FixPortal Enhancement
+                // FP Enhancement: 2026-05-24 — structured rejection log event (see Log.OnRejectionEvent / LoggerExtensions).
+                Log.OnRejectionEvent(message.RawMessage, $"Message {msgSeqNum} Rejected: {reason.Description} (Field={field}, Value={value})");
                 Log.Log(LogLevel.Warning, "Message {MsgSeqNum} Rejected: {Reason} (Field={Field})", msgSeqNum, reason.Description, field);
             }
             else
             {
                 PopulateRejectReason(reject, reason.Description);
-                Log.OnRejectionEvent(message.RawMessage, $"Message {msgSeqNum} Rejected: {reason.Value}"); // FixPortal Enhancement
+                // FP Enhancement: 2026-05-24 — structured rejection log event for the no-field branch (see above).
+                Log.OnRejectionEvent(message.RawMessage, $"Message {msgSeqNum} Rejected: {reason.Value}");
                 Log.Log(LogLevel.Error, "Message {MsgSeqNum} Rejected: {Reason}", msgSeqNum, reason.Value);
             }
 
@@ -1514,8 +1535,7 @@ namespace QuickFix
             reject.SetField(new Fields.Text(text));
         }
 
-        #region FixPortal Enhancement
-
+        // FP Enhancement: 2026-05-24 — fan an inbound session-level Reject out to IApplicationMessageRejection.OnMessageRejected, attaching the original outbound message looked up via RefSeqNum. Exceptions inside the callback are caught and logged so a buggy handler can't tear down the session.
         private void NotifyMessageRejected(Message rejectMessage, string reason)
         {
             if (!_appHandlesRejection)
@@ -1542,8 +1562,6 @@ namespace QuickFix
                 Log.Log(LogLevel.Error, ex, "Error in OnMessageRejected callback: {Message}", ex.Message);
             }
         }
-
-        #endregion
 
         protected void InitializeHeader(Message m, SeqNumType msgSeqNum = 0)
         {
@@ -1587,9 +1605,12 @@ namespace QuickFix
             if (PersistMessages)
             {
                 SeqNumType msgSeqNum = message.Header.GetULong(Fields.Tags.MsgSeqNum);
-                _state.Set(msgSeqNum, messageString);
+                _state.SetAndIncrNextSenderMsgSeqNum(msgSeqNum, messageString);
             }
-            _state.IncrNextSenderMsgSeqNum();
+            else
+            {
+                _state.IncrNextSenderMsgSeqNum();
+            }
         }
 
         protected bool IsGoodTime(Message msg)
@@ -1727,33 +1748,30 @@ namespace QuickFix
                 if (0UL == seqNum)
                     Persist(message, messageString);
 
-				#region FixPortal Enhancement
+                // FP Enhancement: 2026-05-24 — mirror the incoming LogExtended hook for outbound messages so tracked sends are emitted via Log.OnIncomingAndOutgoing.
                 var result = Send(messageString);
-
                 LogExtended(message, msgType);
-
                 return result;
-				#endregion 
             }
         }
 
-        #region FixPortal Enhancement
-		
-	   	public static bool SendToTarget(Message message, SessionID sessionID, bool removeDupeFlag = true, bool removeOriginalSendingTime = true)
-		{
-			message.SetSessionID(sessionID);
-			Session session = Session.LookupSession(sessionID);
-			if (null == session)
-				throw new SessionNotFound(sessionID);
-			return session.Send(message, removeDupeFlag, removeOriginalSendingTime);
-		}
-		public virtual bool Send(Message message, bool removeDupeFlag, bool removeOriginalSendingTime = true)
-		{
-			if (removeDupeFlag) message.Header.RemoveField(Fields.Tags.PossDupFlag);
-			if (removeOriginalSendingTime) message.Header.RemoveField(Fields.Tags.OrigSendingTime);
-			return SendRaw(message, 0);
-		}
-		
+        // FP Enhancement: 2026-05-24 — overloads of SendToTarget / Send that let callers opt out of stripping PossDupFlag / OrigSendingTime; useful when retransmitting a message that should retain its original dup-flag semantics (e.g. CME-style resend flows). The flag-less originals stay unchanged.
+        public static bool SendToTarget(Message message, SessionID sessionID, bool removeDupeFlag = true, bool removeOriginalSendingTime = true)
+        {
+            message.SetSessionID(sessionID);
+            Session session = Session.LookupSession(sessionID);
+            if (null == session)
+                throw new SessionNotFound(sessionID);
+            return session.Send(message, removeDupeFlag, removeOriginalSendingTime);
+        }
+        public virtual bool Send(Message message, bool removeDupeFlag, bool removeOriginalSendingTime = true)
+        {
+            if (removeDupeFlag) message.Header.RemoveField(Fields.Tags.PossDupFlag);
+            if (removeOriginalSendingTime) message.Header.RemoveField(Fields.Tags.OrigSendingTime);
+            return SendRaw(message, 0);
+        }
+
+        // FP Enhancement: 2026-05-24 — emit XML + JSON renderings of tracked messages via Log.OnIncomingAndOutgoing. Tracked messages are those whose rendered string is present in SessionID.SessionLogIdentifiers (populated by application code).
         private void LogExtended(Message message, string msgType)
         {
             if (Message.IsAdminMsgType(msgType)) return;
@@ -1761,12 +1779,9 @@ namespace QuickFix
             if (SessionID.SessionLogIdentifiers != null && message.ToString() != null)
                 if (SessionID.SessionLogIdentifiers.ContainsKey(message.ToString()))
                 {
-                    Log.OnIncomingAndOutgoing((SessionID.SessionLogIdentifiers[message.ToString()].LogId, message.ToString(), message.ToXML(), message.ToJSON())); // FixPortal Enhancement
+                    Log.OnIncomingAndOutgoing((SessionID.SessionLogIdentifiers[message.ToString()].LogId, message.ToString(), message.ToXML(), message.ToJSON()));
                 }
-               
         }
-		
-        #endregion
 
         public void Dispose()
         {

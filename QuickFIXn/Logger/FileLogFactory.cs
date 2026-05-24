@@ -29,13 +29,4 @@ public class FileLogFactory : ILogFactory
             _settings.Get().GetString(SessionSettings.FILE_LOG_PATH),
             new SessionID("Non", "Session", "Log"));
     }
-
-    #region FixPortal Enhancement
-
-    public ILog Create(SessionID sessionID, Enhancements.DataDictionary.VersionInfo dataDictionaryVersionInfo)
-    {
-        return Create(sessionID);
-    }
-
-    #endregion
 }

@@ -2,7 +2,7 @@ using Microsoft.Extensions.Logging;
 
 namespace QuickFix.Logger;
 
-// FixPortal Enhancement - extension methods for CP-specific logging via ILogger
+// FP Enhancement: 2026-05-24 — typed call sites for the FixPortal log events. Callers say `Log.OnRejectionEvent(...)` / `Log.OnIncomingAndOutgoing(...)` and the extension packs the args into the structured state record dispatched via MEL's EventId machinery.
 public static class LoggerExtensions
 {
     public static void OnRejectionEvent(this ILogger logger, string originalMessage, string rejectionText)

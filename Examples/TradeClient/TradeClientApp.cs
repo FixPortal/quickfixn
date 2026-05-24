@@ -257,8 +257,9 @@ namespace TradeClient
 
         private QuickFix.FIX44.OrderCancelReplaceRequest QueryCancelReplaceRequest44()
         {
+            // FP Enhancement: 2026-05-24 — include OrderID in OrderCancelReplaceRequest; required by some counterparties even though upstream's example omits it.
             QuickFix.FIX44.OrderCancelReplaceRequest ocrr = new QuickFix.FIX44.OrderCancelReplaceRequest(
-                QueryOrderID(), // FixPortal Enhancement
+                QueryOrderID(),
                 QueryOrigClOrdId(),
                 QueryClOrdId(),
                 QuerySymbol(),
@@ -297,15 +298,14 @@ namespace TradeClient
 
         #region field query private methods
 
-		#region FixPortal Enhancement
+        // FP Enhancement: 2026-05-24 — interactive OrderID prompt to back the OrderCancelReplaceRequest signature above.
         private OrderID QueryOrderID()
         {
             Console.WriteLine();
             Console.Write("OrderID? ");
             return new OrderID(ReadCommand());
         }
-		#endregion
-		
+
         private ClOrdID QueryClOrdId()
         {
             Console.WriteLine();

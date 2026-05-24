@@ -1,4 +1,4 @@
-// FixPortal Enhancement
+// FP Enhancement: 2026-05-24 — optional interface for receiving notification when the counterparty rejects one of our messages via a session-level Reject (msgtype 3). Upstream has no equivalent callback in IApplication; opt-in by implementing this alongside IApplication and Session will dispatch via NotifyMessageRejected.
 namespace QuickFix
 {
     /// <summary>

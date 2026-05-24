@@ -63,7 +63,8 @@ public class FileStore : IMessageStore
     /// <param name="sessionId"></param>
     public FileStore(string path, SessionID sessionId)
     {
-        string normalizedPath = Enhancements.Utility.ParsePath(StringUtil.FixSlashes(path)); // FixPortal Enhancement
+        // FP Enhancement: 2026-05-24 — normalise the message-store directory via ParsePath so a `.\` prefix resolves against the app base directory.
+        string normalizedPath = Enhancements.Utility.ParsePath(StringUtil.FixSlashes(path));
 
         if (!System.IO.Directory.Exists(normalizedPath))
             System.IO.Directory.CreateDirectory(normalizedPath);

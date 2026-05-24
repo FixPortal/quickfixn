@@ -58,10 +58,10 @@ public class SessionDynamicTest
     }
 
     private const string Host = "127.0.0.1";
-    // FixPortal Enhancement; port configuration didn't work locally so changed
-    private int ConnectPort;// = 55200;
-    private int AcceptPort;// = 55201;
-    private int AcceptPort2; // = 55202;
+    // FP Enhancement: 2026-05-24 — ports are now assigned dynamically per test run; the original 552xx fixed ports clashed with locally running services and made the suite flaky on dev machines.
+    private int ConnectPort;
+    private int AcceptPort;
+    private int AcceptPort2;
     private const string ServerCompId = "dummy";
     private const string StaticInitiatorCompId = "ini01";
     private const string StaticAcceptorCompId = "acc01";
@@ -488,7 +488,7 @@ public class SessionDynamicTest
         Assert.That(IsLoggedOn(StaticAcceptorCompId), Is.False, "Session still logged on after being removed");
     }
 
-    // FixPortal Enhancement
+    // FP Enhancement: 2026-05-24 — regression test for ThreadedSocketAcceptor.RemoveSession's port-cleanup behaviour (see ThreadedSocketAcceptor.cs).
     [Test]
     public void RemoveSessionFreesPortWhenItWasTheLastSessionOnIt()
     {

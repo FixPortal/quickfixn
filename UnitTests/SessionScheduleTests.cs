@@ -708,7 +708,7 @@ namespace UnitTests
             Assert.That(sched.IsSessionTime(new DateTime(2024, 05, 24, 11, 00, 00, DateTimeKind.Utc)), Is.False);
             Assert.That(sched.IsSessionTime(new DateTime(2024, 05, 24, 11, 00, 10, DateTimeKind.Utc)), Is.False);
         }
-        //#region FixPortal Enhancement
+        // FP Enhancement: 2026-05-24 — abandoned EvaluateDateIsInPeriod test block, commented out wholesale. Left in place as a record of the original cases in case the helper comes back.
         //[Test]
         //[TestCase("22:35:00", "22:30:00", "Sun,Mon,Tue,Wed,Thu,Fri,Sat", "04/05/2020 22:35", true)]
         //[TestCase("22:35:00", "22:30:00", "Sun,Mon,Tue,Wed,Thu,Fri,Sat", "05/05/2020 22:35", true)]

@@ -72,6 +72,8 @@ public class SessionSettings
     public const string MAX_LATENCY = "MaxLatency";
     public const string SOCKET_IGNORE_PROXY = "SocketIgnoreProxy";
     public const string ENCODING = "Encoding";
+    public const string REDACT_FIELDS_IN_LOGS = "RedactFieldsInLogs";
+    public const string REDACTION_LOG_TEXT = "RedactionLogText";
 
     public const string SSL_ENABLE = "SSLEnable";
     public const string SSL_SERVERNAME = "SSLServerName";
@@ -85,20 +87,10 @@ public class SessionSettings
 
     #endregion
 
-	#region FixPortal Enhancement
-
-	public const string DATA_DICTIONARY_REVISION = "DataDictionaryRevision";
-	public const string DATA_DICTIONARY_SOURCE = "DataDictionarySource";
-	public const string DATA_DICTIONARY_DEFAULT_SUPPORTED = "DataDictionaryDefaultSupported";
-	public const string SESSION_TYPE = "SessionType";
-	public const string SESSION_SUPPORTS_UPLOAD = "SessionSupportsUpload";
-	public const string SESSION_BROKER = "SessionBroker";
+	// FP Enhancement: 2026-05-24 — FixPortal-specific session settings.
 	public const string VALIDATE_FIELD_ENUM_VALUES = "ValidateFieldEnumValues";
 	public const string ALLOW_STRING_TRUNCATION_FOR_CHAR_FIELDS = "AllowStringTruncationForCharFields";
-	public const string SESSION_DESCRIPTION = "Description";
 	public const string PASSWORD = "Password";
-
-    #endregion
 
     #region Private Members
 
@@ -169,32 +161,9 @@ public class SessionSettings
             if (dict.Has(TARGETLOCID))
                 targetLocId = dict.GetString(TARGETLOCID);
 
-            #region FixPortal Enhancement
-
-			string sessionBroker = SessionID.NOT_SET; 
-			string sessionType = SessionID.NOT_SET;
-			string host = SessionID.NOT_SET;
-			string port = SessionID.NOT_SET;
-			bool sessionSupportsUpload = false;
-			string sessionDescription = SessionID.NOT_SET;
-			if (dict.Has(SESSION_TYPE))
-				sessionType = dict.GetString(SESSION_TYPE);
-			if (dict.Has(SOCKET_ACCEPT_HOST))
-				host = dict.GetString(SOCKET_ACCEPT_HOST);
-			if (dict.Has(SOCKET_ACCEPT_PORT))
-				port = dict.GetString(SOCKET_ACCEPT_PORT);
-			if (dict.Has(SESSION_SUPPORTS_UPLOAD))
-				sessionSupportsUpload = dict.GetBool(SESSION_SUPPORTS_UPLOAD);
-			if (dict.Has(SESSION_BROKER))
-				sessionBroker = dict.GetString(SESSION_BROKER);
-			if (dict.Has(SESSION_DESCRIPTION))
-				sessionDescription = dict.GetString(SESSION_DESCRIPTION);
-                
-			SessionID sessionId = new SessionID(dict.GetString(BEGINSTRING), dict.GetString(SENDERCOMPID), senderSubId,	senderLocId, dict.GetString(TARGETCOMPID), targetSubId, targetLocId, sessionQualifier, sessionType, host, port, sessionSupportsUpload, sessionBroker, sessionDescription); 
+            SessionID sessionId = new SessionID(dict.GetString(BEGINSTRING), dict.GetString(SENDERCOMPID),
+                senderSubId, senderLocId, dict.GetString(TARGETCOMPID), targetSubId, targetLocId, sessionQualifier);
             Set(sessionId, dict);
-				
-            #endregion
-                
         }
     }
 
