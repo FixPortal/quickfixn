@@ -5,12 +5,12 @@ using QuickFix;
 using QuickFix.Logger;
 using QuickFix.Store;
 
-namespace UnitTests
+namespace UnitTests;
+
+[TestFixture]
+public class ThreadedSocketAcceptorTests
 {
-    [TestFixture]
-    public class ThreadedSocketAcceptorTests
-    {
-        private static string Config = $@"
+    private static string Config = $@"
 [DEFAULT]
 StartTime = 00:00:00
 EndTime = 23:59:59
@@ -27,32 +27,31 @@ TargetCompID = target
 BeginString = FIX.4.4
 ";
 
-        private static SessionSettings CreateSettings()
-        {
-            return new SessionSettings(new StringReader(Config));
-        }
+    private static SessionSettings CreateSettings()
+    {
+        return new SessionSettings(new StringReader(Config));
+    }
 
-        [Test]
-        [Ignore("Fails due to file being locked; ignored for now.Add in debounce when time permits")]
-        public void TestRecreation()
-        {
-            StartStopAcceptor();
-            StartStopAcceptor();
-            StartStopAcceptor();
-        }
+    [Test]
+    [Ignore("Fails due to file being locked; ignored for now.Add in debounce when time permits")]
+    public void TestRecreation()
+    {
+        StartStopAcceptor();
+        StartStopAcceptor();
+        StartStopAcceptor();
+    }
 
-        private static void StartStopAcceptor()
-        {
-            var settings = CreateSettings();
-            var lf = new FileLogFactory(settings);
+    private static void StartStopAcceptor()
+    {
+        var settings = CreateSettings();
+        var lf = new FileLogFactory(settings);
 
-            var acceptor = new ThreadedSocketAcceptor(
-                new NullApplication(),
-                new FileStoreFactory(settings),
-                settings,
-                lf);
-            acceptor.Start();
-            acceptor.Dispose();
-        }
+        var acceptor = new ThreadedSocketAcceptor(
+            new NullApplication(),
+            new FileStoreFactory(settings),
+            settings,
+            lf);
+        acceptor.Start();
+        acceptor.Dispose();
     }
 }

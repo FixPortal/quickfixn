@@ -2,8 +2,8 @@
 
 #endregion
 
-namespace QuickFix.Enhancements
-{
+namespace QuickFix.Enhancements;
+
 	public struct FixExecType
 	{
 		public int? Id { get; set; }
@@ -12,4 +12,3 @@ namespace QuickFix.Enhancements
 		public string TagDescription { get; set; }
 		public bool TreatAsPending { get; set; }
 	}
-}

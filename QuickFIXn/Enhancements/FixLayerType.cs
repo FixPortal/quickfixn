@@ -2,12 +2,11 @@
 
 #endregion
 
-namespace QuickFix.Enhancements
-{
+namespace QuickFix.Enhancements;
+
 	public enum FixLayerType
 	{
 		Legacy,
 		Application,
 		Transport
 	}
-}
