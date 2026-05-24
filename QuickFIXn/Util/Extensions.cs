@@ -4,8 +4,8 @@ using System.IO;
 
 #endregion
 
-namespace QuickFix.Util
-{
+namespace QuickFix.Util;
+
 	public static class Extensions
 	{
 		public static bool IsNotLocked(this FileInfo file)
@@ -41,4 +41,3 @@ namespace QuickFix.Util
 			return false;
 		}
 	}
-}
