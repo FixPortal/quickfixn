@@ -127,6 +127,9 @@ Custom message references to colliding fields are removed from the FIX50SP2 spec
 
 ## Version history
 
-| Version            | Date    | Notes                                                          |
-|--------------------|---------|----------------------------------------------------------------|
-| 1.14.0-fixportal.1 | 2026-05 | Initial FixPortal release — fork of upstream `v1.14.0` baseline |
+The patch suffix (`-fixportal.N`) tracks the merged PR count from `qfsim`. One bump per merged PR keeps the package version a direct cross-reference to repo history. Skipped suffix numbers are PRs that didn't change shipped code (e.g. CI workflow PRs).
+
+| Version            | Date       | Notes                                                                          |
+|--------------------|------------|--------------------------------------------------------------------------------|
+| 1.14.0-fixportal.1 | 2026-05    | Initial FixPortal release — fork of upstream `v1.14.0` baseline                |
+| 1.14.0-fixportal.7 | 2026-05-24 | Post-audit cleanup batch: DB DD path removed, three upstream backports (`MessageFactoryNotFound`, `RedactFieldsInLogs`, `IMessageStore.SetAndIncrNextSenderMsgSeqNum`), `Enhancements.Utility.ParsePath` `{DATE:...}` regex fixed, `FileLog` day-rotation actually works now (clock injectable via `TimeProvider`), 93 files converted to file-scoped namespaces, dead public extensions deleted, all `// FixPortal Enhancement` markers re-annotated as dated banners |
