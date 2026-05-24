@@ -92,5 +92,15 @@ namespace UnitTests.Enhancements
             Assert.That(() => Utility.ParsePath(@"logs\{DATE:%}\session.log"),
                 Throws.InstanceOf<FormatException>());
         }
+
+        [Test]
+        public void ParsePath_ExplicitNow_UsesInjectedDate()
+        {
+            // The optional `now` parameter is what lets FileLog's day-rotation flow re-resolve the same template
+            // against a new "today" without depending on a static DateTime.Now read.
+            var injected = new DateTime(2030, 7, 15);
+            Assert.That(Utility.ParsePath(@"logs\{DATE:yyyyMMdd}\session.log", injected),
+                Is.EqualTo(@"logs\20300715\session.log"));
+        }
     }
 }
