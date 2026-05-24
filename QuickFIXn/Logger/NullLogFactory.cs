@@ -15,13 +15,4 @@ public class NullLogFactory : ILogFactory
     {
         return new NullLog();
     }
-
-    #region FixPortal Enhancement
-
-    public ILog Create(SessionID sessionID, Enhancements.DataDictionary.VersionInfo dataDictionaryVersionInfo)
-    {
-        return new NullLog();
-    }
-
-    #endregion
 }

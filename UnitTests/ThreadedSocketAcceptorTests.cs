@@ -54,32 +54,5 @@ BeginString = FIX.4.4
             acceptor.Start();
             acceptor.Dispose();
         }
-		#region FixPortal Enhancement
-		private static ThreadedSocketAcceptor CreateAcceptor_CP()
-        {
-			QuickFix.Enhancements.DataDictionary.IQFCoreSetup setup = NSubstitute.Substitute.For<QuickFix.Enhancements.DataDictionary.IQFCoreSetup>();
-	        IMessageFactory messageFactory = NSubstitute.Substitute.For<IMessageFactory>();
-            var settings = CreateSettings();
-            return new ThreadedSocketAcceptor(
-                new NullApplication(),
-                new FileStoreFactory(settings),
-                settings,
-                new FileLogFactory(settings), messageFactory, setup);
-        }
-        [Test]
-        [Ignore("Fails due to file being locked; ignored for now.Add in debounce when time permits")]
-        public void TestRecreationCP()
-        {
-            StartStopAcceptorCP();
-            StartStopAcceptorCP();
-            StartStopAcceptorCP();
-        }
-        private static void StartStopAcceptorCP()
-        {
-            var acceptor = CreateAcceptor_CP();
-            acceptor.Start();
-            acceptor.Dispose();
-        }
-		#endregion
     }
 }

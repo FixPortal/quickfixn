@@ -28,7 +28,7 @@ internal class LogAdapter : ILogger, IDisposable
         {
             _log.OnOutgoing(formatter(state, exception));
         }
-        // FixPortal Enhancement
+        // FP Enhancement: 2026-05-24 — bridge the FixPortal structured log events (RejectionEvent, IncomingAndOutgoing) from the MEL ILogger pipeline down to the legacy ILog hooks.
         else if (eventId == LogEventIds.RejectionEvent && state is RejectionEventState rejection)
         {
             _log.OnRejectionEvent(rejection.OriginalMessage, rejection.RejectionText);
@@ -53,7 +53,7 @@ internal class LogAdapter : ILogger, IDisposable
     }
 }
 
-// FixPortal Enhancement - structured state types for CP log events
+// FP Enhancement: 2026-05-24 — structured state records that carry the FixPortal-specific log payloads through MEL's `state` slot, with ToString() falling back to a sensible default so sinks that don't know the type still get a readable line.
 public record RejectionEventState(string OriginalMessage, string RejectionText)
 {
     public override string ToString() => RejectionText;

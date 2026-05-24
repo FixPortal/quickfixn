@@ -5,8 +5,6 @@ using Microsoft.Extensions.Logging;
 using QuickFix.Logger;
 using QuickFix.Store;
 
-using QuickFix.Enhancements.DataDictionary; // FixPortal Enhancement
-
 namespace QuickFix
 {
     public abstract class AbstractInitiator : IInitiator
@@ -33,8 +31,7 @@ namespace QuickFix
             IMessageStoreFactory storeFactory,
             SessionSettings settings,
             ILogFactory? logFactoryNullable = null,
-            IMessageFactory? messageFactoryNullable = null,
-            IQFCoreSetup? dictionaryLoader = null) // FixPortal Enhancement)
+            IMessageFactory? messageFactoryNullable = null)
             : this(
                 app,
                 storeFactory,
@@ -42,8 +39,7 @@ namespace QuickFix
                 logFactoryNullable is null
                     ? NullQuickFixLoggerFactory.Instance
                     : new LogFactoryAdapter(logFactoryNullable),
-                messageFactoryNullable,
-                dictionaryLoader)
+                messageFactoryNullable)
         { }
 
         protected AbstractInitiator(
@@ -51,8 +47,7 @@ namespace QuickFix
             IMessageStoreFactory storeFactory,
             SessionSettings settings,
             ILoggerFactory? loggerFactoryNullable = null,
-            IMessageFactory? messageFactoryNullable = null, 
-            IQFCoreSetup? dictionaryLoader = null) // FixPortal Enhancement)
+            IMessageFactory? messageFactoryNullable = null)
             : this(
                 app,
                 storeFactory,
@@ -60,8 +55,7 @@ namespace QuickFix
                 loggerFactoryNullable is null
                     ? NullQuickFixLoggerFactory.Instance
                     : new MelQuickFixLoggerFactory(loggerFactoryNullable),
-                messageFactoryNullable,
-                dictionaryLoader)
+                messageFactoryNullable)
         { }
 
         private AbstractInitiator(
@@ -69,8 +63,7 @@ namespace QuickFix
             IMessageStoreFactory storeFactory,
             SessionSettings settings,
             IQuickFixLoggerFactory qfLoggerFactory,
-            IMessageFactory? messageFactoryNullable = null,
-            IQFCoreSetup? dictionaryLoader = null) // FixPortal Enhancement)
+            IMessageFactory? messageFactoryNullable = null)
         {
             _settings = settings;
             if (qfLoggerFactory is LogFactoryAdapter lfa)
@@ -82,7 +75,7 @@ namespace QuickFix
                 _logFactoryAdapter = lfa;
             }
             var msgFactory = messageFactoryNullable ?? new DefaultMessageFactory();
-            _sessionFactory = new SessionFactory(app, storeFactory, qfLoggerFactory, msgFactory, dictionaryLoader); // FixPortal Enhancement            
+            _sessionFactory = new SessionFactory(app, storeFactory, qfLoggerFactory, msgFactory);
             QfLoggerFactory = qfLoggerFactory;
 
             HashSet<SessionID> definedSessions = _settings.GetSessions();

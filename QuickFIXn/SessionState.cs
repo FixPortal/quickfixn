@@ -368,6 +368,11 @@ namespace QuickFix
             lock (_sync) { MessageStore.IncrNextTargetMsgSeqNum(); }
         }
 
+        public bool SetAndIncrNextSenderMsgSeqNum(SeqNumType msgSeqNum, string msg)
+        {
+            lock (_sync) { return MessageStore.SetAndIncrNextSenderMsgSeqNum(msgSeqNum, msg); }
+        }
+
         public DateTime? CreationTime
         {
             get

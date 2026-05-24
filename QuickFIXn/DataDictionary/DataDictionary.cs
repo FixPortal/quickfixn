@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Xml;
 using QuickFix.Fields;
-using System.Text; // FixPortal Enhancement
 
 namespace QuickFix.DataDictionary
 {
@@ -13,31 +12,8 @@ namespace QuickFix.DataDictionary
     /// </summary>
     public class DataDictionary
     {
-
-        #region FixPortal Enhancement
-
-        public int Revision { get; set; }
-        public string SessionDescription { get; set; }
-        public int? DictionaryID { get; set; }
-        public string Name { get; set; }
+        // FP Enhancement: 2026-05-24 — opt-in lenient char-field parsing (truncate multi-char strings to a single char).
         public bool AllowStringTruncationForCharFields { get; set; }
-        public System.Xml.Linq.XDocument Data { get; set; }
-        private XmlDocument RootDoc;
-
-        public DataDictionary(XmlDocument document)
-            : this()
-        {
-            Load(document);
-        }
-
-        private void ParseName(XmlDocument doc)
-        {
-            var name = doc.SelectSingleNode("/fix/@name");
-            Name = name == null ? string.Empty : name.Value;
-        }
-
-        #endregion
-
 
         public string? MajorVersion { get; private set; }
         public string? MinorVersion { get; private set; }
@@ -107,19 +83,8 @@ namespace QuickFix.DataDictionary
             Header = src.Header;
             Trailer = src.Trailer;
 
-            #region FixPortal Enhancement
-
-            Name = src.Name;
-            DictionaryID = src.DictionaryID;
-            Version = src.Version;
-            if (src.Data is not null)
-            {
-                Data = new System.Xml.Linq.XDocument(src.Data);
-            }
-
+            // FP Enhancement: 2026-05-24 — preserve lenient char-field flag on copy.
             AllowStringTruncationForCharFields = src.AllowStringTruncationForCharFields;
-
-            #endregion
         }
 
         public static void Validate(Message message, DataDictionary? transportDataDict, DataDictionary appDataDict, string beginString,
@@ -339,7 +304,8 @@ namespace QuickFix.DataDictionary
                 }
 
                 if (type == typeof(CharField))
-                    Fields.Converters.CharConverter.Convert(field.ToString(), AllowStringTruncationForCharFields); // FixPortal Enhancement
+                    // FP Enhancement: 2026-05-24 — pass AllowStringTruncationForCharFields through so lenient char parsing is opt-in per session.
+                    Fields.Converters.CharConverter.Convert(field.ToString(), AllowStringTruncationForCharFields);
                 else if (type == typeof(IntField))
                     Fields.Converters.IntConverter.Convert(field.ToString());
                 else if (type == typeof(DecimalField))
@@ -395,8 +361,7 @@ namespace QuickFix.DataDictionary
                 return;
             if (FieldsByTag.TryGetValue(field.Tag, out var fld))
             {
-                #region FixPortal Enhancement
-
+                // FP Enhancement: 2026-05-24 — strict-per-value enum validation for multi-value fields. Upstream uses .Any() and reports a generic failure; we collect the offending values and surface them in the IncorrectTagValue so the reject log line names the bad data.
                 if (fld.HasEnums())
                 {
                     if (fld.IsMultipleValueFieldWithEnums)
@@ -412,8 +377,6 @@ namespace QuickFix.DataDictionary
                     else if (!fld.EnumDict.ContainsKey(field.ToString()))
                         throw new IncorrectTagValue(field.Tag, field.ToString());
                 }
-
-                #endregion
             }
         }
 
@@ -493,36 +456,24 @@ namespace QuickFix.DataDictionary
             Load(stream);
         }
 
-        #region FixPortal Enhancement
-
         public void Load(Stream stream)
         {
             XmlReaderSettings readerSettings = new()
             {
                 IgnoreComments = true
             };
-            XmlDocument doc = new XmlDocument();
 
-            using (XmlReader reader = XmlReader.Create(stream, readerSettings))
-            {
-                doc.Load(reader);
-                Load(doc);
+            using (XmlReader reader = XmlReader.Create(stream, readerSettings)) {
+                XmlDocument rootDoc = new();
+                rootDoc.Load(reader);
+                SetVersionInfo(rootDoc);
+                ParseFields(rootDoc);
+                CacheComponents(rootDoc);
+                ParseMessages(rootDoc);
+                ParseHeader(rootDoc);
+                ParseTrailer(rootDoc);
             }
         }
-
-        public void Load(XmlDocument doc)
-        {
-            RootDoc = doc;
-            SetVersionInfo(doc);
-            ParseFields(doc);
-            CacheComponents(doc);
-            ParseMessages(doc);
-            ParseHeader(doc);
-            ParseTrailer(doc);
-            ParseName(doc); //	FixPortal Enhancement
-        }
-
-        #endregion
 
         public bool FieldHasValue(int tag, string val)
         {
@@ -712,7 +663,8 @@ namespace QuickFix.DataDictionary
 
             foreach (XmlNode childNode in node.ChildNodes)
             {
-                if (childNode.NodeType == XmlNodeType.Comment) continue; // FixPortal Enhancement
+                // FP Enhancement: 2026-05-24 — skip XML comment nodes so commented-out fields in custom specs don't trip the "Malformed data dictionary" guard.
+                if (childNode.NodeType == XmlNodeType.Comment) continue;
                 /*
                 // Continuation of code that's great for debugging DD parsing issues.
                 s = "    + " + childNode.Name;  // childNode.Name is probably "field"

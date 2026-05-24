@@ -29,7 +29,10 @@ For general QuickFIX/n documentation, refer to the upstream `README.md`.
 - `spec/FixPortal/` — Custom data-dictionary XML files (legacy directory name)
 - `scripts/Generate-Message-Sources.ps1` — Uses the custom specs
 - `DDTool/Structures/DataDictionary.cs` — Ordering enhancements for spec processing
-- FixPortal enhancements throughout `QuickFIXn/`, marked `// FixPortal Enhancement`
+- FixPortal enhancements throughout `QuickFIXn/`, marked with a single-line banner of the form
+  `// FP Enhancement: YYYY-MM-DD — <one-line rationale>.` (matching the convention used in the
+  FixPortal FixAtdl repo). Older `// FixPortal Enhancement` markers and `#region FixPortal Enhancement`
+  blocks may still appear in unreviewed corners; convert on touch.
 
 ## Upgrade workflow
 
@@ -54,9 +57,10 @@ git merge v1.15.0
 
 Merge conflicts are expected in core files (`Session.cs`, `Message.cs`,
 `DataDictionary.cs`, `ThreadedSocketAcceptor.cs`, logger and transport).
-FixPortal enhancements are marked with `// FixPortal Enhancement` comments
-where practical — when in doubt, take the upstream change and re-apply the
-FixPortal modification on top.
+FixPortal enhancements are marked with `// FP Enhancement: YYYY-MM-DD — <rationale>.`
+banners where practical (older `// FixPortal Enhancement` markers may also appear) —
+when in doubt, take the upstream change and re-apply the FixPortal modification on
+top, then convert the marker to the banner format if it isn't already.
 
 The `DDTool/Structures/DataDictionary.cs` model class (~86 lines) is distinct
 from the runtime `QuickFIXn/DataDictionary/DataDictionary.cs` (700+ lines);

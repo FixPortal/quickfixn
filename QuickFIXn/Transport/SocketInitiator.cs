@@ -6,7 +6,6 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using Microsoft.Extensions.Logging;
-using QuickFix.Enhancements.DataDictionary;
 using QuickFix.Logger;
 using QuickFix.Store;
 
@@ -32,9 +31,8 @@ namespace QuickFix.Transport
             IMessageStoreFactory storeFactory,
             SessionSettings settings,
             ILogFactory? logFactoryNullable = null,
-            IMessageFactory? messageFactoryNullable = null,
-            IQFCoreSetup? dictionaryLoader = null) // FixPortal Enhancement)
-            : base(application, storeFactory, settings, logFactoryNullable, messageFactoryNullable, dictionaryLoader)
+            IMessageFactory? messageFactoryNullable = null)
+            : base(application, storeFactory, settings, logFactoryNullable, messageFactoryNullable)
         {
             _nonSessionLog = QfLoggerFactory.CreateNonSessionLogger<SocketInitiator>();
         }

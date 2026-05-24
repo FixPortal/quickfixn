@@ -144,6 +144,31 @@ public class SettingsDictionary : System.Collections.IEnumerable
         }
     }
 
+    public int[] GetIntArray(string key)
+    {
+        try
+        {
+            string[] items = GetString(key).Split(",");
+            List<int> rvList = [];
+            foreach (string item in items)
+            {
+                string it = item.Trim();
+                if (it == "")
+                    continue;
+                rvList.Add(int.Parse(it));
+            }
+            return rvList.Distinct().OrderBy(s => s).ToArray();
+        }
+        catch (FormatException)
+        {
+            throw new ConfigError("Incorrect data type");
+        }
+        catch (QuickFIXException)
+        {
+            throw new ConfigError("No value for key: " + key);
+        }
+    }
+
     /// <summary>
     /// Return true if key is present AND value is true, else false
     /// </summary>

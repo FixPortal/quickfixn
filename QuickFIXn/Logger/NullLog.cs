@@ -27,12 +27,9 @@ public sealed class NullLog : ILog
 
     #endregion
 
-    #region FixPortal Enhancement
-
+    // FP Enhancement: 2026-05-24 — ILog hooks for the FixPortal extended logging (no-ops here by design).
     public void LogOn() { }
     public void LogOff() { }
     public void OnIncomingAndOutgoing((int Id, string Raw, string Xml, string Json) message) { }
     public void OnRejectionEvent(string originalMessage, string rejectionText) { }
-
-    #endregion
 }

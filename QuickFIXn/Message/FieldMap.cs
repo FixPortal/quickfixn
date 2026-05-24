@@ -14,11 +14,8 @@ namespace QuickFix;
 public class FieldMap : IEnumerable<KeyValuePair<int, IField>> {
     private SortedDictionary<int, IField> _fields = new();
 
-    #region FixPortal Enhancement
-		
-	public bool AllowStringTruncationForCharFields { get; set; }
-		
-    #endregion
+    // FP Enhancement: 2026-05-24 — per-instance opt-in for lenient char-field parsing; threaded through from the session via DataDictionary copy.
+    public bool AllowStringTruncationForCharFields { get; set; }
 
     /// FIXME sorted dict is a hack to get quasi-correct field order
     private Dictionary<int, List<Group>> _groups = new();
@@ -451,7 +448,8 @@ public class FieldMap : IEnumerable<KeyValuePair<int, IField>> {
         if (fld is FieldBase<char> charField)
             return charField.Value;
 
-        return CharConverter.Convert(fld.ToString(), AllowStringTruncationForCharFields); // FixPortal Enhancement
+        // FP Enhancement: 2026-05-24 — honour the lenient char-field flag at the read site too.
+        return CharConverter.Convert(fld.ToString(), AllowStringTruncationForCharFields);
     }
 
     /// <summary>

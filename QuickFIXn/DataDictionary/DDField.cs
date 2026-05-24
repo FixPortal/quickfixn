@@ -60,7 +60,8 @@ public class DDField
             case "EXCHANGE": return typeof(Fields.StringField);
             case "UTCTIMESTAMP": return typeof(Fields.DateTimeField);
             case "BOOLEAN": return typeof(Fields.BooleanField);
-            case "LOCALMKTDATE": return typeof(Fields.DateOnlyField); // FixPortal Enhancement
+            // FP Enhancement: 2026-05-24 — LOCALMKTDATE mapped to DateOnlyField (upstream: StringField). Required by FixPortal counterparty agreements that expect strict date-only parsing and validation on local-market-date tags; keep on upstream merges and resolve conflicts in favour of DateOnlyField.
+            case "LOCALMKTDATE": return typeof(Fields.DateOnlyField);
             case "LOCALMKTTIME": return typeof(Fields.StringField);
             case "DATA": return typeof(Fields.StringField);
             case "FLOAT": return typeof(Fields.DecimalField);

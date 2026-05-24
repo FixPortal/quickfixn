@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
-using QuickFix.Enhancements.DataDictionary;
 
 namespace QuickFix.Logger;
 
@@ -29,21 +28,6 @@ internal class LogFactoryAdapter : IQuickFixLoggerFactory, IDisposable
             if (!_loggers.TryGetValue(sessionId, out var logger))
             {
                 logger = new LogAdapter(_logFactory.Create(sessionId));
-                _loggers.Add(sessionId, logger);
-            }
-
-            return logger;
-        }
-    }
-
-    // FixPortal Enhancement - create logger with DataDictionary version info
-    public ILogger CreateSessionLogger(SessionID sessionId, VersionInfo versionInfo)
-    {
-        lock (_dictionaryLock)
-        {
-            if (!_loggers.TryGetValue(sessionId, out var logger))
-            {
-                logger = new LogAdapter(_logFactory.Create(sessionId, versionInfo));
                 _loggers.Add(sessionId, logger);
             }
 

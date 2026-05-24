@@ -69,8 +69,7 @@ internal class CompositeLog : ILog
 
     ~CompositeLog() => Dispose(false);
 
-    #region FixPortal Enhancement
-	
+    // FP Enhancement: 2026-05-24 — fan FixPortal log events out to every child log in the composite (rejections & tracked-message tuples).
     public void LogOn() { }
     public void LogOff() { }
 
@@ -86,6 +85,4 @@ internal class CompositeLog : ILog
         foreach (var log in _logs)
             log.OnRejectionEvent(originalMessage, rejectionText);
     }
-	
-    #endregion
 }

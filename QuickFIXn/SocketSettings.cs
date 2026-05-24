@@ -193,7 +193,8 @@ namespace QuickFix
                 CACertificatePath = settingsDictionary.GetString(SessionSettings.SSL_CA_CERTIFICATE);
 
             if (settingsDictionary.Has(SessionSettings.SSL_CERTIFICATE))
-                CertificatePath = Enhancements.Utility.ParsePath(settingsDictionary.GetString(SessionSettings.SSL_CERTIFICATE)); // FixPortal Enhancement
+                // FP Enhancement: 2026-05-24 — normalise the certificate path via ParsePath so a `.\` prefix resolves against the app base directory.
+                CertificatePath = Enhancements.Utility.ParsePath(settingsDictionary.GetString(SessionSettings.SSL_CERTIFICATE));
 
             if (settingsDictionary.Has(SessionSettings.SSL_CERTIFICATE_PASSWORD))
                 CertificatePassword = settingsDictionary.GetString(SessionSettings.SSL_CERTIFICATE_PASSWORD);

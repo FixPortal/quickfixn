@@ -78,6 +78,18 @@ namespace QuickFix
     }
 
     /// <summary>
+    /// DefaultMessageFactory can't find a factory that matches this BeginString.
+    /// This may indicate a missing package dependency,
+    /// e.g. user forgot to add the FixPortal.QuickFIXn.FIX42 or .FIX50SP2 package.
+    /// </summary>
+    public class MessageFactoryNotFound : QuickFIXException
+    {
+        public MessageFactoryNotFound(string beginString)
+            : base($"Message factory not found for BeginString={beginString}.")
+        { }
+    }
+
+    /// <summary>
     /// Message type is not supported by application
     /// </summary>
     public class UnsupportedMessageType : QuickFIXException
@@ -168,47 +180,41 @@ namespace QuickFix
     }
 
     #region Tag Exceptions
-	    /// <summary>
+    /// <summary>
     /// Base class for tag-related errors
     /// </summary>
-	public abstract class TagException : QuickFIXException // FixPortal Enhancement			
+    public abstract class TagException : QuickFIXException
     {
         protected int _field;
 
         public int Field { get { return _field; } }
         public FixValues.SessionRejectReason sessionRejectReason;
 
-		#region FixPortal Enhancement
-		
-		protected string _value;
+        // FP Enhancement: 2026-05-24 — carry the offending field value alongside the tag/reason so reject log lines can show both the rule and the data that broke it. The `value` parameter is optional on every overload, so existing callers using `(field, reason)` keep compiling without change.
+        protected string _value;
+        public string Value => _value;
 
-		public string Value => _value;
-		
-		public TagException(string msg, int field, string value = "")
-			: base(msg)
-		{
-			this._field = field;
-			this._value = value;
-			this.sessionRejectReason = new QuickFix.FixValues.SessionRejectReason(FixValues.SessionRejectReason.OTHER.Value, msg);
-		}
-		public TagException(int field, FixValues.SessionRejectReason reason, string value = "")
-			: base(reason.Description)
-		{
-			this._field = field;
-			this._value = value;
-			this.sessionRejectReason = reason;
-		}
-		public TagException(int field, FixValues.SessionRejectReason reason, System.Exception innerException, string value = "")
-			: base(reason.Description, innerException)
-		{
-			this._field = field;
-			this._value = value;
-			this.sessionRejectReason = reason;
-		}
-		
-		#endregion
-		
-
+        public TagException(string msg, int field, string value = "")
+            : base(msg)
+        {
+            this._field = field;
+            this._value = value;
+            this.sessionRejectReason = new QuickFix.FixValues.SessionRejectReason(FixValues.SessionRejectReason.OTHER.Value, msg);
+        }
+        public TagException(int field, FixValues.SessionRejectReason reason, string value = "")
+            : base(reason.Description)
+        {
+            this._field = field;
+            this._value = value;
+            this.sessionRejectReason = reason;
+        }
+        public TagException(int field, FixValues.SessionRejectReason reason, System.Exception innerException, string value = "")
+            : base(reason.Description, innerException)
+        {
+            this._field = field;
+            this._value = value;
+            this.sessionRejectReason = reason;
+        }
     }
     /// <summary>
     /// Tag is not in the correct order
@@ -253,14 +259,10 @@ namespace QuickFix
     /// <summary>
     /// Field has a value that is out of range
     /// </summary>
-    public class IncorrectTagValue : TagException //FixPortal Enhancement			
+    public class IncorrectTagValue : TagException
     {
-		#region FixPortal Enhancement
-			
-		public IncorrectTagValue(int field, string value = "") : base(field, FixValues.SessionRejectReason.VALUE_IS_INCORRECT, value) { }
-		
-		#endregion
-
+        // FP Enhancement: 2026-05-24 — accept the value that violated the spec so it lands in the reject log line (see TagException).
+        public IncorrectTagValue(int field, string value = "") : base(field, FixValues.SessionRejectReason.VALUE_IS_INCORRECT, value) { }
     }
 	
     /// <summary>

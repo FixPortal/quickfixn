@@ -29,15 +29,12 @@ namespace QuickFix.Fields.Converters
             return c.ToString();
         }
 
-        #region FixPortal Enhancement
-
+        // FP Enhancement: 2026-05-24 — opt-in lenient overload. When `allowTruncation` is true, accept multi-char strings by taking the first character; otherwise behave like the strict overload. Used by FieldMap/DataDictionary when the session enables AllowStringTruncationForCharFields for counterparties that send over-wide char fields.
         public static char Convert(string c, bool allowTruncation)
         {
             if (c.Length == 0 || (c.Length != 1 && !allowTruncation))
                 throw new FieldConvertError("could not convert string to char, str=" + c);
             return c[0];
         }
-
-        #endregion
     }
 }

@@ -44,12 +44,12 @@ public class DataDictionary
             var prefix = IsFIXT ? "FIXT" : "FIX";
             var svcPack = ServicePack is null ? "" : $"SP{ServicePack}";
             var defaultIdentifier =  $"{prefix}.{MajorVersion}.{MinorVersion}{svcPack}";
-            // FixPortal Enhancement
-            return _centerpriseDesiredOrder.TryGetValue(defaultIdentifier, out var value) ? $"{value}_{defaultIdentifier}" : defaultIdentifier;
+            // FP Enhancement: 2026-05-24 — prepend a sort prefix so FixPortal's customised 4.2 / 4.4 dictionaries process after the standard versions (their identifiers must therefore be stripped of the prefix again in IdentifierNoDots below).
+            return _fixPortalDesiredOrder.TryGetValue(defaultIdentifier, out var value) ? $"{value}_{defaultIdentifier}" : defaultIdentifier;
         }
     }
 
-    private readonly Dictionary<string, int> _centerpriseDesiredOrder = new()
+    private readonly Dictionary<string, int> _fixPortalDesiredOrder = new()
     {
         { "FIX.4.0", 1 },
         { "FIX.4.1", 2 },
@@ -67,9 +67,9 @@ public class DataDictionary
     /// </summary>
     public string IdentifierNoDots
     {
-        // FixPortal Enhancement
         get
         {
+            // FP Enhancement: 2026-05-24 — strip the leading "<n>_" sort prefix added by Identifier before flattening dots, so generated class/dir names stay clean ("FIX44" not "8_FIX44").
             Regex regex = new(@"(?:1_)?(FIXT?\.\d\.\d(?:SP\d+)?)");
 
             Match match = regex.Match(Identifier);

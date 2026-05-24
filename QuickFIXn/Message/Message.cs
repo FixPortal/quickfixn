@@ -15,12 +15,8 @@ namespace QuickFix;
 /// </summary>
 public class Message : FieldMap
 {
-    #region FixPortal Enhancement		
-    // capture the raw message before we potentially manipulate it
-    // The message itself is used as a key when trying to identify a given message at various points in the process so we need to
+    // FP Enhancement: 2026-05-24 — captured at FromString time, before Clear() and the parse pipeline mutates anything. Downstream code (notably Log.OnRejectionEvent and Session.NotifyMessageRejected) needs the original wire string to correlate with the counterparty's view.
     public string RawMessage { get; private set; }
-		
-    #endregion
 
     public const char SOH = '\u0001';
 
@@ -365,7 +361,7 @@ public class Message : FieldMap
         IMessageFactory? msgFactory = null,
         bool ignoreBody = false)
     {
-        RawMessage = msgstr; // FixPortal Enhancement
+        RawMessage = msgstr;
 
         Clear();
 

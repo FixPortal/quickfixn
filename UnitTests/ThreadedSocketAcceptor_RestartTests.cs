@@ -19,7 +19,8 @@ namespace UnitTests;
 public class ThreadedSocketAcceptor_RestartTests
 {
     private const string Host = "127.0.0.1";
-    private const int AcceptPort = 9823; // FixPortal Enhancement - use a non-privileged port to avoid test failures due to insufficient permissions/conflict with asus_framework.
+    // FP Enhancement: 2026-05-24 — non-privileged port chosen to avoid permission denials on dev machines and a clash with asus_framework's default port.
+    private const int AcceptPort = 9823;
     private const string StaticAcceptorCompID = "acc01";
     private const string StaticAcceptorCompID2 = "acc02";
     private const string ServerCompID = "dummy";

@@ -31,6 +31,24 @@ public interface IMessageStore : IDisposable
     void IncrNextSenderMsgSeqNum();
     void IncrNextTargetMsgSeqNum();
 
+    /// <summary>
+    /// The purpose of this method is to combine <see cref="Set(SeqNumType, string)"/>
+    /// and <see cref="IncrNextSenderMsgSeqNum()"/> into one call, for use in situations
+    /// when these operations should be performed together.
+    /// The default implementation simply calls those two functions.
+    /// Certain custom IMessageStore implementations (e.g. DB-backed stores)
+    /// may need to override the default implementation to ensure that these two behaviors
+    /// are combined into a single atomic operation.
+    /// </summary>
+    /// <param name="msgSeqNum">the sequence number</param>
+    /// <param name="msg">the raw FIX message string</param>
+    /// <returns>true if successful, false otherwise</returns>
+    bool SetAndIncrNextSenderMsgSeqNum(SeqNumType msgSeqNum, string msg)
+    {
+        bool result = Set(msgSeqNum, msg);
+        IncrNextSenderMsgSeqNum();
+        return result;
+    }
 
     DateTime? CreationTime { get; }
 
