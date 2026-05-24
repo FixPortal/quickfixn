@@ -1,0 +1,31 @@
+# FixPortal-owned CI for the qfsim deployment branch.
+# Kept as a separate workflow from upstream's dotnet.yml so upstream
+# merges never conflict on a branches-filter line.
+
+name: FixPortal CI
+
+on:
+  push:
+    branches: [ "qfsim" ]
+  pull_request:
+    branches: [ "qfsim" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore
+    - name: Unit Test
+      run: dotnet test --no-build --verbosity normal UnitTests
+    - name: Acceptance
+      run: dotnet test --no-build --verbosity normal AcceptanceTest
