@@ -18,11 +18,14 @@ public class FileLog : ILog
     private System.IO.StreamWriter? _messageLog;
     private System.IO.StreamWriter? _eventLog;
 
-    // FP Enhancement: 2026-05-24 — keep the parsed log root + the day-rotated current message/event filenames so DirectoryCheck() can re-roll the log files when the date changes (see InitialiseLogs / DirectoryCheck below).
-    private readonly string _fileLogPath;
+    // FP Enhancement: 2026-05-24 — the configured path template, slash-normalised but NOT date-resolved.
+    // Stored as a template so day-rotation can re-resolve {DATE:...} against the current clock on every write
+    // (see DirectoryCheck / EvaluateCandidateLog). Storing the already-resolved path here would consume the
+    // template at construction time and break rotation.
+    private readonly string _fileLogPathTemplate;
+    private readonly TimeProvider _timeProvider;
     private string _messageLogFileName;
     private string _eventLogFileName;
-
 
 
     /// <summary>
@@ -33,13 +36,18 @@ public class FileLog : ILog
     /// path separator (i.e. "/" will become "\" on windows, else "\" will become "/" on all other platforms)
     /// </param>
     /// <param name="sessionId"></param>
-    public FileLog(string fileLogPath, SessionID sessionId)
+    /// <param name="timeProvider">
+    /// Clock source used for day-rotation checks. Defaults to <see cref="TimeProvider.System"/>; tests can inject
+    /// a fake to simulate day changes.
+    /// </param>
+    public FileLog(string fileLogPath, SessionID sessionId, TimeProvider? timeProvider = null)
     {
-        // FP Enhancement: 2026-05-24 — defer file creation until first write (InitialiseLogs with initOnly:true) and pre-resolve the parsed path so DirectoryCheck() can date-rotate later.
-        _fileLogPath = Enhancements.Utility.ParsePath(StringUtil.FixSlashes(fileLogPath));
+        _timeProvider = timeProvider ?? TimeProvider.System;
+        _fileLogPathTemplate = StringUtil.FixSlashes(fileLogPath);
         _sessionPrefix = Prefix(sessionId);
 
-        InitialiseLogs(_fileLogPath, true);
+        var initialPath = Enhancements.Utility.ParsePath(_fileLogPathTemplate, _timeProvider.GetLocalNow().DateTime);
+        InitialiseLogs(initialPath, initOnly: true);
     }
 
     public static string Prefix(SessionID sessionId)
@@ -176,45 +184,61 @@ public class FileLog : ILog
     }
     #endregion
 
-    // FP Enhancement: 2026-05-24 — date-aware log rotation. Each write calls DirectoryCheck() to see if the day has rolled over; if so, EvaluateCandidateLog() re-resolves the log directory (so ParsePath's {DATE:...} token, if present, expands fresh) and reinitialises the streams. The streams themselves are created lazily so a session that never writes leaves no empty files behind.
+    // FP Enhancement: 2026-05-24 — date-aware log rotation. Each write calls DirectoryCheck() to see if the day
+    // has rolled over; if so, EvaluateCandidateLog() re-resolves the template against the new date and, if the
+    // resolved path actually changed, disposes the open streams and reopens them under the new path. The streams
+    // themselves are created lazily so a session that never writes leaves no empty files behind.
     private readonly string _sessionPrefix;
     private DateTime _creationDate;
     private string? _currentFileLogPath;
+
     private void DirectoryCheck()
     {
-        if (_creationDate.CompareTo(DateTime.Now.Date) == 0) return;
+        var today = _timeProvider.GetLocalNow().Date;
+        if (_creationDate.CompareTo(today) == 0) return;
         EvaluateCandidateLog();
     }
+
     private void EvaluateCandidateLog()
     {
-        var normalizedPath = Enhancements.Utility.ParsePath(StringUtil.FixSlashes(_fileLogPath));
+        var normalizedPath = Enhancements.Utility.ParsePath(_fileLogPathTemplate, _timeProvider.GetLocalNow().DateTime);
 
         if (normalizedPath != _currentFileLogPath)
         {
-            InitialiseLogs(normalizedPath, false);
+            InitialiseLogs(normalizedPath, initOnly: false);
+        }
+        else
+        {
+            // Path didn't change (template has no {DATE:...} or the date format didn't roll), but the date did —
+            // record the new creation date so we don't re-evaluate on every subsequent write today.
+            _creationDate = _timeProvider.GetLocalNow().Date;
         }
     }
 
     private void InitialiseLogs(string normalizedPath, bool initOnly)
     {
-        _creationDate = DateTime.Now.Date;
+        _creationDate = _timeProvider.GetLocalNow().Date;
 
         if (!System.IO.Directory.Exists(normalizedPath))
             System.IO.Directory.CreateDirectory(normalizedPath);
 
         _messageLogFileName = System.IO.Path.Combine(normalizedPath, _sessionPrefix + ".messages.current.log");
         _eventLogFileName = System.IO.Path.Combine(normalizedPath, _sessionPrefix + ".event.current.log");
+        _currentFileLogPath = normalizedPath;
 
         if (initOnly)
             return;
 
-        _currentFileLogPath = normalizedPath;
-
-        EnsureMessageLogInit();
-        EnsureEventLogInit();
+        // Rotating: dispose the open streams so EnsureXxxLogInit reopens at the new path on the next write.
+        _messageLog?.Dispose();
+        _eventLog?.Dispose();
+        _messageLog = null;
+        _eventLog = null;
     }
 
-    // FP Enhancement: 2026-05-24 — ILog hooks for the extended message-tracking and rejection-notification flows; FileLog routes rejections into the event log and ignores the tracked-message tuple (sinks that care about XML/JSON live elsewhere).
+    // FP Enhancement: 2026-05-24 — ILog hooks for the extended message-tracking and rejection-notification flows;
+    // FileLog routes rejections into the event log and ignores the tracked-message tuple (sinks that care about
+    // XML/JSON live elsewhere).
     public void LogOn() { }
     public void LogOff() { }
     public void OnIncomingAndOutgoing((int Id, string Raw, string Xml, string Json) message) { }

@@ -127,4 +127,79 @@ public class FileLogTests
         _log = null;
         Directory.Delete(_logDirectory, true);
     }
+
+    [Test]
+    public void TestDateRotation_WritesToNewDirectoryAfterDayChange()
+    {
+        // Regression: previously the constructor stored the already-resolved path in _fileLogPath, so the
+        // day-rotation flow (DirectoryCheck -> EvaluateCandidateLog) could never re-substitute {DATE:...}.
+        // A long-running session would write day 1, 2, 3, ... into the day-1 directory forever.
+
+        string rootDir = Path.Combine(TestContext.CurrentContext.TestDirectory, "log-rotation-test");
+        if (Directory.Exists(rootDir))
+            Directory.Delete(rootDir, true);
+
+        try
+        {
+            var fakeClock = new FakeTimeProvider(new DateTimeOffset(2026, 1, 1, 10, 0, 0, TimeSpan.Zero));
+            string template = Path.Combine(rootDir, "{DATE:yyyyMMdd}");
+
+            string day1Dir = Path.Combine(rootDir, "20260101");
+            string day1EventFile = Path.Combine(day1Dir, "FIX.4.2-SENDERCOMP-TARGETCOMP.event.current.log");
+            string day2Dir = Path.Combine(rootDir, "20260102");
+            string day2EventFile = Path.Combine(day2Dir, "FIX.4.2-SENDERCOMP-TARGETCOMP.event.current.log");
+            string day2MessagesFile = Path.Combine(day2Dir, "FIX.4.2-SENDERCOMP-TARGETCOMP.messages.current.log");
+
+            FileLog log = new FileLog(template, _defaultSessionId, fakeClock);
+            try
+            {
+                log.OnEvent("first day event");
+                Assert.That(File.Exists(day1EventFile), "Day 1 event file should exist after the first write");
+
+                // Advance the clock past midnight into day 2.
+                fakeClock.Now = new DateTimeOffset(2026, 1, 2, 9, 0, 0, TimeSpan.Zero);
+
+                log.OnEvent("second day event");
+                log.OnIncoming("second day incoming");
+
+                Assert.That(File.Exists(day2EventFile), "Day 2 event file should exist after the day-change write");
+                Assert.That(File.Exists(day2MessagesFile), "Day 2 messages file should exist after the day-change write");
+                Assert.That(File.Exists(day1EventFile), "Day 1 event file should be preserved across rotation");
+            }
+            finally
+            {
+                // Dispose the log so the StreamWriters release the files before we read them.
+                log.Dispose();
+            }
+
+            // Day 2's event file should have the day-2 content, NOT the day-1 content.
+            string day2Content = File.ReadAllText(day2EventFile);
+            Assert.That(day2Content, Does.Contain("second day event"));
+            Assert.That(day2Content, Does.Not.Contain("first day event"));
+
+            // Day 1's event file should retain its day-1 content untouched by the rotation.
+            string day1Content = File.ReadAllText(day1EventFile);
+            Assert.That(day1Content, Does.Contain("first day event"));
+            Assert.That(day1Content, Does.Not.Contain("second day event"));
+        }
+        finally
+        {
+            if (Directory.Exists(rootDir))
+                Directory.Delete(rootDir, true);
+        }
+    }
+
+    /// <summary>
+    /// Minimal <see cref="TimeProvider"/> stub for tests that need to simulate a day change without bringing in
+    /// the full Microsoft.Extensions.TimeProvider.Testing package.
+    /// </summary>
+    private sealed class FakeTimeProvider : TimeProvider
+    {
+        public DateTimeOffset Now { get; set; }
+
+        public FakeTimeProvider(DateTimeOffset initial) => Now = initial;
+
+        public override DateTimeOffset GetUtcNow() => Now.ToUniversalTime();
+        public override TimeZoneInfo LocalTimeZone => TimeZoneInfo.Utc;
+    }
 }
