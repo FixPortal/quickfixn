@@ -155,6 +155,9 @@ public class SocketReader : IDisposable
 
             try
             {
+                // FP Enhancement: 2026-06-01 — Log each incoming message type at Information so receipt is visible in ACA log streams (QF/n FileLog output does not surface there).
+                _qfSession.Log.Log(LogLevel.Information, LogEventIds.IncomingMessage,
+                    "Incoming {MsgType} on {SessionId}", Message.GetMsgType(msg), _qfSession.SessionID);
                 _qfSession.Next(msg);
             }
             catch (Exception e)
@@ -290,12 +293,17 @@ public class SocketReader : IDisposable
         if (_disposed) return;
         if (disposing)
         {
+            // FP Enhancement: 2026-06-01 — Cancel before waiting; dispose CTS only after the in-flight ReadAsync unwinds to prevent ObjectDisposedException killing the reader thread.
             _readCancellationTokenSource.Cancel();
-            _readCancellationTokenSource.Dispose();
 
-            // just wait when read task will be cancelled
+            if (_currentReadTask is { IsCompleted: false })
+                _nonSessionLog.Log(LogLevel.Warning,
+                    "SocketReader: disposing with an in-flight ReadAsync; cancelling gracefully (ObjectDisposedException would have killed the reader thread without this fix).");
+
             _currentReadTask?.ContinueWith(_ => { }).Wait(1000);
             _currentReadTask?.Dispose();
+
+            _readCancellationTokenSource.Dispose();
 
             _stream.Dispose();
             _tcpClient.Close();
