@@ -191,13 +191,19 @@ public class SocketInitiatorThread : IResponder
 
     public void Disconnect()
     {
+        // FP Enhancement: 2026-06-01 — Cancel before waiting; dispose CTS only after the in-flight ReadAsync unwinds to prevent ObjectDisposedException killing the reader thread.
         _readCancellationTokenSource.Cancel();
-        _readCancellationTokenSource.Dispose();
 
-        // just wait when read task will be cancelled
+        if (_currentReadTask is { IsCompleted: false })
+            NonSessionLog.Log(LogLevel.Warning,
+                "SocketInitiatorThread: disconnecting with an in-flight ReadAsync; cancelling gracefully (ObjectDisposedException would have killed the reader thread without this fix).");
+
         _currentReadTask?.ContinueWith(_ => { }).Wait(1000);
         _currentReadTask?.Dispose();
         _currentReadTask = null;
+
+        _readCancellationTokenSource.Dispose();
+
         _stream?.Close();
     }
 
