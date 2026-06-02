@@ -46,6 +46,9 @@ public class SocketReader : IDisposable
 
     public void Read()
     {
+        if (_disposed)
+            return;
+
         try
         {
             int bytesRead = ReadSome(_readBuffer, 1000);
@@ -58,10 +61,14 @@ public class SocketReader : IDisposable
         }
         catch (MessageParseError e)
         {
+            if (_disposed)
+                return;
             HandleExceptionInternal(_qfSession, e);
         }
         catch (Exception e)
         {
+            if (_disposed)
+                return;
             HandleExceptionInternal(_qfSession, e);
             throw;
         }
@@ -302,11 +309,15 @@ public class SocketReader : IDisposable
 
             _currentReadTask?.ContinueWith(_ => { }).Wait(1000);
             _currentReadTask?.Dispose();
+            _currentReadTask = null;
 
             _readCancellationTokenSource.Dispose();
 
             _stream.Dispose();
             _tcpClient.Close();
+
+            // FP Enhancement: 2026-06-02 — Shutdown the responder thread immediately on disposal to prevent tight loop of ObjectDisposedException
+            _responder.Shutdown("SocketReader disposed");
         }
         _disposed = true;
     }
