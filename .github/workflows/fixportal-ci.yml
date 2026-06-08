@@ -1,4 +1,4 @@
-# FixPortal-owned CI for the qfsim deployment branch.
+# FixPortal-owned CI for the fpsim deployment branch.
 # Kept as a separate workflow from upstream's dotnet.yml so upstream
 # merges never conflict on a branches-filter line.
 
@@ -6,9 +6,9 @@ name: FixPortal CI
 
 on:
   push:
-    branches: [ "qfsim" ]
+    branches: [ "fpsim" ]
   pull_request:
-    branches: [ "qfsim" ]
+    branches: [ "fpsim" ]
 
 jobs:
   build:

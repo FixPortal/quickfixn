@@ -22,7 +22,7 @@ For general QuickFIX/n documentation, refer to the upstream `README.md`.
 | Branch       | Purpose                                                                      |
 |--------------|------------------------------------------------------------------------------|
 | `master`     | Tracks upstream `master`                                                     |
-| `qfsim`      | FixPortal deployment branch — upstream `v1.14.0` + FixPortal enhancements    |
+| `fpsim`      | FixPortal deployment branch — upstream `v1.14.0` + FixPortal enhancements    |
 
 ### FixPortal-specific content
 
@@ -37,7 +37,7 @@ For general QuickFIX/n documentation, refer to the upstream `README.md`.
 ## Upgrade workflow
 
 When a new upstream release is available (e.g. `v1.15.0`), follow these steps to
-incorporate it into `qfsim`.
+incorporate it into `fpsim`.
 
 ### 1. Sync `master` with upstream
 
@@ -48,10 +48,10 @@ git merge upstream/master
 git push origin master
 ```
 
-### 2. Merge the release into `qfsim`
+### 2. Merge the release into `fpsim`
 
 ```bash
-git checkout qfsim
+git checkout fpsim
 git merge v1.15.0
 ```
 
@@ -127,7 +127,7 @@ Custom message references to colliding fields are removed from the FIX50SP2 spec
 
 ## Version history
 
-The patch suffix (`-fixportal.N`) tracks the merged PR count from `qfsim`. One bump per merged PR keeps the package version a direct cross-reference to repo history. Skipped suffix numbers are PRs that didn't change shipped code (e.g. CI workflow PRs).
+The patch suffix (`-fixportal.N`) tracks the merged PR count from `fpsim`. One bump per merged PR keeps the package version a direct cross-reference to repo history. Skipped suffix numbers are PRs that didn't change shipped code (e.g. CI workflow PRs).
 
 | Version            | Date       | Notes                                                                          |
 |--------------------|------------|--------------------------------------------------------------------------------|
