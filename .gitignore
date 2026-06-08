@@ -172,3 +172,9 @@ FakesAssemblies/
 .sass-cache/
 _site/
 
+# Local code-analysis tool artifacts (graphify / understand-anything skills)
+.agents/
+.graphifyignore
+.understand-anything/
+graphify-out/
+
