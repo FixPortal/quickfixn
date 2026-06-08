@@ -235,4 +235,34 @@ public class SessionCmeEnhancedResendTest : SessionTestBase
         // ResendRequest is still unfinished
         Assert.That(_session.IsResendRequested, Is.True);
     }
+
+    [Test]
+    public void TestResetModeSequenceResetDuringResendDoesNotDisconnect() {
+        // Regression for adversarial-review finding F1/G1: with CmeEnhancedResend enabled
+        // and a resend in flight, a reset-mode SequenceReset (tag 36 NewSeqNo set, tag 123
+        // GapFillFlag ABSENT) must not disconnect the session. NextSequenceReset calls
+        // Verify(sr, isGapFill, isGapFill); for a reset-mode reset isGapFill is false, so the
+        // GetBoolean(GapFillFlag) sites inside Verify's `if (checkTooHigh || checkTooLow)`
+        // block are never reached. This pins that behavior (and that the reset is obeyed) so
+        // a future change to the check-param coupling can't silently turn a legal reset-mode
+        // SequenceReset into a session disconnect.
+        Logon();
+        SendNOSMessage();                       // seq 2 -> now expecting 3
+        Assert.That(_session!.NextTargetMsgSeqNum, Is.EqualTo(3));
+
+        SendNOSMessage(8);                      // seq too high -> ResendRequest, IsResendRequested
+        Assert.That(_session.IsResendRequested, Is.True);
+        Assert.That(_responder.MsgLookup[MsgType.RESEND_REQUEST].Count, Is.EqualTo(1));
+        Assert.That(DISCONNECTED(), Is.False);
+
+        // Counterparty replies with a reset-mode SequenceReset: NewSeqNo set, GapFillFlag absent.
+        var sr = new QuickFix.FIX42.SequenceReset();
+        sr.SetField(new NewSeqNo(11));
+        SendTheMessage(sr, 3);                  // arrives in-order (seq 3 == expected)
+
+        Assert.That(DISCONNECTED(), Is.False,
+            "a reset-mode SequenceReset during an active CME resend must not disconnect the session");
+        Assert.That(_session.NextTargetMsgSeqNum, Is.EqualTo(11),
+            "the reset must be obeyed: target advances to NewSeqNo");
+    }
 }
