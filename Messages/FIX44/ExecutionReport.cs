@@ -6457,7 +6457,7 @@ public class ExecutionReport : Message
     {
         public static int[] DefaultFieldOrder = [Tags.PartyID, Tags.PartyIDSource, Tags.PartyRole, Tags.PartyRoleQualifier, Tags.NoPartySubIDs, Tags.NoPartyAltIDs, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.PartyID, Tags.PartyIDSource, Tags.PartyRole, Tags.PartyRoleQualifier, Tags.NoPartySubIDs, Tags.NoPartyAltIDs, 0};
 
         public NoPartyIDsGroup()
@@ -6572,7 +6572,7 @@ public class ExecutionReport : Message
         {
             public static int[] DefaultFieldOrder = [Tags.PartySubID, Tags.PartySubIDType, 0];
 
-            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
             public static int[] fieldOrder = {Tags.PartySubID, Tags.PartySubIDType, 0};
 
             public NoPartySubIDsGroup()
@@ -6624,7 +6624,7 @@ public class ExecutionReport : Message
         {
             public static int[] DefaultFieldOrder = [Tags.PartyAltID, Tags.PartyAltIDSource, Tags.NoPartyAltSubIDs, 0];
 
-            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
             public static int[] fieldOrder = {Tags.PartyAltID, Tags.PartyAltIDSource, Tags.NoPartyAltSubIDs, 0};
 
             public NoPartyAltIDsGroup()
@@ -6691,7 +6691,7 @@ public class ExecutionReport : Message
             {
                 public static int[] DefaultFieldOrder = [Tags.PartyAltSubID, Tags.PartyAltSubIDType, 0];
 
-                [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+                [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
                 public static int[] fieldOrder = {Tags.PartyAltSubID, Tags.PartyAltSubIDType, 0};
 
                 public NoPartyAltSubIDsGroup()
@@ -6745,7 +6745,7 @@ public class ExecutionReport : Message
     {
         public static int[] DefaultFieldOrder = [Tags.RegulatoryTradeID, Tags.RegulatoryTradeIDSource, Tags.RegulatoryTradeIDEvent, Tags.RegulatoryTradeIDType, Tags.RegulatoryLegRefID, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.RegulatoryTradeID, Tags.RegulatoryTradeIDSource, Tags.RegulatoryTradeIDEvent, Tags.RegulatoryTradeIDType, Tags.RegulatoryLegRefID, 0};
 
         public NoRegulatoryTradeIDsGroup()
@@ -6845,7 +6845,7 @@ public class ExecutionReport : Message
     {
         public static int[] DefaultFieldOrder = [Tags.SecurityAltID, Tags.SecurityAltIDSource, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.SecurityAltID, Tags.SecurityAltIDSource, 0};
 
         public NoSecurityAltIDGroup()
@@ -6897,7 +6897,7 @@ public class ExecutionReport : Message
     {
         public static int[] DefaultFieldOrder = [Tags.EventType, Tags.EventDate, Tags.EventTimeUnit, Tags.EventTimePeriod, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.EventType, Tags.EventDate, Tags.EventTimeUnit, Tags.EventTimePeriod, 0};
 
         public NoEventsGroup()
@@ -6981,7 +6981,7 @@ public class ExecutionReport : Message
     {
         public static int[] DefaultFieldOrder = [Tags.InstrumentPartyID, Tags.InstrumentPartyIDSource, Tags.InstrumentPartyRole, Tags.NoInstrumentPartySubIDs, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.InstrumentPartyID, Tags.InstrumentPartyIDSource, Tags.InstrumentPartyRole, Tags.NoInstrumentPartySubIDs, 0};
 
         public NoInstrumentPartiesGroup()
@@ -7064,7 +7064,7 @@ public class ExecutionReport : Message
         {
             public static int[] DefaultFieldOrder = [Tags.InstrumentPartySubID, Tags.InstrumentPartySubIDType, 0];
 
-            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
             public static int[] fieldOrder = {Tags.InstrumentPartySubID, Tags.InstrumentPartySubIDType, 0};
 
             public NoInstrumentPartySubIDsGroup()
@@ -7117,7 +7117,7 @@ public class ExecutionReport : Message
     {
         public static int[] DefaultFieldOrder = [Tags.ComplexEventType, Tags.ComplexEventPrice, Tags.ComplexEventPriceTimeType, Tags.ComplexEventCondition, Tags.NoComplexEventDates, Tags.ComplexRebate, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.ComplexEventType, Tags.ComplexEventPrice, Tags.ComplexEventPriceTimeType, Tags.ComplexEventCondition, Tags.NoComplexEventDates, Tags.ComplexRebate, 0};
 
         public NoComplexEventsGroup()
@@ -7232,7 +7232,7 @@ public class ExecutionReport : Message
         {
             public static int[] DefaultFieldOrder = [Tags.ComplexEventStartDate, Tags.ComplexEventEndDate, 0];
 
-            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
             public static int[] fieldOrder = {Tags.ComplexEventStartDate, Tags.ComplexEventEndDate, 0};
 
             public NoComplexEventDatesGroup()
@@ -7285,7 +7285,7 @@ public class ExecutionReport : Message
     {
         public static int[] DefaultFieldOrder = [Tags.OptionExerciseExpirationDate, Tags.OptionExerciseExpirationDateType, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.OptionExerciseExpirationDate, Tags.OptionExerciseExpirationDateType, 0};
 
         public NoOptionExerciseExpirationDatesGroup()
@@ -7337,7 +7337,7 @@ public class ExecutionReport : Message
     {
         public static int[] DefaultFieldOrder = [Tags.StreamType, Tags.StreamDesc, Tags.StreamPaySide, Tags.StreamReceiveSide, Tags.StreamEffectiveDateAdjusted, Tags.StreamTerminationDateAdjusted, Tags.StreamFirstRegularPeriodStartDateUnadjusted, Tags.StreamLastRegularPeriodEndDateUnadjusted, Tags.PaymentStreamType, Tags.PaymentStreamPaymentFrequencyPeriod, Tags.PaymentStreamPaymentFrequencyUnit, Tags.PaymentStreamResetFrequencyPeriod, Tags.PaymentStreamResetFrequencyUnit, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.StreamType, Tags.StreamDesc, Tags.StreamPaySide, Tags.StreamReceiveSide, Tags.StreamEffectiveDateAdjusted, Tags.StreamTerminationDateAdjusted, Tags.StreamFirstRegularPeriodStartDateUnadjusted, Tags.StreamLastRegularPeriodEndDateUnadjusted, Tags.PaymentStreamType, Tags.PaymentStreamPaymentFrequencyPeriod, Tags.PaymentStreamPaymentFrequencyUnit, Tags.PaymentStreamResetFrequencyPeriod, Tags.PaymentStreamResetFrequencyUnit, 0};
 
         public NoStreamsGroup()
@@ -7565,7 +7565,7 @@ public class ExecutionReport : Message
     {
         public static int[] DefaultFieldOrder = [Tags.InstrAttribType, Tags.InstrAttribValue, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.InstrAttribType, Tags.InstrAttribValue, 0};
 
         public NoInstrAttribGroup()
@@ -7617,7 +7617,7 @@ public class ExecutionReport : Message
     {
         public static int[] DefaultFieldOrder = [Tags.ContractualDefinition, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.ContractualDefinition, 0};
 
         public NoContractualDefinitionsGroup()
@@ -7653,7 +7653,7 @@ public class ExecutionReport : Message
     {
         public static int[] DefaultFieldOrder = [Tags.ContractualMatrixSource, Tags.ContractualMatrixDate, Tags.ContractualMatrixTerm, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.ContractualMatrixSource, Tags.ContractualMatrixDate, Tags.ContractualMatrixTerm, 0};
 
         public NoContractualMatricesGroup()
@@ -7721,7 +7721,7 @@ public class ExecutionReport : Message
     {
         public static int[] DefaultFieldOrder = [Tags.PaymentType, Tags.PaymentPaySide, Tags.PaymentReceiveSide, Tags.PaymentDesc, Tags.PaymentCurrency, Tags.PaymentAmount, Tags.PaymentDateAdjusted, Tags.PaymentLegRefID, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.PaymentType, Tags.PaymentPaySide, Tags.PaymentReceiveSide, Tags.PaymentDesc, Tags.PaymentCurrency, Tags.PaymentAmount, Tags.PaymentDateAdjusted, Tags.PaymentLegRefID, 0};
 
         public NoPaymentsGroup()
@@ -7869,7 +7869,7 @@ public class ExecutionReport : Message
     {
         public static int[] DefaultFieldOrder = [Tags.UnderlyingSymbol, Tags.UnderlyingSymbolSfx, Tags.UnderlyingSecurityID, Tags.UnderlyingSecurityIDSource, Tags.NoUnderlyingSecurityAltID, Tags.UnderlyingProduct, Tags.UnderlyingSecurityType, Tags.UnderlyingMaturityDate, Tags.UnderlyingRestructuringType, Tags.UnderlyingSeniority, Tags.UnderlyingIssueDate, Tags.UnderlyingFactor, Tags.UnderlyingCountryOfIssue, Tags.UnderlyingContractMultiplier, Tags.UnderlyingCouponRate, Tags.UnderlyingSecurityExchange, Tags.UnderlyingIssuer, Tags.UnderlyingSecurityDesc, Tags.UnderlyingQty, Tags.UnderlyingPx, Tags.UnderlyingDirtyPrice, Tags.UnderlyingEndPrice, Tags.UnderlyingStartValue, Tags.NoUnderlyingStips, Tags.NoUndlyInstrumentParties, Tags.UnderlyingCouponFrequencyPeriod, Tags.UnderlyingCouponFrequencyUnit, Tags.UnderlyingCouponDayCount, Tags.UnderlyingObligationID, Tags.UnderlyingObligationIDSource, Tags.NoUnderlyingEvents, Tags.UnderlyingIndexSeries, Tags.UnderlyingIndexAnnexVersion, Tags.UnderlyingIndexAnnexDate, Tags.UnderlyingIndexAnnexSource, Tags.UnderlyingAssetClass, Tags.UnderlyingAssetSubClass, Tags.NoUnderlyingStreams, Tags.UnderlyingStartAcrdIntAmt, Tags.UnderlyingEndAcrdIntAmt, Tags.UnderlyingPriceType, Tags.UnderlyingCouponDateGenerationMethod, Tags.UnderlyingIndexCurvePeriod, Tags.UnderlyingIndexCurveUnit, Tags.NoUnderlyingReinvCoupon, Tags.UnderlyingSecuritySeries, Tags.UnderlyingTenor, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.UnderlyingSymbol, Tags.UnderlyingSymbolSfx, Tags.UnderlyingSecurityID, Tags.UnderlyingSecurityIDSource, Tags.NoUnderlyingSecurityAltID, Tags.UnderlyingProduct, Tags.UnderlyingSecurityType, Tags.UnderlyingMaturityDate, Tags.UnderlyingRestructuringType, Tags.UnderlyingSeniority, Tags.UnderlyingIssueDate, Tags.UnderlyingFactor, Tags.UnderlyingCountryOfIssue, Tags.UnderlyingContractMultiplier, Tags.UnderlyingCouponRate, Tags.UnderlyingSecurityExchange, Tags.UnderlyingIssuer, Tags.UnderlyingSecurityDesc, Tags.UnderlyingQty, Tags.UnderlyingPx, Tags.UnderlyingDirtyPrice, Tags.UnderlyingEndPrice, Tags.UnderlyingStartValue, Tags.NoUnderlyingStips, Tags.NoUndlyInstrumentParties, Tags.UnderlyingCouponFrequencyPeriod, Tags.UnderlyingCouponFrequencyUnit, Tags.UnderlyingCouponDayCount, Tags.UnderlyingObligationID, Tags.UnderlyingObligationIDSource, Tags.NoUnderlyingEvents, Tags.UnderlyingIndexSeries, Tags.UnderlyingIndexAnnexVersion, Tags.UnderlyingIndexAnnexDate, Tags.UnderlyingIndexAnnexSource, Tags.UnderlyingAssetClass, Tags.UnderlyingAssetSubClass, Tags.NoUnderlyingStreams, Tags.UnderlyingStartAcrdIntAmt, Tags.UnderlyingEndAcrdIntAmt, Tags.UnderlyingPriceType, Tags.UnderlyingCouponDateGenerationMethod, Tags.UnderlyingIndexCurvePeriod, Tags.UnderlyingIndexCurveUnit, Tags.NoUnderlyingReinvCoupon, Tags.UnderlyingSecuritySeries, Tags.UnderlyingTenor, 0};
 
         public NoUnderlyingsGroup()
@@ -8640,7 +8640,7 @@ public class ExecutionReport : Message
         {
             public static int[] DefaultFieldOrder = [Tags.UnderlyingSecurityAltID, Tags.UnderlyingSecurityAltIDSource, 0];
 
-            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
             public static int[] fieldOrder = {Tags.UnderlyingSecurityAltID, Tags.UnderlyingSecurityAltIDSource, 0};
 
             public NoUnderlyingSecurityAltIDGroup()
@@ -8692,7 +8692,7 @@ public class ExecutionReport : Message
         {
             public static int[] DefaultFieldOrder = [Tags.UnderlyingStipType, Tags.UnderlyingStipValue, 0];
 
-            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
             public static int[] fieldOrder = {Tags.UnderlyingStipType, Tags.UnderlyingStipValue, 0};
 
             public NoUnderlyingStipsGroup()
@@ -8744,7 +8744,7 @@ public class ExecutionReport : Message
         {
             public static int[] DefaultFieldOrder = [Tags.UnderlyingInstrumentPartyID, Tags.UnderlyingInstrumentPartyIDSource, Tags.UnderlyingInstrumentPartyRole, 0];
 
-            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
             public static int[] fieldOrder = {Tags.UnderlyingInstrumentPartyID, Tags.UnderlyingInstrumentPartyIDSource, Tags.UnderlyingInstrumentPartyRole, 0};
 
             public NoUndlyInstrumentPartiesGroup()
@@ -8812,7 +8812,7 @@ public class ExecutionReport : Message
         {
             public static int[] DefaultFieldOrder = [Tags.UnderlyingEventType, Tags.UnderlyingEventDate, 0];
 
-            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
             public static int[] fieldOrder = {Tags.UnderlyingEventType, Tags.UnderlyingEventDate, 0};
 
             public NoUnderlyingEventsGroup()
@@ -8864,7 +8864,7 @@ public class ExecutionReport : Message
         {
             public static int[] DefaultFieldOrder = [Tags.UnderlyingStreamType, Tags.UnderlyingStreamDesc, Tags.UnderlyingStreamPaySide, Tags.UnderlyingStreamReceiveSide, 0];
 
-            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
             public static int[] fieldOrder = {Tags.UnderlyingStreamType, Tags.UnderlyingStreamDesc, Tags.UnderlyingStreamPaySide, Tags.UnderlyingStreamReceiveSide, 0};
 
             public NoUnderlyingStreamsGroup()
@@ -8948,7 +8948,7 @@ public class ExecutionReport : Message
         {
             public static int[] DefaultFieldOrder = [Tags.UnderlyingReinvCouponDate, Tags.UnderlyingReinvCouponRate, Tags.UnderlyingReinvCouponAmt, 0];
 
-            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
             public static int[] fieldOrder = {Tags.UnderlyingReinvCouponDate, Tags.UnderlyingReinvCouponRate, Tags.UnderlyingReinvCouponAmt, 0};
 
             public NoUnderlyingReinvCouponGroup()
@@ -9017,7 +9017,7 @@ public class ExecutionReport : Message
     {
         public static int[] DefaultFieldOrder = [Tags.StipulationType, Tags.StipulationValue, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.StipulationType, Tags.StipulationValue, 0};
 
         public NoStipulationsGroup()
@@ -9069,7 +9069,7 @@ public class ExecutionReport : Message
     {
         public static int[] DefaultFieldOrder = [Tags.StrategyParameterName, Tags.StrategyParameterType, Tags.StrategyParameterValue, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.StrategyParameterName, Tags.StrategyParameterType, Tags.StrategyParameterValue, 0};
 
         public NoStrategyParametersGroup()
@@ -9137,7 +9137,7 @@ public class ExecutionReport : Message
     {
         public static int[] DefaultFieldOrder = [Tags.OrderAttributeType, Tags.OrderAttributeValue, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.OrderAttributeType, Tags.OrderAttributeValue, 0};
 
         public NoOrderAttributesGroup()
@@ -9189,7 +9189,7 @@ public class ExecutionReport : Message
     {
         public static int[] DefaultFieldOrder = [Tags.RelativeValueType, Tags.RelativeValue, Tags.RelativeValueLegRefID, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.RelativeValueType, Tags.RelativeValue, Tags.RelativeValueLegRefID, 0};
 
         public NoRelativeValuesGroup()
@@ -9257,7 +9257,7 @@ public class ExecutionReport : Message
     {
         public static int[] DefaultFieldOrder = [Tags.RateSource, Tags.RateSourceType, Tags.ReferencePage, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.RateSource, Tags.RateSourceType, Tags.ReferencePage, 0};
 
         public NoRateSourcesGroup()
@@ -9325,7 +9325,7 @@ public class ExecutionReport : Message
     {
         public static int[] DefaultFieldOrder = [Tags.LegSymbol, Tags.LegSymbolSfx, Tags.LegSecurityID, Tags.LegSecurityIDSource, Tags.NoLegSecurityAltID, Tags.LegID, Tags.LegProduct, Tags.LegCFICode, Tags.LegSecurityType, Tags.LegMaturityDate, Tags.LegRestructuringType, Tags.LegSeniority, Tags.LegAttachmentPoint, Tags.LegDetachmentPoint, Tags.LegAssetClass, Tags.LegAssetSubClass, Tags.LegCouponFrequencyPeriod, Tags.LegCouponFrequencyUnit, Tags.LegCouponDayCount, Tags.LegIndexSeries, Tags.LegIndexAnnexVersion, Tags.LegIndexAnnexDate, Tags.LegIndexAnnexSource, Tags.LegFactor, Tags.LegCountryOfIssue, Tags.LegStrikePrice, Tags.LegStrikeCurrency, Tags.LegContractMultiplier, Tags.LegSettlMethod, Tags.LegExerciseStyle, Tags.LegCouponRate, Tags.LegSecurityExchange, Tags.LegIssuer, Tags.LegSecurityDesc, Tags.LegSecurityXMLLen, Tags.LegSecurityXML, Tags.LegSecurityXMLSchema, Tags.LegRatioQty, Tags.LegSide, Tags.LegCurrency, Tags.LegPool, Tags.LegContractSettlMonth, Tags.LegPutOrCall, Tags.LegPrice, Tags.NoLegEvents, Tags.NoLegComplexEvents, Tags.LegBusinessDayConvention, Tags.LegDateRollConvention, Tags.LegOptionExerciseLatestTime, Tags.LegOptionExerciseTimeBusinessCenter, Tags.LegOptionExerciseDeliveryDate, Tags.NoLegStreams, Tags.LegCouponDateGenerationMethod, Tags.LegPutOrCallCurrency, Tags.LegStrategyPosition, Tags.LegCustomizedIndicator, Tags.LegOrderQty, Tags.LegQty, Tags.LegMidPx, Tags.NoLegStipulations, Tags.NoNested3PartyIDs, Tags.LegRefID, Tags.LegSettlType, Tags.LegSettlDate, Tags.LegLastPx, Tags.LegSettlCurrency, Tags.LegLastForwardPoints, Tags.LegCalculatedCcyLastQty, Tags.LegGrossTradeAmt, Tags.LegVolatility, Tags.LegLastQty, Tags.LegBidPx, Tags.LegOfferPx, Tags.LegPriceType, Tags.LegYield, Tags.LegReportID, Tags.LegQtyType, Tags.LegExecID, Tags.LegAgreementDesc, Tags.LegAgreementDate, Tags.NoLegContractualDefinitions, Tags.NoLegContractualMatrices, Tags.NoLegPosAmt, Tags.LegTenor, Tags.LegTrdContinuation, Tags.LegDV01, Tags.LegNetMoney, Tags.LegAccruedInterestAmt, Tags.LegCoverPrice, Tags.LegPriceDelta, Tags.LegBaseInstrument, Tags.LegLastParPx, Tags.LegNumDaysInterest, Tags.LegAvgPx, Tags.LegCumQty, Tags.LegLeavesQty, Tags.LegText, Tags.LegSettlCurrAmt, Tags.LegSettlCurrFxRate, Tags.LegSettlCurrFxRateCalc, Tags.LegCalculatedNotional, Tags.LegTrdType, Tags.LegRegulatoryTradeRule, Tags.LegRiskWeight, Tags.LegDealerSide, Tags.LegClientBidPx, Tags.LegClientOfferPx, Tags.LegTradeContinuation, Tags.LegCalculatedCurrency, Tags.LegOptionHashID, Tags.LegYieldType, Tags.LegPremiumDeliveryDate, Tags.LegPremiumSettlCurrency, Tags.LegPremiumSettlCurrAmt, Tags.LegPremium, Tags.NoLegRefPrices, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.LegSymbol, Tags.LegSymbolSfx, Tags.LegSecurityID, Tags.LegSecurityIDSource, Tags.NoLegSecurityAltID, Tags.LegID, Tags.LegProduct, Tags.LegCFICode, Tags.LegSecurityType, Tags.LegMaturityDate, Tags.LegRestructuringType, Tags.LegSeniority, Tags.LegAttachmentPoint, Tags.LegDetachmentPoint, Tags.LegAssetClass, Tags.LegAssetSubClass, Tags.LegCouponFrequencyPeriod, Tags.LegCouponFrequencyUnit, Tags.LegCouponDayCount, Tags.LegIndexSeries, Tags.LegIndexAnnexVersion, Tags.LegIndexAnnexDate, Tags.LegIndexAnnexSource, Tags.LegFactor, Tags.LegCountryOfIssue, Tags.LegStrikePrice, Tags.LegStrikeCurrency, Tags.LegContractMultiplier, Tags.LegSettlMethod, Tags.LegExerciseStyle, Tags.LegCouponRate, Tags.LegSecurityExchange, Tags.LegIssuer, Tags.LegSecurityDesc, Tags.LegSecurityXMLLen, Tags.LegSecurityXML, Tags.LegSecurityXMLSchema, Tags.LegRatioQty, Tags.LegSide, Tags.LegCurrency, Tags.LegPool, Tags.LegContractSettlMonth, Tags.LegPutOrCall, Tags.LegPrice, Tags.NoLegEvents, Tags.NoLegComplexEvents, Tags.LegBusinessDayConvention, Tags.LegDateRollConvention, Tags.LegOptionExerciseLatestTime, Tags.LegOptionExerciseTimeBusinessCenter, Tags.LegOptionExerciseDeliveryDate, Tags.NoLegStreams, Tags.LegCouponDateGenerationMethod, Tags.LegPutOrCallCurrency, Tags.LegStrategyPosition, Tags.LegCustomizedIndicator, Tags.LegOrderQty, Tags.LegQty, Tags.LegMidPx, Tags.NoLegStipulations, Tags.NoNested3PartyIDs, Tags.LegRefID, Tags.LegSettlType, Tags.LegSettlDate, Tags.LegLastPx, Tags.LegSettlCurrency, Tags.LegLastForwardPoints, Tags.LegCalculatedCcyLastQty, Tags.LegGrossTradeAmt, Tags.LegVolatility, Tags.LegLastQty, Tags.LegBidPx, Tags.LegOfferPx, Tags.LegPriceType, Tags.LegYield, Tags.LegReportID, Tags.LegQtyType, Tags.LegExecID, Tags.LegAgreementDesc, Tags.LegAgreementDate, Tags.NoLegContractualDefinitions, Tags.NoLegContractualMatrices, Tags.NoLegPosAmt, Tags.LegTenor, Tags.LegTrdContinuation, Tags.LegDV01, Tags.LegNetMoney, Tags.LegAccruedInterestAmt, Tags.LegCoverPrice, Tags.LegPriceDelta, Tags.LegBaseInstrument, Tags.LegLastParPx, Tags.LegNumDaysInterest, Tags.LegAvgPx, Tags.LegCumQty, Tags.LegLeavesQty, Tags.LegText, Tags.LegSettlCurrAmt, Tags.LegSettlCurrFxRate, Tags.LegSettlCurrFxRateCalc, Tags.LegCalculatedNotional, Tags.LegTrdType, Tags.LegRegulatoryTradeRule, Tags.LegRiskWeight, Tags.LegDealerSide, Tags.LegClientBidPx, Tags.LegClientOfferPx, Tags.LegTradeContinuation, Tags.LegCalculatedCurrency, Tags.LegOptionHashID, Tags.LegYieldType, Tags.LegPremiumDeliveryDate, Tags.LegPremiumSettlCurrency, Tags.LegPremiumSettlCurrAmt, Tags.LegPremium, Tags.NoLegRefPrices, 0};
 
         public NoLegsGroup()
@@ -11200,7 +11200,7 @@ public class ExecutionReport : Message
         {
             public static int[] DefaultFieldOrder = [Tags.LegSecurityAltID, Tags.LegSecurityAltIDSource, 0];
 
-            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
             public static int[] fieldOrder = {Tags.LegSecurityAltID, Tags.LegSecurityAltIDSource, 0};
 
             public NoLegSecurityAltIDGroup()
@@ -11252,7 +11252,7 @@ public class ExecutionReport : Message
         {
             public static int[] DefaultFieldOrder = [Tags.LegEventType, Tags.LegEventDate, Tags.LegEventTimeUnit, Tags.LegEventTimePeriod, 0];
 
-            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
             public static int[] fieldOrder = {Tags.LegEventType, Tags.LegEventDate, Tags.LegEventTimeUnit, Tags.LegEventTimePeriod, 0};
 
             public NoLegEventsGroup()
@@ -11336,7 +11336,7 @@ public class ExecutionReport : Message
         {
             public static int[] DefaultFieldOrder = [Tags.LegComplexEventType, Tags.LegComplexEventPrice, Tags.LegComplexEventPriceTimeType, Tags.LegComplexEventCondition, Tags.NoLegComplexEventDates, Tags.LegComplexRebate, 0];
 
-            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
             public static int[] fieldOrder = {Tags.LegComplexEventType, Tags.LegComplexEventPrice, Tags.LegComplexEventPriceTimeType, Tags.LegComplexEventCondition, Tags.NoLegComplexEventDates, Tags.LegComplexRebate, 0};
 
             public NoLegComplexEventsGroup()
@@ -11451,7 +11451,7 @@ public class ExecutionReport : Message
             {
                 public static int[] DefaultFieldOrder = [Tags.LegComplexEventStartDate, Tags.LegComplexEventEndDate, 0];
 
-                [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+                [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
                 public static int[] fieldOrder = {Tags.LegComplexEventStartDate, Tags.LegComplexEventEndDate, 0};
 
                 public NoLegComplexEventDatesGroup()
@@ -11504,7 +11504,7 @@ public class ExecutionReport : Message
         {
             public static int[] DefaultFieldOrder = [Tags.LegStreamType, Tags.LegStreamDesc, Tags.LegStreamPaySide, Tags.LegStreamReceiveSide, Tags.LegStreamEffectiveDateAdjusted, Tags.LegStreamTerminationDateAdjusted, Tags.LegStreamFirstRegularPeriodStartDateUnadjusted, Tags.LegStreamLastRegularPeriodEndDateUnadjusted, Tags.LegPaymentStreamType, Tags.LegPaymentStreamPaymentFrequencyPeriod, Tags.LegPaymentStreamPaymentFrequencyUnit, Tags.LegPaymentStreamResetFrequencyPeriod, Tags.LegPaymentStreamResetFrequencyUnit, 0];
 
-            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
             public static int[] fieldOrder = {Tags.LegStreamType, Tags.LegStreamDesc, Tags.LegStreamPaySide, Tags.LegStreamReceiveSide, Tags.LegStreamEffectiveDateAdjusted, Tags.LegStreamTerminationDateAdjusted, Tags.LegStreamFirstRegularPeriodStartDateUnadjusted, Tags.LegStreamLastRegularPeriodEndDateUnadjusted, Tags.LegPaymentStreamType, Tags.LegPaymentStreamPaymentFrequencyPeriod, Tags.LegPaymentStreamPaymentFrequencyUnit, Tags.LegPaymentStreamResetFrequencyPeriod, Tags.LegPaymentStreamResetFrequencyUnit, 0};
 
             public NoLegStreamsGroup()
@@ -11732,7 +11732,7 @@ public class ExecutionReport : Message
         {
             public static int[] DefaultFieldOrder = [Tags.LegStipulationType, Tags.LegStipulationValue, 0];
 
-            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
             public static int[] fieldOrder = {Tags.LegStipulationType, Tags.LegStipulationValue, 0};
 
             public NoLegStipulationsGroup()
@@ -11784,7 +11784,7 @@ public class ExecutionReport : Message
         {
             public static int[] DefaultFieldOrder = [Tags.Nested3PartyID, Tags.Nested3PartyIDSource, Tags.Nested3PartyRole, Tags.NoNested3PartySubIDs, 0];
 
-            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
             public static int[] fieldOrder = {Tags.Nested3PartyID, Tags.Nested3PartyIDSource, Tags.Nested3PartyRole, Tags.NoNested3PartySubIDs, 0};
 
             public NoNested3PartyIDsGroup()
@@ -11867,7 +11867,7 @@ public class ExecutionReport : Message
             {
                 public static int[] DefaultFieldOrder = [Tags.Nested3PartySubID, Tags.Nested3PartySubIDType, 0];
 
-                [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+                [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
                 public static int[] fieldOrder = {Tags.Nested3PartySubID, Tags.Nested3PartySubIDType, 0};
 
                 public NoNested3PartySubIDsGroup()
@@ -11920,7 +11920,7 @@ public class ExecutionReport : Message
         {
             public static int[] DefaultFieldOrder = [Tags.LegContractualDefinition, 0];
 
-            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
             public static int[] fieldOrder = {Tags.LegContractualDefinition, 0};
 
             public NoLegContractualDefinitionsGroup()
@@ -11956,7 +11956,7 @@ public class ExecutionReport : Message
         {
             public static int[] DefaultFieldOrder = [Tags.LegContractualMatrixSource, Tags.LegContractualMatrixDate, Tags.LegContractualMatrixTerm, 0];
 
-            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
             public static int[] fieldOrder = {Tags.LegContractualMatrixSource, Tags.LegContractualMatrixDate, Tags.LegContractualMatrixTerm, 0};
 
             public NoLegContractualMatricesGroup()
@@ -12024,7 +12024,7 @@ public class ExecutionReport : Message
         {
             public static int[] DefaultFieldOrder = [Tags.LegPosAmt, Tags.LegPosAmtType, 0];
 
-            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
             public static int[] fieldOrder = {Tags.LegPosAmt, Tags.LegPosAmtType, 0};
 
             public NoLegPosAmtGroup()
@@ -12076,7 +12076,7 @@ public class ExecutionReport : Message
         {
             public static int[] DefaultFieldOrder = [Tags.LegRefPrice, Tags.LegRefPriceType, Tags.LegRefPriceSource, Tags.LegRefPriceFirmIndicator, Tags.LegRefPriceInventoryIndicator, Tags.LegRefQuoteID, Tags.LegRefPriceSize, Tags.LegRefPriceTime, 0];
 
-            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
             public static int[] fieldOrder = {Tags.LegRefPrice, Tags.LegRefPriceType, Tags.LegRefPriceSource, Tags.LegRefPriceFirmIndicator, Tags.LegRefPriceInventoryIndicator, Tags.LegRefQuoteID, Tags.LegRefPriceSize, Tags.LegRefPriceTime, 0};
 
             public NoLegRefPricesGroup()
@@ -12225,7 +12225,7 @@ public class ExecutionReport : Message
     {
         public static int[] DefaultFieldOrder = [Tags.MiscFeeAmt, Tags.MiscFeeCurr, Tags.MiscFeeType, Tags.MiscFeeBasis, Tags.MiscFeeRate, Tags.MiscFeeDesc, Tags.MiscFeeLegRefID, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.MiscFeeAmt, Tags.MiscFeeCurr, Tags.MiscFeeType, Tags.MiscFeeBasis, Tags.MiscFeeRate, Tags.MiscFeeDesc, Tags.MiscFeeLegRefID, 0};
 
         public NoMiscFeesGroup()
@@ -12357,7 +12357,7 @@ public class ExecutionReport : Message
     {
         public static int[] DefaultFieldOrder = [Tags.TrdRegTimestamp, Tags.TrdRegTimestampType, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.TrdRegTimestamp, Tags.TrdRegTimestampType, 0};
 
         public NoTrdRegTimestampsGroup()
@@ -12409,7 +12409,7 @@ public class ExecutionReport : Message
     {
         public static int[] DefaultFieldOrder = [Tags.TrdRegPublicationType, Tags.TrdRegPublicationReason, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.TrdRegPublicationType, Tags.TrdRegPublicationReason, 0};
 
         public NoTrdRegPublicationsGroup()
@@ -12461,7 +12461,7 @@ public class ExecutionReport : Message
     {
         public static int[] DefaultFieldOrder = [Tags.TradePriceCondition, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.TradePriceCondition, 0};
 
         public NoTradePriceConditionsGroup()
@@ -12497,7 +12497,7 @@ public class ExecutionReport : Message
     {
         public static int[] DefaultFieldOrder = [Tags.ClearingInstruction, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.ClearingInstruction, 0};
 
         public NoClearingInstructionsGroup()
@@ -12533,7 +12533,7 @@ public class ExecutionReport : Message
     {
         public static int[] DefaultFieldOrder = [Tags.PosAmtType, Tags.PosAmt, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.PosAmtType, Tags.PosAmt, 0};
 
         public NoPosAmtGroup()
@@ -12585,7 +12585,7 @@ public class ExecutionReport : Message
     {
         public static int[] DefaultFieldOrder = [Tags.QuoteQualifier, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.QuoteQualifier, 0};
 
         public NoQuoteQualifiersGroup()
@@ -12621,7 +12621,7 @@ public class ExecutionReport : Message
     {
         public static int[] DefaultFieldOrder = [Tags.RelatedInstrumentType, Tags.RelatedSecurityID, Tags.RelatedSecurityIDSource, Tags.RelatedToSecurityID, Tags.RelatedToSecurityIDSource, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.RelatedInstrumentType, Tags.RelatedSecurityID, Tags.RelatedSecurityIDSource, Tags.RelatedToSecurityID, Tags.RelatedToSecurityIDSource, 0};
 
         public NoRelatedInstrumentsGroup()
@@ -12721,7 +12721,7 @@ public class ExecutionReport : Message
     {
         public static int[] DefaultFieldOrder = [Tags.ClientCustomDataName, Tags.ClientCustomDataValue, Tags.ClientCustomDataType, Tags.ClientCustomDataStreamDesc, Tags.ClientCustomDataPrecision, Tags.ClientCustomDataLegRefID, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.ClientCustomDataName, Tags.ClientCustomDataValue, Tags.ClientCustomDataType, Tags.ClientCustomDataStreamDesc, Tags.ClientCustomDataPrecision, Tags.ClientCustomDataLegRefID, 0};
 
         public NoClientCustomDataGroup()
@@ -12837,7 +12837,7 @@ public class ExecutionReport : Message
     {
         public static int[] DefaultFieldOrder = [Tags.CompDealerID, Tags.CompDealerQuotePrice, Tags.CompDealerQuotePriceType, Tags.CompDealerParQuote, Tags.DealerNetMoney, Tags.CompDealerQuotePriceLeg2, Tags.CompDealerQuoteForwardPoints, Tags.CompDealerQuoteSwapPoints, Tags.CompDealerQuoteOrdQty, Tags.CompDealerRollSpread, Tags.CompDealerQuoteType, Tags.CompDealerQuoteLegRefID, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.CompDealerID, Tags.CompDealerQuotePrice, Tags.CompDealerQuotePriceType, Tags.CompDealerParQuote, Tags.DealerNetMoney, Tags.CompDealerQuotePriceLeg2, Tags.CompDealerQuoteForwardPoints, Tags.CompDealerQuoteSwapPoints, Tags.CompDealerQuoteOrdQty, Tags.CompDealerRollSpread, Tags.CompDealerQuoteType, Tags.CompDealerQuoteLegRefID, 0};
 
         public NoCompDealerQuotesGroup()
@@ -13049,7 +13049,7 @@ public class ExecutionReport : Message
     {
         public static int[] DefaultFieldOrder = [Tags.RefPrice, Tags.RefPriceType, Tags.RefPriceSource, Tags.RefPriceFirmIndicator, Tags.RefPriceInventoryIndicator, Tags.RefQuoteID, Tags.RefPriceSide, Tags.RefPriceText, Tags.RefPriceleg2, Tags.RefPriceForwardPoints, Tags.RefPriceSwapPoints, Tags.RefPriceSize, Tags.RefPriceTime, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.RefPrice, Tags.RefPriceType, Tags.RefPriceSource, Tags.RefPriceFirmIndicator, Tags.RefPriceInventoryIndicator, Tags.RefQuoteID, Tags.RefPriceSide, Tags.RefPriceText, Tags.RefPriceleg2, Tags.RefPriceForwardPoints, Tags.RefPriceSwapPoints, Tags.RefPriceSize, Tags.RefPriceTime, 0};
 
         public NoRefPricesGroup()
@@ -13277,7 +13277,7 @@ public class ExecutionReport : Message
     {
         public static int[] DefaultFieldOrder = [Tags.ReferenceIDType, Tags.ReferenceID, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.ReferenceIDType, Tags.ReferenceID, 0};
 
         public NoReferenceIdsGroup()
@@ -13329,7 +13329,7 @@ public class ExecutionReport : Message
     {
         public static int[] DefaultFieldOrder = [Tags.PriceQualifier, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.PriceQualifier, 0};
 
         public NoPriceQualifiersGroup()
@@ -13365,7 +13365,7 @@ public class ExecutionReport : Message
     {
         public static int[] DefaultFieldOrder = [Tags.NoteType, Tags.NoteLabel, Tags.NoteText, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.NoteType, Tags.NoteLabel, Tags.NoteText, 0};
 
         public NoNotesGroup()

@@ -11,7 +11,7 @@ using QuickFix.Util;
 namespace QuickFix;
 
 /// <summary>
-/// The Session is the primary FIX abstraction for message communication. 
+/// The Session is the primary FIX abstraction for message communication.
 /// It performs sequencing and error recovery and represents a communication
 /// channel to a counterparty. Sessions are independent of specific communication
 /// layer connections. A Session is defined as starting with message sequence number
@@ -222,7 +222,9 @@ public class Session : IDisposable
     /// false after the first resent message is received.
     /// Else it remains true until EndSeqNo is received.
     /// </summary>
-    internal bool IsResendRequested => _state.ResendRequested();
+    internal bool IsResendRequested => _state.IsResendRequested();
+
+    public bool CmeEnhancedResend { get; set; }
 
     public int[] RedactFieldsInLogs { get; set; } = [];
     public string RedactionLogText { get; set; } = "<redacted>";
@@ -255,7 +257,6 @@ public class Session : IDisposable
         ApplicationDataDictionary = SessionID.IsFIXT
             ? DataDictionaryProvider.GetApplicationDataDictionary(SenderDefaultApplVerID)
             : SessionDataDictionary;
-
 
         ILogger logger = loggerFactory.CreateSessionLogger(sessId);
 
@@ -358,6 +359,23 @@ public class Session : IDisposable
         return SendRaw(message);
     }
 
+    // FP Enhancement: 2026-05-24 — overloads of SendToTarget / Send that let callers opt out of stripping PossDupFlag / OrigSendingTime; useful when retransmitting a message that should retain its original dup-flag semantics (e.g. CME-style resend flows). The flag-less originals stay unchanged.
+    public static bool SendToTarget(Message message, SessionID sessionID, bool removeDupeFlag = true, bool removeOriginalSendingTime = true)
+    {
+        message.SetSessionID(sessionID);
+        Session session = Session.LookupSession(sessionID);
+        if (null == session)
+            throw new SessionNotFound(sessionID);
+        return session.Send(message, removeDupeFlag, removeOriginalSendingTime);
+    }
+
+    public virtual bool Send(Message message, bool removeDupeFlag, bool removeOriginalSendingTime = true)
+    {
+        if (removeDupeFlag) message.Header.RemoveField(Fields.Tags.PossDupFlag);
+        if (removeOriginalSendingTime) message.Header.RemoveField(Fields.Tags.OrigSendingTime);
+        return SendRaw(message, 0);
+    }
+
     /// <summary>
     /// Sends a message
     /// </summary>
@@ -374,7 +392,7 @@ public class Session : IDisposable
             {
                 using (Log.BeginScope(new Dictionary<string, object>
                        {
-                           {"MessageType", Message.GetMsgType(message)}
+                           { "MessageType", Message.GetMsgType(message) }
                        }))
                 {
                     Log.Log(MessagesLogLevel, LogEventIds.OutgoingMessage, "{Message}",
@@ -441,7 +459,7 @@ public class Session : IDisposable
             _state.LogoutReason = "";
             if (ResetOnDisconnect)
                 _state.Reset("ResetOnDisconnect");
-            _state.SetResendRange(0, 0);
+            _state.ResetResendRange();
         }
     }
 
@@ -548,15 +566,14 @@ public class Session : IDisposable
             {
                 using (Log.BeginScope(new Dictionary<string, object>
                        {
-                           {"MessageType", Message.GetMsgType(msgStr)}
+                           { "MessageType", Message.GetMsgType(msgStr) }
                        }))
                 {
                     Log.Log(MessagesLogLevel, LogEventIds.IncomingMessage, "{Message}",
                         LogAssist.RedactSensitiveFields(msgStr, RedactFieldsInLogs, RedactionLogText));
                 }
             }
-        }
-        catch (Exception)
+        } catch (Exception)
         {
             Log.Log(MessagesLogLevel, LogEventIds.IncomingMessage, "{Message}",
                 LogAssist.RedactSensitiveFields(msgStr, RedactFieldsInLogs, RedactionLogText));
@@ -891,6 +908,7 @@ public class Session : IDisposable
             Log.Log(LogLevel.Error, e, "ERROR during resend request {Message}", e.Message);
         }
     }
+
     private bool ResendApproved(Message msg, SessionID sessionId)
     {
         try
@@ -912,22 +930,37 @@ public class Session : IDisposable
 
         string disconnectReason;
 
-        if (!_state.SentLogout)
+        if (_state.SentLogout)
         {
+            // We initiated the logout, and this is the response.
+            disconnectReason = "Received logout response";
+            Log.Log(LogLevel.Information, "{Message}", disconnectReason);
+
+            _state.IncrNextTargetMsgSeqNum();
+            if (ResetOnLogout) {
+                _state.Reset("ResetOnLogout");
+            }
+        }
+        else
+        {
+            // Counterparty is initiating the logout
             disconnectReason = "Received logout request";
             Log.Log(LogLevel.Information, "{Message}", disconnectReason);
             GenerateLogout(logout);
             Log.Log(LogLevel.Information, "Sending logout response");
-        }
-        else
-        {
-            disconnectReason = "Received logout response";
-            Log.Log(LogLevel.Information, "{Message}", disconnectReason);
+
+
+            _state.IncrNextTargetMsgSeqNum();
+            if(ResetOnLogout)
+                _state.Reset("ResetOnLogout");
+            else if (CmeEnhancedResend && logout.IsSetField(789) && logout.GetInt(789) == 1) {
+                // Reset, but preserve target seqnum
+                SeqNumType n = _state.NextTargetMsgSeqNum;
+                _state.Reset("Session reset because CME Logout has tag 789=1");
+                NextTargetMsgSeqNum = n;
+            }
         }
 
-        _state.IncrNextTargetMsgSeqNum();
-        if (ResetOnLogout)
-            _state.Reset("ResetOnLogout");
         Disconnect(disconnectReason);
     }
 
@@ -938,31 +971,100 @@ public class Session : IDisposable
         _state.IncrNextTargetMsgSeqNum();
     }
 
+    // using this variable is hacky, but I didn't come up with a better solution
+    private bool _didHandleCmeEnhancedResendGapFill = false;
+
     protected void NextSequenceReset(Message sequenceReset)
     {
-        bool isGapFill = false;
-        if (sequenceReset.IsSetField(Fields.Tags.GapFillFlag))
-            isGapFill = sequenceReset.GetBoolean(Fields.Tags.GapFillFlag);
+        _didHandleCmeEnhancedResendGapFill = false;
 
+        bool isGapFill = false;
+        if (sequenceReset.IsSetField(Tags.GapFillFlag))
+            isGapFill = sequenceReset.GetBoolean(Tags.GapFillFlag);
+
+        SeqNumType newSeqNo = sequenceReset.GetULong(Tags.NewSeqNo);
+        Log.Log(LogLevel.Information, "Received SequenceRequest FROM: {NextTargetMsgSeqNum} TO: {NewSeqNo}",
+            _state.NextTargetMsgSeqNum, newSeqNo);
+
+        if (newSeqNo < _state.NextTargetMsgSeqNum)
+        {
+            GenerateReject(sequenceReset, FixValues.SessionRejectReason.VALUE_IS_INCORRECT);
+            return;
+        }
+
+        // This may possibly set _didHandleCmeEnhancedResendGapFill=true if CmeEnhancedResend mode enabled
         if (!Verify(sequenceReset, isGapFill, isGapFill))
             return;
 
-        if (sequenceReset.IsSetField(Fields.Tags.NewSeqNo))
+        if (_didHandleCmeEnhancedResendGapFill)
         {
-            SeqNumType newSeqNo = sequenceReset.GetULong(Fields.Tags.NewSeqNo);
-            Log.Log(LogLevel.Information, "Received SequenceRequest FROM: {NextTargetMsgSeqNum} TO: {NewSeqNo}",
-                _state.NextTargetMsgSeqNum, newSeqNo);
+            _didHandleCmeEnhancedResendGapFill = false;
+            // Return now, and don't proceed to set NextTargetMsgSeqNum in the next block!
+            return;
+        }
 
-            if (newSeqNo > _state.NextTargetMsgSeqNum)
+        if (newSeqNo > _state.NextTargetMsgSeqNum)
+        {
+            _state.NextTargetMsgSeqNum = newSeqNo;
+        }
+    }
+
+    private void HandleCmeEnhancedResendGapFill(Message seqReset)
+    {
+        ResendRange range = _state.GetResendRange();
+        SeqNumType newSeqNo = seqReset.GetULong(Tags.NewSeqNo);
+
+        if (range.ChunkEndSeqNo == ResendRange.NOT_SET || range.ChunkEndSeqNo == range.EndSeqNo)
+        {
+            // We're either in a non-chunk situation or we're in the final chunk.
+            if (newSeqNo > range.ActualEndSeqNo)
             {
-                _state.NextTargetMsgSeqNum = newSeqNo;
-            }
-            else
-            {
-                if (newSeqNo < _state.NextTargetMsgSeqNum)
-                    GenerateReject(sequenceReset, FixValues.SessionRejectReason.VALUE_IS_INCORRECT);
+                Log.Log(LogLevel.Information,
+                    "ResendRequest for messages FROM: {BeginSeqNo} TO: {EndSeqNo} has been satisfied (by a gap fill).",
+                    range.BeginSeqNo, range.EndSeqNo);
+                _state.ResetResendRange();
             }
         }
+        else // we're in a non-final chunk
+        {
+            SeqNumType max = range.ChunkEndSeqNo + 1;
+            if (newSeqNo > max)
+            {
+                Log.Log(LogLevel.Information,
+                    "The SequenceReset's NewSeqNo ({NewSeqNo}) is higher than my request ({BeginSeqNo}-{ChunkEndSeqNo}).  Per CME's expected behavior, I'll use {max}.",
+                    newSeqNo, range.BeginSeqNo, range.ChunkEndSeqNo, max);
+                newSeqNo = max;
+            }
+            if (newSeqNo == max)
+            {
+                Log.Log(LogLevel.Information,
+                    "Chunked ResendRequest for messages FROM: {BeginSeqNo} TO: {ChunkEndSeqNo} has been satisfied (by a gap fill).",
+                    range.BeginSeqNo, range.ChunkEndSeqNo);
+                SeqNumType newStart = max;
+                SeqNumType newChunkEnd = Math.Min(range.EndSeqNo, newStart + MaxMessagesInResendRequest); // TODO we can +1 this
+
+                Message resendRequest = CreateResendRequest(seqReset.Header.GetString(Tags.BeginString),
+                    newStart, newChunkEnd);
+                if (EnableLastMsgSeqNumProcessed)
+                    resendRequest.Header.SetField(new LastMsgSeqNumProcessed(seqReset.Header.GetULong(Tags.MsgSeqNum)));
+
+                if (SendRaw(resendRequest))
+                    Log.Log(LogLevel.Information, "Sent ResendRequest FROM: {NewStart} TO: {NewChunkEnd}", newStart, newChunkEnd);
+                else
+                    Log.Log(LogLevel.Information, "Error sending ResendRequest ({NewStart}, {NewChunkEnd})", newStart, newChunkEnd);
+
+                range.UpdateChunk(newStart, newChunkEnd);
+            }
+            else if (newSeqNo >= range.BeginSeqNo)
+            {
+                range.MarkAsStarted();
+            }
+        }
+
+        if(newSeqNo > _state.NextTargetMsgSeqNum)
+            _state.NextTargetMsgSeqNum = newSeqNo;
+
+        _didHandleCmeEnhancedResendGapFill = true;
     }
 
     public bool Verify(Message msg, bool checkTooHigh = true, bool checkTooLow = true)
@@ -1012,21 +1114,17 @@ public class Session : IDisposable
                 if (IsResendRequested)
                 {
                     ResendRange range = _state.GetResendRange();
-                    if (msgSeqNum >= range.EndSeqNo)
+
+                    if (CmeEnhancedResend && msgType == MsgType.SEQUENCE_RESET && msg.GetBoolean(Tags.GapFillFlag))
                     {
-                        if (range.EndSeqNo == 0)
-                        {
-                            Log.Log(LogLevel.Information,
-                                "ResendRequest for messages FROM: {BeginSeqNo} TO: {EndSeqNo} has been satisfied",
-                                range.BeginSeqNo, range.EndSeqNo);
-                        }
-                        else
-                        {
-                            Log.Log(LogLevel.Information,
-                                "ResendRequest for messages FROM: {BeginSeqNo} TO: {EndSeqNo} has been started",
-                                range.BeginSeqNo, range.EndSeqNo);
-                        }
-                        _state.SetResendRange(0, 0);
+                        HandleCmeEnhancedResendGapFill(msg);
+                    }
+                    else if (msgSeqNum >= range.ActualEndSeqNo)
+                    {
+                        Log.Log(LogLevel.Information,
+                            "ResendRequest for messages FROM: {BeginSeqNo} TO: {EndSeqNo} has been satisfied.",
+                            range.BeginSeqNo, range.EndSeqNo);
+                        _state.ResetResendRange();
                     }
                     else if (msgSeqNum >= range.ChunkEndSeqNo)
                     {
@@ -1034,7 +1132,7 @@ public class Session : IDisposable
                             "Chunked ResendRequest for messages FROM: {BeginSeqNo} TO: {ChunkEndSeqNo} has been satisfied",
                             range.BeginSeqNo, range.ChunkEndSeqNo);
                         SeqNumType newStart = range.ChunkEndSeqNo + 1;
-                        SeqNumType newChunkEndSeqNo = Math.Min(range.EndSeqNo, range.ChunkEndSeqNo + MaxMessagesInResendRequest);
+                        SeqNumType newChunkEndSeqNo = Math.Min(range.EndSeqNo, range.ChunkEndSeqNo + MaxMessagesInResendRequest); // TODO we can +1 this
 
                         Message resendRequest = CreateResendRequest(msg.Header.GetString(Tags.BeginString),
                             newStart, newChunkEndSeqNo);
@@ -1054,7 +1152,11 @@ public class Session : IDisposable
                                 newStart, newChunkEndSeqNo);
                         }
 
-                        range.ChunkEndSeqNo = newChunkEndSeqNo;
+                        range.UpdateChunk(newStart, newChunkEndSeqNo);
+                    }
+                    else if (msgSeqNum >= range.BeginSeqNo)
+                    {
+                        range.MarkAsStarted();
                     }
                 }
             }
@@ -1175,6 +1277,11 @@ public class Session : IDisposable
         {
             ResendRange range = _state.GetResendRange();
 
+            if (CmeEnhancedResend && !range.IsResendStarted)
+            {
+                return; // don't send another ResendRequest
+            }
+
             if (!SendRedundantResendRequests && msgSeqNum >= range.BeginSeqNo)
             {
                 Log.Log(LogLevel.Information,
@@ -1291,7 +1398,6 @@ public class Session : IDisposable
         }
 
         Message resendRequest = CreateResendRequest(beginString, beginSeqNum, endChunkSeqNum);
-
         if (EnableLastMsgSeqNumProcessed)
             resendRequest.Header.SetField(new LastMsgSeqNumProcessed(msgSeqNum));
 
@@ -1299,7 +1405,8 @@ public class Session : IDisposable
         {
             Log.Log(LogLevel.Information, "Sent ResendRequest FROM: {BeginSeqNum} TO: {EndChunkSeqNum}",
                 beginSeqNum, endChunkSeqNum);
-            _state.SetResendRange(beginSeqNum, endRangeSeqNum, endChunkSeqNum);
+            _state.SetResendRange(beginSeqNum, endRangeSeqNum, msgSeqNum, resendRequest,
+                endChunkSeqNum==0 ? ResendRange.NOT_SET : endChunkSeqNum);
             return;
         }
 
@@ -1440,7 +1547,7 @@ public class Session : IDisposable
     {
         GenerateReject(msgBuilder.RejectableMessage(), reason, field);
     }
-   
+
     // FP Enhancement: 2026-05-24 — optional `value` parameter carries the offending field value into the reject log line; backward-compatible (defaults to empty).
     public void GenerateReject(Message message, FixValues.SessionRejectReason reason, int field = 0, string value = "")
     {
@@ -1561,6 +1668,18 @@ public class Session : IDisposable
         {
             Log.Log(LogLevel.Error, ex, "Error in OnMessageRejected callback: {Message}", ex.Message);
         }
+    }
+
+    // FP Enhancement: 2026-05-24 — emit XML + JSON renderings of tracked messages via Log.OnIncomingAndOutgoing. Tracked messages are those whose rendered string is present in SessionID.SessionLogIdentifiers (populated by application code).
+    private void LogExtended(Message message, string msgType)
+    {
+        if (Message.IsAdminMsgType(msgType)) return;
+
+        if (SessionID.SessionLogIdentifiers != null && message.ToString() != null)
+            if (SessionID.SessionLogIdentifiers.ContainsKey(message.ToString()))
+            {
+                Log.OnIncomingAndOutgoing((SessionID.SessionLogIdentifiers[message.ToString()].LogId, message.ToString(), message.ToXML(), message.ToJSON()));
+            }
     }
 
     protected void InitializeHeader(Message m, SeqNumType msgSeqNum = 0)
@@ -1753,34 +1872,6 @@ public class Session : IDisposable
             LogExtended(message, msgType);
             return result;
         }
-    }
-
-    // FP Enhancement: 2026-05-24 — overloads of SendToTarget / Send that let callers opt out of stripping PossDupFlag / OrigSendingTime; useful when retransmitting a message that should retain its original dup-flag semantics (e.g. CME-style resend flows). The flag-less originals stay unchanged.
-    public static bool SendToTarget(Message message, SessionID sessionID, bool removeDupeFlag = true, bool removeOriginalSendingTime = true)
-    {
-        message.SetSessionID(sessionID);
-        Session session = Session.LookupSession(sessionID);
-        if (null == session)
-            throw new SessionNotFound(sessionID);
-        return session.Send(message, removeDupeFlag, removeOriginalSendingTime);
-    }
-    public virtual bool Send(Message message, bool removeDupeFlag, bool removeOriginalSendingTime = true)
-    {
-        if (removeDupeFlag) message.Header.RemoveField(Fields.Tags.PossDupFlag);
-        if (removeOriginalSendingTime) message.Header.RemoveField(Fields.Tags.OrigSendingTime);
-        return SendRaw(message, 0);
-    }
-
-    // FP Enhancement: 2026-05-24 — emit XML + JSON renderings of tracked messages via Log.OnIncomingAndOutgoing. Tracked messages are those whose rendered string is present in SessionID.SessionLogIdentifiers (populated by application code).
-    private void LogExtended(Message message, string msgType)
-    {
-        if (Message.IsAdminMsgType(msgType)) return;
-
-        if (SessionID.SessionLogIdentifiers != null && message.ToString() != null)
-            if (SessionID.SessionLogIdentifiers.ContainsKey(message.ToString()))
-            {
-                Log.OnIncomingAndOutgoing((SessionID.SessionLogIdentifiers[message.ToString()].LogId, message.ToString(), message.ToXML(), message.ToJSON()));
-            }
     }
 
     public void Dispose()

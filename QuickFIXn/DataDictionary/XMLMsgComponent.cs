@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace QuickFix;
+namespace QuickFix.DataDictionary;
 
+[Obsolete("This class will be removed in 1.16 (because it's unused)")]
 partial class DataDictionaryParser
 {
     private sealed class XMLMsgComponent
     {
         public enum TypeEnum { Field, Component, Group };
 
+        [Obsolete("This class will be removed in 1.16 (because it's unused)")]
         public XMLMsgComponent(string name, bool req, TypeEnum type )
         {
             Name = name;
@@ -23,6 +23,7 @@ partial class DataDictionaryParser
         public bool Required { get; set; }
         public List<XMLMsgComponent> SubComponents { get; set; }
 
+        [Obsolete("This class will be removed in 1.16 (because it's unused)")]
         public static TypeEnum GetComponentType(string typestr, string parentName)
         {
             TypeEnum ctype;

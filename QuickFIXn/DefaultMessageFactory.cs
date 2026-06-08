@@ -18,7 +18,7 @@ public class DefaultMessageFactory : IMessageFactory
     private readonly IReadOnlyDictionary<string, IMessageFactory> _factories;
 
     private readonly QuickFix.Fields.ApplVerID _defaultApplVerId;
-    
+
     /// <summary>
     /// This constructor will
     /// 1. Dynamically load all QuickFix.*.dll assemblies into the current appdomain

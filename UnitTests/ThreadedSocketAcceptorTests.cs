@@ -1,5 +1,4 @@
-using System.IO;
-using Microsoft.Extensions.Logging;
+﻿using System.IO;
 using NUnit.Framework;
 using QuickFix;
 using QuickFix.Logger;
@@ -33,7 +32,6 @@ BeginString = FIX.4.4
     }
 
     [Test]
-    [Ignore("Fails due to file being locked; ignored for now.Add in debounce when time permits")]
     public void TestRecreation()
     {
         StartStopAcceptor();

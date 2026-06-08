@@ -16,7 +16,6 @@ namespace QuickFix.Transport;
 /// </summary>
 public class SocketInitiator : AbstractInitiator
 {
-
     private volatile bool _shutdownRequested = false;
     private DateTime _lastConnectTimeDt = DateTime.MinValue;
     private int _reconnectInterval = 30;
@@ -108,7 +107,7 @@ public class SocketInitiator : AbstractInitiator
 
     private void RemoveThread(SessionID sessionId)
     {
-        // We can come in here on the thread being removed, and on another thread too in the case 
+        // We can come in here on the thread being removed, and on another thread too in the case
         // of dynamic session removal, so make sure we won't deadlock...
         if (Monitor.TryEnter(_sync))
         {
@@ -132,7 +131,6 @@ public class SocketInitiator : AbstractInitiator
 
         string hostKey = SessionSettings.SOCKET_CONNECT_HOST + num;
         string portKey = SessionSettings.SOCKET_CONNECT_PORT + num;
-        
         if (!settings.Has(hostKey) || !settings.Has(portKey))
         {
             num = 0;
@@ -157,7 +155,7 @@ public class SocketInitiator : AbstractInitiator
     }
 
     #region Initiator Methods
-    
+
     /// <summary>
     /// handle other socket options like TCP_NO_DELAY here
     /// </summary>
@@ -173,7 +171,7 @@ public class SocketInitiator : AbstractInitiator
 
         // TODO: Don't know if this is required in order to handle settings in the general section
         _socketSettings.Configure(settings.Get());
-    }       
+    }
 
     protected override void OnStart()
     {

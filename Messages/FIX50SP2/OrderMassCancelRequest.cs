@@ -3661,7 +3661,7 @@ public class OrderMassCancelRequest : Message
     {
         public static int[] DefaultFieldOrder = [Tags.SecurityAltID, Tags.SecurityAltIDSource, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.SecurityAltID, Tags.SecurityAltIDSource, 0};
 
         public NoSecurityAltIDGroup()
@@ -3713,7 +3713,7 @@ public class OrderMassCancelRequest : Message
     {
         public static int[] DefaultFieldOrder = [Tags.EventType, Tags.EventDate, Tags.EventPx, Tags.EventText, Tags.EventTime, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.EventType, Tags.EventDate, Tags.EventPx, Tags.EventText, Tags.EventTime, 0};
 
         public NoEventsGroup()
@@ -3813,7 +3813,7 @@ public class OrderMassCancelRequest : Message
     {
         public static int[] DefaultFieldOrder = [Tags.InstrumentPartyID, Tags.InstrumentPartyIDSource, Tags.InstrumentPartyRole, Tags.NoInstrumentPartySubIDs, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.InstrumentPartyID, Tags.InstrumentPartyIDSource, Tags.InstrumentPartyRole, Tags.NoInstrumentPartySubIDs, 0};
 
         public NoInstrumentPartiesGroup()
@@ -3896,7 +3896,7 @@ public class OrderMassCancelRequest : Message
         {
             public static int[] DefaultFieldOrder = [Tags.InstrumentPartySubID, Tags.InstrumentPartySubIDType, 0];
 
-            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
             public static int[] fieldOrder = {Tags.InstrumentPartySubID, Tags.InstrumentPartySubIDType, 0};
 
             public NoInstrumentPartySubIDsGroup()
@@ -3949,7 +3949,7 @@ public class OrderMassCancelRequest : Message
     {
         public static int[] DefaultFieldOrder = [Tags.ComplexEventType, Tags.ComplexOptPayoutAmount, Tags.ComplexEventPrice, Tags.ComplexEventPriceBoundaryMethod, Tags.ComplexEventPriceBoundaryPrecision, Tags.ComplexEventPriceTimeType, Tags.ComplexEventCondition, Tags.NoComplexEventDates, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.ComplexEventType, Tags.ComplexOptPayoutAmount, Tags.ComplexEventPrice, Tags.ComplexEventPriceBoundaryMethod, Tags.ComplexEventPriceBoundaryPrecision, Tags.ComplexEventPriceTimeType, Tags.ComplexEventCondition, Tags.NoComplexEventDates, 0};
 
         public NoComplexEventsGroup()
@@ -4096,7 +4096,7 @@ public class OrderMassCancelRequest : Message
         {
             public static int[] DefaultFieldOrder = [Tags.ComplexEventStartDate, Tags.ComplexEventEndDate, Tags.NoComplexEventTimes, 0];
 
-            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
             public static int[] fieldOrder = {Tags.ComplexEventStartDate, Tags.ComplexEventEndDate, Tags.NoComplexEventTimes, 0};
 
             public NoComplexEventDatesGroup()
@@ -4163,7 +4163,7 @@ public class OrderMassCancelRequest : Message
             {
                 public static int[] DefaultFieldOrder = [Tags.ComplexEventStartTime, Tags.ComplexEventEndTime, 0];
 
-                [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+                [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
                 public static int[] fieldOrder = {Tags.ComplexEventStartTime, Tags.ComplexEventEndTime, 0};
 
                 public NoComplexEventTimesGroup()
@@ -4217,7 +4217,7 @@ public class OrderMassCancelRequest : Message
     {
         public static int[] DefaultFieldOrder = [Tags.OptionExerciseExpirationDate, Tags.OptionExerciseExpirationDateType, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.OptionExerciseExpirationDate, Tags.OptionExerciseExpirationDateType, 0};
 
         public NoOptionExerciseExpirationDatesGroup()
@@ -4269,7 +4269,7 @@ public class OrderMassCancelRequest : Message
     {
         public static int[] DefaultFieldOrder = [Tags.StreamType, Tags.StreamDesc, Tags.StreamPaySide, Tags.StreamReceiveSide, Tags.StreamEffectiveDateAdjusted, Tags.StreamTerminationDateAdjusted, Tags.StreamFirstRegularPeriodStartDateUnadjusted, Tags.StreamLastRegularPeriodEndDateUnadjusted, Tags.PaymentStreamType, Tags.PaymentStreamPaymentFrequencyPeriod, Tags.PaymentStreamPaymentFrequencyUnit, Tags.PaymentStreamResetFrequencyPeriod, Tags.PaymentStreamResetFrequencyUnit, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.StreamType, Tags.StreamDesc, Tags.StreamPaySide, Tags.StreamReceiveSide, Tags.StreamEffectiveDateAdjusted, Tags.StreamTerminationDateAdjusted, Tags.StreamFirstRegularPeriodStartDateUnadjusted, Tags.StreamLastRegularPeriodEndDateUnadjusted, Tags.PaymentStreamType, Tags.PaymentStreamPaymentFrequencyPeriod, Tags.PaymentStreamPaymentFrequencyUnit, Tags.PaymentStreamResetFrequencyPeriod, Tags.PaymentStreamResetFrequencyUnit, 0};
 
         public NoStreamsGroup()
@@ -4497,7 +4497,7 @@ public class OrderMassCancelRequest : Message
     {
         public static int[] DefaultFieldOrder = [Tags.UnderlyingSecurityAltID, Tags.UnderlyingSecurityAltIDSource, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.UnderlyingSecurityAltID, Tags.UnderlyingSecurityAltIDSource, 0};
 
         public NoUnderlyingSecurityAltIDGroup()
@@ -4549,7 +4549,7 @@ public class OrderMassCancelRequest : Message
     {
         public static int[] DefaultFieldOrder = [Tags.UnderlyingStipType, Tags.UnderlyingStipValue, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.UnderlyingStipType, Tags.UnderlyingStipValue, 0};
 
         public NoUnderlyingStipsGroup()
@@ -4601,7 +4601,7 @@ public class OrderMassCancelRequest : Message
     {
         public static int[] DefaultFieldOrder = [Tags.UnderlyingInstrumentPartyID, Tags.UnderlyingInstrumentPartyIDSource, Tags.UnderlyingInstrumentPartyRole, Tags.NoUndlyInstrumentPartySubIDs, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.UnderlyingInstrumentPartyID, Tags.UnderlyingInstrumentPartyIDSource, Tags.UnderlyingInstrumentPartyRole, Tags.NoUndlyInstrumentPartySubIDs, 0};
 
         public NoUndlyInstrumentPartiesGroup()
@@ -4684,7 +4684,7 @@ public class OrderMassCancelRequest : Message
         {
             public static int[] DefaultFieldOrder = [Tags.UnderlyingInstrumentPartySubID, Tags.UnderlyingInstrumentPartySubIDType, 0];
 
-            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
             public static int[] fieldOrder = {Tags.UnderlyingInstrumentPartySubID, Tags.UnderlyingInstrumentPartySubIDType, 0};
 
             public NoUndlyInstrumentPartySubIDsGroup()
@@ -4737,7 +4737,7 @@ public class OrderMassCancelRequest : Message
     {
         public static int[] DefaultFieldOrder = [Tags.UnderlyingEventType, Tags.UnderlyingEventDate, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.UnderlyingEventType, Tags.UnderlyingEventDate, 0};
 
         public NoUnderlyingEventsGroup()
@@ -4789,7 +4789,7 @@ public class OrderMassCancelRequest : Message
     {
         public static int[] DefaultFieldOrder = [Tags.UnderlyingStreamType, Tags.UnderlyingStreamDesc, Tags.UnderlyingStreamPaySide, Tags.UnderlyingStreamReceiveSide, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.UnderlyingStreamType, Tags.UnderlyingStreamDesc, Tags.UnderlyingStreamPaySide, Tags.UnderlyingStreamReceiveSide, 0};
 
         public NoUnderlyingStreamsGroup()
@@ -4873,7 +4873,7 @@ public class OrderMassCancelRequest : Message
     {
         public static int[] DefaultFieldOrder = [Tags.UnderlyingReinvCouponDate, Tags.UnderlyingReinvCouponRate, Tags.UnderlyingReinvCouponAmt, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.UnderlyingReinvCouponDate, Tags.UnderlyingReinvCouponRate, Tags.UnderlyingReinvCouponAmt, 0};
 
         public NoUnderlyingReinvCouponGroup()
@@ -4941,7 +4941,7 @@ public class OrderMassCancelRequest : Message
     {
         public static int[] DefaultFieldOrder = [Tags.PartyID, Tags.PartyIDSource, Tags.PartyRole, Tags.NoPartySubIDs, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.PartyID, Tags.PartyIDSource, Tags.PartyRole, Tags.NoPartySubIDs, 0};
 
         public NoPartyIDsGroup()
@@ -5024,7 +5024,7 @@ public class OrderMassCancelRequest : Message
         {
             public static int[] DefaultFieldOrder = [Tags.PartySubID, Tags.PartySubIDType, 0];
 
-            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
             public static int[] fieldOrder = {Tags.PartySubID, Tags.PartySubIDType, 0};
 
             public NoPartySubIDsGroup()
@@ -5077,7 +5077,7 @@ public class OrderMassCancelRequest : Message
     {
         public static int[] DefaultFieldOrder = [Tags.TargetPartyID, Tags.TargetPartyIDSource, Tags.TargetPartyRole, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.TargetPartyID, Tags.TargetPartyIDSource, Tags.TargetPartyRole, 0};
 
         public NoTargetPartyIDsGroup()

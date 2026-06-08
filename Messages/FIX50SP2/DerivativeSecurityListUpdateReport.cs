@@ -2722,7 +2722,7 @@ public class DerivativeSecurityListUpdateReport : Message
     {
         public static int[] DefaultFieldOrder = [Tags.UnderlyingSecurityAltID, Tags.UnderlyingSecurityAltIDSource, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.UnderlyingSecurityAltID, Tags.UnderlyingSecurityAltIDSource, 0};
 
         public NoUnderlyingSecurityAltIDGroup()
@@ -2774,7 +2774,7 @@ public class DerivativeSecurityListUpdateReport : Message
     {
         public static int[] DefaultFieldOrder = [Tags.UnderlyingStipType, Tags.UnderlyingStipValue, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.UnderlyingStipType, Tags.UnderlyingStipValue, 0};
 
         public NoUnderlyingStipsGroup()
@@ -2826,7 +2826,7 @@ public class DerivativeSecurityListUpdateReport : Message
     {
         public static int[] DefaultFieldOrder = [Tags.UnderlyingInstrumentPartyID, Tags.UnderlyingInstrumentPartyIDSource, Tags.UnderlyingInstrumentPartyRole, Tags.NoUndlyInstrumentPartySubIDs, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.UnderlyingInstrumentPartyID, Tags.UnderlyingInstrumentPartyIDSource, Tags.UnderlyingInstrumentPartyRole, Tags.NoUndlyInstrumentPartySubIDs, 0};
 
         public NoUndlyInstrumentPartiesGroup()
@@ -2909,7 +2909,7 @@ public class DerivativeSecurityListUpdateReport : Message
         {
             public static int[] DefaultFieldOrder = [Tags.UnderlyingInstrumentPartySubID, Tags.UnderlyingInstrumentPartySubIDType, 0];
 
-            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
             public static int[] fieldOrder = {Tags.UnderlyingInstrumentPartySubID, Tags.UnderlyingInstrumentPartySubIDType, 0};
 
             public NoUndlyInstrumentPartySubIDsGroup()
@@ -2962,7 +2962,7 @@ public class DerivativeSecurityListUpdateReport : Message
     {
         public static int[] DefaultFieldOrder = [Tags.UnderlyingEventType, Tags.UnderlyingEventDate, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.UnderlyingEventType, Tags.UnderlyingEventDate, 0};
 
         public NoUnderlyingEventsGroup()
@@ -3014,7 +3014,7 @@ public class DerivativeSecurityListUpdateReport : Message
     {
         public static int[] DefaultFieldOrder = [Tags.UnderlyingStreamType, Tags.UnderlyingStreamDesc, Tags.UnderlyingStreamPaySide, Tags.UnderlyingStreamReceiveSide, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.UnderlyingStreamType, Tags.UnderlyingStreamDesc, Tags.UnderlyingStreamPaySide, Tags.UnderlyingStreamReceiveSide, 0};
 
         public NoUnderlyingStreamsGroup()
@@ -3098,7 +3098,7 @@ public class DerivativeSecurityListUpdateReport : Message
     {
         public static int[] DefaultFieldOrder = [Tags.UnderlyingReinvCouponDate, Tags.UnderlyingReinvCouponRate, Tags.UnderlyingReinvCouponAmt, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.UnderlyingReinvCouponDate, Tags.UnderlyingReinvCouponRate, Tags.UnderlyingReinvCouponAmt, 0};
 
         public NoUnderlyingReinvCouponGroup()
@@ -3166,7 +3166,7 @@ public class DerivativeSecurityListUpdateReport : Message
     {
         public static int[] DefaultFieldOrder = [Tags.DerivativeSecurityAltID, Tags.DerivativeSecurityAltIDSource, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.DerivativeSecurityAltID, Tags.DerivativeSecurityAltIDSource, 0};
 
         public NoDerivativeSecurityAltIDGroup()
@@ -3218,7 +3218,7 @@ public class DerivativeSecurityListUpdateReport : Message
     {
         public static int[] DefaultFieldOrder = [Tags.DerivativeEventType, Tags.DerivativeEventDate, Tags.DerivativeEventTime, Tags.DerivativeEventPx, Tags.DerivativeEventText, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.DerivativeEventType, Tags.DerivativeEventDate, Tags.DerivativeEventTime, Tags.DerivativeEventPx, Tags.DerivativeEventText, 0};
 
         public NoDerivativeEventsGroup()
@@ -3318,7 +3318,7 @@ public class DerivativeSecurityListUpdateReport : Message
     {
         public static int[] DefaultFieldOrder = [Tags.DerivativeInstrumentPartyID, Tags.DerivativeInstrumentPartyIDSource, Tags.DerivativeInstrumentPartyRole, Tags.NoDerivativeInstrumentPartySubIDs, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.DerivativeInstrumentPartyID, Tags.DerivativeInstrumentPartyIDSource, Tags.DerivativeInstrumentPartyRole, Tags.NoDerivativeInstrumentPartySubIDs, 0};
 
         public NoDerivativeInstrumentPartiesGroup()
@@ -3401,7 +3401,7 @@ public class DerivativeSecurityListUpdateReport : Message
         {
             public static int[] DefaultFieldOrder = [Tags.DerivativeInstrumentPartySubID, Tags.DerivativeInstrumentPartySubIDType, 0];
 
-            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
             public static int[] fieldOrder = {Tags.DerivativeInstrumentPartySubID, Tags.DerivativeInstrumentPartySubIDType, 0};
 
             public NoDerivativeInstrumentPartySubIDsGroup()
@@ -3454,7 +3454,7 @@ public class DerivativeSecurityListUpdateReport : Message
     {
         public static int[] DefaultFieldOrder = [Tags.DerivativeInstrAttribType, Tags.DerivativeInstrAttribValue, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.DerivativeInstrAttribType, Tags.DerivativeInstrAttribValue, 0};
 
         public NoDerivativeInstrAttribGroup()
@@ -3506,7 +3506,7 @@ public class DerivativeSecurityListUpdateReport : Message
     {
         public static int[] DefaultFieldOrder = [Tags.MarketID, Tags.MarketSegmentID, Tags.NoTickRules, Tags.NoLotTypeRules, Tags.PriceLimitType, Tags.LowLimitPrice, Tags.HighLimitPrice, Tags.TradingReferencePrice, Tags.ExpirationCycle, Tags.MinTradeVol, Tags.MaxTradeVol, Tags.MaxPriceVariation, Tags.ImpliedMarketIndicator, Tags.TradingCurrency, Tags.RoundLot, Tags.MultilegModel, Tags.MultilegPriceMethod, Tags.PriceType, Tags.NoTradingSessionRules, Tags.NoNestedInstrAttrib, Tags.NoStrikeRules, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.MarketID, Tags.MarketSegmentID, Tags.NoTickRules, Tags.NoLotTypeRules, Tags.PriceLimitType, Tags.LowLimitPrice, Tags.HighLimitPrice, Tags.TradingReferencePrice, Tags.ExpirationCycle, Tags.MinTradeVol, Tags.MaxTradeVol, Tags.MaxPriceVariation, Tags.ImpliedMarketIndicator, Tags.TradingCurrency, Tags.RoundLot, Tags.MultilegModel, Tags.MultilegPriceMethod, Tags.PriceType, Tags.NoTradingSessionRules, Tags.NoNestedInstrAttrib, Tags.NoStrikeRules, 0};
 
         public NoMarketSegmentsGroup()
@@ -3861,7 +3861,7 @@ public class DerivativeSecurityListUpdateReport : Message
         {
             public static int[] DefaultFieldOrder = [Tags.StartTickPriceRange, Tags.EndTickPriceRange, Tags.TickIncrement, Tags.TickRuleType, 0];
 
-            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
             public static int[] fieldOrder = {Tags.StartTickPriceRange, Tags.EndTickPriceRange, Tags.TickIncrement, Tags.TickRuleType, 0};
 
             public NoTickRulesGroup()
@@ -3945,7 +3945,7 @@ public class DerivativeSecurityListUpdateReport : Message
         {
             public static int[] DefaultFieldOrder = [Tags.LotType, Tags.MinLotSize, 0];
 
-            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
             public static int[] fieldOrder = {Tags.LotType, Tags.MinLotSize, 0};
 
             public NoLotTypeRulesGroup()
@@ -3997,7 +3997,7 @@ public class DerivativeSecurityListUpdateReport : Message
         {
             public static int[] DefaultFieldOrder = [Tags.TradingSessionID, Tags.TradingSessionSubID, Tags.NoOrdTypeRules, Tags.NoTimeInForceRules, Tags.NoExecInstRules, Tags.NoMatchRules, Tags.NoMDFeedTypes, 0];
 
-            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
             public static int[] fieldOrder = {Tags.TradingSessionID, Tags.TradingSessionSubID, Tags.NoOrdTypeRules, Tags.NoTimeInForceRules, Tags.NoExecInstRules, Tags.NoMatchRules, Tags.NoMDFeedTypes, 0};
 
             public NoTradingSessionRulesGroup()
@@ -4128,7 +4128,7 @@ public class DerivativeSecurityListUpdateReport : Message
             {
                 public static int[] DefaultFieldOrder = [Tags.OrdType, 0];
 
-                [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+                [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
                 public static int[] fieldOrder = {Tags.OrdType, 0};
 
                 public NoOrdTypeRulesGroup()
@@ -4164,7 +4164,7 @@ public class DerivativeSecurityListUpdateReport : Message
             {
                 public static int[] DefaultFieldOrder = [Tags.TimeInForce, 0];
 
-                [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+                [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
                 public static int[] fieldOrder = {Tags.TimeInForce, 0};
 
                 public NoTimeInForceRulesGroup()
@@ -4200,7 +4200,7 @@ public class DerivativeSecurityListUpdateReport : Message
             {
                 public static int[] DefaultFieldOrder = [Tags.ExecInstValue, 0];
 
-                [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+                [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
                 public static int[] fieldOrder = {Tags.ExecInstValue, 0};
 
                 public NoExecInstRulesGroup()
@@ -4236,7 +4236,7 @@ public class DerivativeSecurityListUpdateReport : Message
             {
                 public static int[] DefaultFieldOrder = [Tags.MatchAlgorithm, Tags.MatchType, 0];
 
-                [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+                [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
                 public static int[] fieldOrder = {Tags.MatchAlgorithm, Tags.MatchType, 0};
 
                 public NoMatchRulesGroup()
@@ -4288,7 +4288,7 @@ public class DerivativeSecurityListUpdateReport : Message
             {
                 public static int[] DefaultFieldOrder = [Tags.MDFeedType, Tags.MarketDepth, Tags.MDBookType, 0];
 
-                [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+                [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
                 public static int[] fieldOrder = {Tags.MDFeedType, Tags.MarketDepth, Tags.MDBookType, 0};
 
                 public NoMDFeedTypesGroup()
@@ -4357,7 +4357,7 @@ public class DerivativeSecurityListUpdateReport : Message
         {
             public static int[] DefaultFieldOrder = [Tags.NestedInstrAttribType, Tags.NestedInstrAttribValue, 0];
 
-            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
             public static int[] fieldOrder = {Tags.NestedInstrAttribType, Tags.NestedInstrAttribValue, 0};
 
             public NoNestedInstrAttribGroup()
@@ -4409,7 +4409,7 @@ public class DerivativeSecurityListUpdateReport : Message
         {
             public static int[] DefaultFieldOrder = [Tags.StrikeRuleID, Tags.StartStrikePxRange, Tags.EndStrikePxRange, Tags.StrikeIncrement, Tags.StrikeExerciseStyle, Tags.NoMaturityRules, 0];
 
-            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
             public static int[] fieldOrder = {Tags.StrikeRuleID, Tags.StartStrikePxRange, Tags.EndStrikePxRange, Tags.StrikeIncrement, Tags.StrikeExerciseStyle, Tags.NoMaturityRules, 0};
 
             public NoStrikeRulesGroup()
@@ -4524,7 +4524,7 @@ public class DerivativeSecurityListUpdateReport : Message
             {
                 public static int[] DefaultFieldOrder = [Tags.MaturityRuleID, Tags.MaturityMonthYearFormat, Tags.MaturityMonthYearIncrementUnits, Tags.StartMaturityMonthYear, Tags.EndMaturityMonthYear, Tags.MaturityMonthYearIncrement, 0];
 
-                [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+                [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
                 public static int[] fieldOrder = {Tags.MaturityRuleID, Tags.MaturityMonthYearFormat, Tags.MaturityMonthYearIncrementUnits, Tags.StartMaturityMonthYear, Tags.EndMaturityMonthYear, Tags.MaturityMonthYearIncrement, 0};
 
                 public NoMaturityRulesGroup()
@@ -4642,7 +4642,7 @@ public class DerivativeSecurityListUpdateReport : Message
     {
         public static int[] DefaultFieldOrder = [Tags.ListUpdateAction, Tags.Symbol, Tags.SymbolSfx, Tags.SecurityID, Tags.SecurityIDSource, Tags.NoSecurityAltID, Tags.Product, Tags.CFICode, Tags.SecurityType, Tags.SecuritySubType, Tags.MaturityMonthYear, Tags.MaturityDate, Tags.CouponPaymentDate, Tags.IssueDate, Tags.RepoCollateralSecurityType, Tags.RepurchaseTerm, Tags.RepurchaseRate, Tags.Factor, Tags.CreditRating, Tags.InstrRegistry, Tags.CountryOfIssue, Tags.StateOrProvinceOfIssue, Tags.LocaleOfIssue, Tags.RedemptionDate, Tags.StrikePrice, Tags.StrikeCurrency, Tags.OptAttribute, Tags.ContractMultiplier, Tags.CouponRate, Tags.SecurityExchange, Tags.Issuer, Tags.EncodedIssuerLen, Tags.EncodedIssuer, Tags.SecurityDesc, Tags.EncodedSecurityDescLen, Tags.EncodedSecurityDesc, Tags.Pool, Tags.ContractSettlMonth, Tags.CPProgram, Tags.CPRegType, Tags.NoEvents, Tags.DatedDate, Tags.InterestAccrualDate, Tags.SecurityStatus, Tags.SettleOnOpenFlag, Tags.InstrmtAssignmentMethod, Tags.StrikeMultiplier, Tags.StrikeValue, Tags.MinPriceIncrement, Tags.PositionLimit, Tags.NTPositionLimit, Tags.NoInstrumentParties, Tags.UnitOfMeasure, Tags.TimeUnit, Tags.MaturityTime, Tags.SecurityGroup, Tags.MinPriceIncrementAmount, Tags.UnitOfMeasureQty, Tags.SecurityXMLLen, Tags.SecurityXML, Tags.SecurityXMLSchema, Tags.ProductComplex, Tags.PriceUnitOfMeasure, Tags.PriceUnitOfMeasureQty, Tags.SettlMethod, Tags.ExerciseStyle, Tags.OptPayoutAmount, Tags.PriceQuoteMethod, Tags.ListMethod, Tags.CapPrice, Tags.FloorPrice, Tags.PutOrCall, Tags.FlexibleIndicator, Tags.FlexProductEligibilityIndicator, Tags.ValuationMethod, Tags.ContractMultiplierUnit, Tags.FlowScheduleType, Tags.RestructuringType, Tags.Seniority, Tags.NotionalPercentageOutstanding, Tags.OriginalNotionalPercentageOutstanding, Tags.AttachmentPoint, Tags.DetachmentPoint, Tags.StrikePriceDeterminationMethod, Tags.StrikePriceBoundaryMethod, Tags.StrikePriceBoundaryPrecision, Tags.UnderlyingPriceDeterminationMethod, Tags.OptPayoutType, Tags.NoComplexEvents, Tags.MaturityDay, Tags.AssetClass, Tags.AssetSubClass, Tags.AssetType, Tags.CouponType, Tags.CouponFrequencyPeriod, Tags.CouponFrequencyUnit, Tags.CouponDayCount, Tags.ConvertibleBondEquityID, Tags.ConvertibleBondEquityIDSource, Tags.IndexSeries, Tags.IndexAnnexVersion, Tags.IndexAnnexDate, Tags.IndexAnnexSource, Tags.StrategyType, Tags.BusinessDayConvention, Tags.DateRollConvention, Tags.OptionExerciseLatestTime, Tags.OptionExerciseTimeBusinessCenter, Tags.OptionExerciseDeliveryDate, Tags.NoOptionExerciseExpirationDates, Tags.NoStreams, Tags.StrategyPosition, Tags.PutOrCallCurrency, Tags.CreditRatingSource, Tags.CouponDateGenerationMethod, Tags.CustomizedIndicator, Tags.OptionSettlAmtDeterminationMethod, Tags.ConvertibleBondEquityCurrency, Tags.OfferingSize, Tags.CountryOfJurisdiction, Tags.CurrencyOfIssue, Tags.DeliveryForm, Tags.PctAtRisk, Tags.NoInstrAttrib, Tags.FloatingRateIndex, Tags.FloatingRateIndexCurvePeriod, Tags.FloatingRateIndexCurveUnit, Tags.FloatingRateIndexCurveSpread, Tags.SecondaryPriceLimitType, Tags.SecondaryLowLimitPrice, Tags.SecondaryHighLimitPrice, Tags.SecondaryTradingReferencePrice, Tags.Currency, Tags.NoLegs, Tags.Text, Tags.EncodedTextLen, Tags.EncodedText, Tags.CorporateAction, Tags.RelSymTransactTime, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.ListUpdateAction, Tags.Symbol, Tags.SymbolSfx, Tags.SecurityID, Tags.SecurityIDSource, Tags.NoSecurityAltID, Tags.Product, Tags.CFICode, Tags.SecurityType, Tags.SecuritySubType, Tags.MaturityMonthYear, Tags.MaturityDate, Tags.CouponPaymentDate, Tags.IssueDate, Tags.RepoCollateralSecurityType, Tags.RepurchaseTerm, Tags.RepurchaseRate, Tags.Factor, Tags.CreditRating, Tags.InstrRegistry, Tags.CountryOfIssue, Tags.StateOrProvinceOfIssue, Tags.LocaleOfIssue, Tags.RedemptionDate, Tags.StrikePrice, Tags.StrikeCurrency, Tags.OptAttribute, Tags.ContractMultiplier, Tags.CouponRate, Tags.SecurityExchange, Tags.Issuer, Tags.EncodedIssuerLen, Tags.EncodedIssuer, Tags.SecurityDesc, Tags.EncodedSecurityDescLen, Tags.EncodedSecurityDesc, Tags.Pool, Tags.ContractSettlMonth, Tags.CPProgram, Tags.CPRegType, Tags.NoEvents, Tags.DatedDate, Tags.InterestAccrualDate, Tags.SecurityStatus, Tags.SettleOnOpenFlag, Tags.InstrmtAssignmentMethod, Tags.StrikeMultiplier, Tags.StrikeValue, Tags.MinPriceIncrement, Tags.PositionLimit, Tags.NTPositionLimit, Tags.NoInstrumentParties, Tags.UnitOfMeasure, Tags.TimeUnit, Tags.MaturityTime, Tags.SecurityGroup, Tags.MinPriceIncrementAmount, Tags.UnitOfMeasureQty, Tags.SecurityXMLLen, Tags.SecurityXML, Tags.SecurityXMLSchema, Tags.ProductComplex, Tags.PriceUnitOfMeasure, Tags.PriceUnitOfMeasureQty, Tags.SettlMethod, Tags.ExerciseStyle, Tags.OptPayoutAmount, Tags.PriceQuoteMethod, Tags.ListMethod, Tags.CapPrice, Tags.FloorPrice, Tags.PutOrCall, Tags.FlexibleIndicator, Tags.FlexProductEligibilityIndicator, Tags.ValuationMethod, Tags.ContractMultiplierUnit, Tags.FlowScheduleType, Tags.RestructuringType, Tags.Seniority, Tags.NotionalPercentageOutstanding, Tags.OriginalNotionalPercentageOutstanding, Tags.AttachmentPoint, Tags.DetachmentPoint, Tags.StrikePriceDeterminationMethod, Tags.StrikePriceBoundaryMethod, Tags.StrikePriceBoundaryPrecision, Tags.UnderlyingPriceDeterminationMethod, Tags.OptPayoutType, Tags.NoComplexEvents, Tags.MaturityDay, Tags.AssetClass, Tags.AssetSubClass, Tags.AssetType, Tags.CouponType, Tags.CouponFrequencyPeriod, Tags.CouponFrequencyUnit, Tags.CouponDayCount, Tags.ConvertibleBondEquityID, Tags.ConvertibleBondEquityIDSource, Tags.IndexSeries, Tags.IndexAnnexVersion, Tags.IndexAnnexDate, Tags.IndexAnnexSource, Tags.StrategyType, Tags.BusinessDayConvention, Tags.DateRollConvention, Tags.OptionExerciseLatestTime, Tags.OptionExerciseTimeBusinessCenter, Tags.OptionExerciseDeliveryDate, Tags.NoOptionExerciseExpirationDates, Tags.NoStreams, Tags.StrategyPosition, Tags.PutOrCallCurrency, Tags.CreditRatingSource, Tags.CouponDateGenerationMethod, Tags.CustomizedIndicator, Tags.OptionSettlAmtDeterminationMethod, Tags.ConvertibleBondEquityCurrency, Tags.OfferingSize, Tags.CountryOfJurisdiction, Tags.CurrencyOfIssue, Tags.DeliveryForm, Tags.PctAtRisk, Tags.NoInstrAttrib, Tags.FloatingRateIndex, Tags.FloatingRateIndexCurvePeriod, Tags.FloatingRateIndexCurveUnit, Tags.FloatingRateIndexCurveSpread, Tags.SecondaryPriceLimitType, Tags.SecondaryLowLimitPrice, Tags.SecondaryHighLimitPrice, Tags.SecondaryTradingReferencePrice, Tags.Currency, Tags.NoLegs, Tags.Text, Tags.EncodedTextLen, Tags.EncodedText, Tags.CorporateAction, Tags.RelSymTransactTime, 0};
 
         public NoRelatedSymGroup()
@@ -6885,7 +6885,7 @@ public class DerivativeSecurityListUpdateReport : Message
         {
             public static int[] DefaultFieldOrder = [Tags.SecurityAltID, Tags.SecurityAltIDSource, 0];
 
-            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
             public static int[] fieldOrder = {Tags.SecurityAltID, Tags.SecurityAltIDSource, 0};
 
             public NoSecurityAltIDGroup()
@@ -6937,7 +6937,7 @@ public class DerivativeSecurityListUpdateReport : Message
         {
             public static int[] DefaultFieldOrder = [Tags.EventType, Tags.EventDate, Tags.EventPx, Tags.EventText, Tags.EventTime, 0];
 
-            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
             public static int[] fieldOrder = {Tags.EventType, Tags.EventDate, Tags.EventPx, Tags.EventText, Tags.EventTime, 0};
 
             public NoEventsGroup()
@@ -7037,7 +7037,7 @@ public class DerivativeSecurityListUpdateReport : Message
         {
             public static int[] DefaultFieldOrder = [Tags.InstrumentPartyID, Tags.InstrumentPartyIDSource, Tags.InstrumentPartyRole, Tags.NoInstrumentPartySubIDs, 0];
 
-            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
             public static int[] fieldOrder = {Tags.InstrumentPartyID, Tags.InstrumentPartyIDSource, Tags.InstrumentPartyRole, Tags.NoInstrumentPartySubIDs, 0};
 
             public NoInstrumentPartiesGroup()
@@ -7120,7 +7120,7 @@ public class DerivativeSecurityListUpdateReport : Message
             {
                 public static int[] DefaultFieldOrder = [Tags.InstrumentPartySubID, Tags.InstrumentPartySubIDType, 0];
 
-                [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+                [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
                 public static int[] fieldOrder = {Tags.InstrumentPartySubID, Tags.InstrumentPartySubIDType, 0};
 
                 public NoInstrumentPartySubIDsGroup()
@@ -7173,7 +7173,7 @@ public class DerivativeSecurityListUpdateReport : Message
         {
             public static int[] DefaultFieldOrder = [Tags.ComplexEventType, Tags.ComplexOptPayoutAmount, Tags.ComplexEventPrice, Tags.ComplexEventPriceBoundaryMethod, Tags.ComplexEventPriceBoundaryPrecision, Tags.ComplexEventPriceTimeType, Tags.ComplexEventCondition, Tags.NoComplexEventDates, 0];
 
-            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
             public static int[] fieldOrder = {Tags.ComplexEventType, Tags.ComplexOptPayoutAmount, Tags.ComplexEventPrice, Tags.ComplexEventPriceBoundaryMethod, Tags.ComplexEventPriceBoundaryPrecision, Tags.ComplexEventPriceTimeType, Tags.ComplexEventCondition, Tags.NoComplexEventDates, 0};
 
             public NoComplexEventsGroup()
@@ -7320,7 +7320,7 @@ public class DerivativeSecurityListUpdateReport : Message
             {
                 public static int[] DefaultFieldOrder = [Tags.ComplexEventStartDate, Tags.ComplexEventEndDate, Tags.NoComplexEventTimes, 0];
 
-                [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+                [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
                 public static int[] fieldOrder = {Tags.ComplexEventStartDate, Tags.ComplexEventEndDate, Tags.NoComplexEventTimes, 0};
 
                 public NoComplexEventDatesGroup()
@@ -7387,7 +7387,7 @@ public class DerivativeSecurityListUpdateReport : Message
                 {
                     public static int[] DefaultFieldOrder = [Tags.ComplexEventStartTime, Tags.ComplexEventEndTime, 0];
 
-                    [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+                    [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
                     public static int[] fieldOrder = {Tags.ComplexEventStartTime, Tags.ComplexEventEndTime, 0};
 
                     public NoComplexEventTimesGroup()
@@ -7441,7 +7441,7 @@ public class DerivativeSecurityListUpdateReport : Message
         {
             public static int[] DefaultFieldOrder = [Tags.OptionExerciseExpirationDate, Tags.OptionExerciseExpirationDateType, 0];
 
-            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
             public static int[] fieldOrder = {Tags.OptionExerciseExpirationDate, Tags.OptionExerciseExpirationDateType, 0};
 
             public NoOptionExerciseExpirationDatesGroup()
@@ -7493,7 +7493,7 @@ public class DerivativeSecurityListUpdateReport : Message
         {
             public static int[] DefaultFieldOrder = [Tags.StreamType, Tags.StreamDesc, Tags.StreamPaySide, Tags.StreamReceiveSide, Tags.StreamEffectiveDateAdjusted, Tags.StreamTerminationDateAdjusted, Tags.StreamFirstRegularPeriodStartDateUnadjusted, Tags.StreamLastRegularPeriodEndDateUnadjusted, Tags.PaymentStreamType, Tags.PaymentStreamPaymentFrequencyPeriod, Tags.PaymentStreamPaymentFrequencyUnit, Tags.PaymentStreamResetFrequencyPeriod, Tags.PaymentStreamResetFrequencyUnit, 0];
 
-            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
             public static int[] fieldOrder = {Tags.StreamType, Tags.StreamDesc, Tags.StreamPaySide, Tags.StreamReceiveSide, Tags.StreamEffectiveDateAdjusted, Tags.StreamTerminationDateAdjusted, Tags.StreamFirstRegularPeriodStartDateUnadjusted, Tags.StreamLastRegularPeriodEndDateUnadjusted, Tags.PaymentStreamType, Tags.PaymentStreamPaymentFrequencyPeriod, Tags.PaymentStreamPaymentFrequencyUnit, Tags.PaymentStreamResetFrequencyPeriod, Tags.PaymentStreamResetFrequencyUnit, 0};
 
             public NoStreamsGroup()
@@ -7721,7 +7721,7 @@ public class DerivativeSecurityListUpdateReport : Message
         {
             public static int[] DefaultFieldOrder = [Tags.InstrAttribType, Tags.InstrAttribValue, 0];
 
-            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
             public static int[] fieldOrder = {Tags.InstrAttribType, Tags.InstrAttribValue, 0};
 
             public NoInstrAttribGroup()
@@ -7773,7 +7773,7 @@ public class DerivativeSecurityListUpdateReport : Message
         {
             public static int[] DefaultFieldOrder = [Tags.LegSymbol, Tags.LegSymbolSfx, Tags.LegSecurityID, Tags.LegSecurityIDSource, Tags.NoLegSecurityAltID, Tags.LegProduct, Tags.LegCFICode, Tags.LegSecurityType, Tags.LegSecuritySubType, Tags.LegMaturityMonthYear, Tags.LegMaturityDate, Tags.LegCouponPaymentDate, Tags.LegIssueDate, Tags.LegRepoCollateralSecurityType, Tags.LegRepurchaseTerm, Tags.LegRepurchaseRate, Tags.LegFactor, Tags.LegCreditRating, Tags.LegInstrRegistry, Tags.LegCountryOfIssue, Tags.LegStateOrProvinceOfIssue, Tags.LegLocaleOfIssue, Tags.LegRedemptionDate, Tags.LegStrikePrice, Tags.LegStrikeCurrency, Tags.LegOptAttribute, Tags.LegContractMultiplier, Tags.LegCouponRate, Tags.LegSecurityExchange, Tags.LegIssuer, Tags.EncodedLegIssuerLen, Tags.EncodedLegIssuer, Tags.LegSecurityDesc, Tags.EncodedLegSecurityDescLen, Tags.EncodedLegSecurityDesc, Tags.LegRatioQty, Tags.LegSide, Tags.LegCurrency, Tags.LegPool, Tags.LegDatedDate, Tags.LegContractSettlMonth, Tags.LegInterestAccrualDate, Tags.LegUnitOfMeasure, Tags.LegTimeUnit, Tags.LegOptionRatio, Tags.LegPrice, Tags.LegMaturityTime, Tags.LegPutOrCall, Tags.LegExerciseStyle, Tags.LegUnitOfMeasureQty, Tags.LegPriceUnitOfMeasure, Tags.LegPriceUnitOfMeasureQty, Tags.LegContractMultiplierUnit, Tags.LegFlowScheduleType, Tags.LegID, Tags.LegRestructuringType, Tags.LegSeniority, Tags.LegAttachmentPoint, Tags.LegDetachmentPoint, Tags.LegAssetClass, Tags.LegAssetSubClass, Tags.LegCouponFrequencyPeriod, Tags.LegCouponFrequencyUnit, Tags.LegCouponDayCount, Tags.LegIndexSeries, Tags.LegIndexAnnexVersion, Tags.LegIndexAnnexDate, Tags.LegIndexAnnexSource, Tags.LegSettlMethod, Tags.LegSecurityXMLLen, Tags.LegSecurityXML, Tags.LegSecurityXMLSchema, Tags.NoLegEvents, Tags.NoLegComplexEvents, Tags.LegBusinessDayConvention, Tags.LegDateRollConvention, Tags.LegOptionExerciseLatestTime, Tags.LegOptionExerciseTimeBusinessCenter, Tags.LegOptionExerciseDeliveryDate, Tags.NoLegStreams, Tags.LegCouponDateGenerationMethod, Tags.LegPutOrCallCurrency, Tags.LegStrategyPosition, Tags.LegCustomizedIndicator, 0];
 
-            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
             public static int[] fieldOrder = {Tags.LegSymbol, Tags.LegSymbolSfx, Tags.LegSecurityID, Tags.LegSecurityIDSource, Tags.NoLegSecurityAltID, Tags.LegProduct, Tags.LegCFICode, Tags.LegSecurityType, Tags.LegSecuritySubType, Tags.LegMaturityMonthYear, Tags.LegMaturityDate, Tags.LegCouponPaymentDate, Tags.LegIssueDate, Tags.LegRepoCollateralSecurityType, Tags.LegRepurchaseTerm, Tags.LegRepurchaseRate, Tags.LegFactor, Tags.LegCreditRating, Tags.LegInstrRegistry, Tags.LegCountryOfIssue, Tags.LegStateOrProvinceOfIssue, Tags.LegLocaleOfIssue, Tags.LegRedemptionDate, Tags.LegStrikePrice, Tags.LegStrikeCurrency, Tags.LegOptAttribute, Tags.LegContractMultiplier, Tags.LegCouponRate, Tags.LegSecurityExchange, Tags.LegIssuer, Tags.EncodedLegIssuerLen, Tags.EncodedLegIssuer, Tags.LegSecurityDesc, Tags.EncodedLegSecurityDescLen, Tags.EncodedLegSecurityDesc, Tags.LegRatioQty, Tags.LegSide, Tags.LegCurrency, Tags.LegPool, Tags.LegDatedDate, Tags.LegContractSettlMonth, Tags.LegInterestAccrualDate, Tags.LegUnitOfMeasure, Tags.LegTimeUnit, Tags.LegOptionRatio, Tags.LegPrice, Tags.LegMaturityTime, Tags.LegPutOrCall, Tags.LegExerciseStyle, Tags.LegUnitOfMeasureQty, Tags.LegPriceUnitOfMeasure, Tags.LegPriceUnitOfMeasureQty, Tags.LegContractMultiplierUnit, Tags.LegFlowScheduleType, Tags.LegID, Tags.LegRestructuringType, Tags.LegSeniority, Tags.LegAttachmentPoint, Tags.LegDetachmentPoint, Tags.LegAssetClass, Tags.LegAssetSubClass, Tags.LegCouponFrequencyPeriod, Tags.LegCouponFrequencyUnit, Tags.LegCouponDayCount, Tags.LegIndexSeries, Tags.LegIndexAnnexVersion, Tags.LegIndexAnnexDate, Tags.LegIndexAnnexSource, Tags.LegSettlMethod, Tags.LegSecurityXMLLen, Tags.LegSecurityXML, Tags.LegSecurityXMLSchema, Tags.NoLegEvents, Tags.NoLegComplexEvents, Tags.LegBusinessDayConvention, Tags.LegDateRollConvention, Tags.LegOptionExerciseLatestTime, Tags.LegOptionExerciseTimeBusinessCenter, Tags.LegOptionExerciseDeliveryDate, Tags.NoLegStreams, Tags.LegCouponDateGenerationMethod, Tags.LegPutOrCallCurrency, Tags.LegStrategyPosition, Tags.LegCustomizedIndicator, 0};
 
             public NoLegsGroup()
@@ -9136,7 +9136,7 @@ public class DerivativeSecurityListUpdateReport : Message
             {
                 public static int[] DefaultFieldOrder = [Tags.LegSecurityAltID, Tags.LegSecurityAltIDSource, 0];
 
-                [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+                [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
                 public static int[] fieldOrder = {Tags.LegSecurityAltID, Tags.LegSecurityAltIDSource, 0};
 
                 public NoLegSecurityAltIDGroup()
@@ -9188,7 +9188,7 @@ public class DerivativeSecurityListUpdateReport : Message
             {
                 public static int[] DefaultFieldOrder = [Tags.LegEventType, Tags.LegEventDate, Tags.LegEventTimeUnit, Tags.LegEventTimePeriod, 0];
 
-                [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+                [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
                 public static int[] fieldOrder = {Tags.LegEventType, Tags.LegEventDate, Tags.LegEventTimeUnit, Tags.LegEventTimePeriod, 0};
 
                 public NoLegEventsGroup()
@@ -9272,7 +9272,7 @@ public class DerivativeSecurityListUpdateReport : Message
             {
                 public static int[] DefaultFieldOrder = [Tags.LegComplexEventType, Tags.LegComplexEventPrice, Tags.LegComplexEventPriceTimeType, Tags.LegComplexEventCondition, Tags.NoLegComplexEventDates, Tags.LegComplexRebate, 0];
 
-                [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+                [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
                 public static int[] fieldOrder = {Tags.LegComplexEventType, Tags.LegComplexEventPrice, Tags.LegComplexEventPriceTimeType, Tags.LegComplexEventCondition, Tags.NoLegComplexEventDates, Tags.LegComplexRebate, 0};
 
                 public NoLegComplexEventsGroup()
@@ -9387,7 +9387,7 @@ public class DerivativeSecurityListUpdateReport : Message
                 {
                     public static int[] DefaultFieldOrder = [Tags.LegComplexEventStartDate, Tags.LegComplexEventEndDate, 0];
 
-                    [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+                    [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
                     public static int[] fieldOrder = {Tags.LegComplexEventStartDate, Tags.LegComplexEventEndDate, 0};
 
                     public NoLegComplexEventDatesGroup()
@@ -9440,7 +9440,7 @@ public class DerivativeSecurityListUpdateReport : Message
             {
                 public static int[] DefaultFieldOrder = [Tags.LegStreamType, Tags.LegStreamDesc, Tags.LegStreamPaySide, Tags.LegStreamReceiveSide, Tags.LegStreamEffectiveDateAdjusted, Tags.LegStreamTerminationDateAdjusted, Tags.LegStreamFirstRegularPeriodStartDateUnadjusted, Tags.LegStreamLastRegularPeriodEndDateUnadjusted, Tags.LegPaymentStreamType, Tags.LegPaymentStreamPaymentFrequencyPeriod, Tags.LegPaymentStreamPaymentFrequencyUnit, Tags.LegPaymentStreamResetFrequencyPeriod, Tags.LegPaymentStreamResetFrequencyUnit, 0];
 
-                [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+                [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
                 public static int[] fieldOrder = {Tags.LegStreamType, Tags.LegStreamDesc, Tags.LegStreamPaySide, Tags.LegStreamReceiveSide, Tags.LegStreamEffectiveDateAdjusted, Tags.LegStreamTerminationDateAdjusted, Tags.LegStreamFirstRegularPeriodStartDateUnadjusted, Tags.LegStreamLastRegularPeriodEndDateUnadjusted, Tags.LegPaymentStreamType, Tags.LegPaymentStreamPaymentFrequencyPeriod, Tags.LegPaymentStreamPaymentFrequencyUnit, Tags.LegPaymentStreamResetFrequencyPeriod, Tags.LegPaymentStreamResetFrequencyUnit, 0};
 
                 public NoLegStreamsGroup()

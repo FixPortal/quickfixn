@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using QuickFix;
 
@@ -35,5 +32,14 @@ public class DefaultMessageFactoryTests
 
         Group? g50sp2 = dmf.Create("FIXT.1.1", "CD", QuickFix.Fields.Tags.NoAsgnReqs);
         Assert.That(g50sp2, Is.InstanceOf<QuickFix.FIX50SP2.StreamAssignmentReport.NoAsgnReqsGroup>());
+    }
+
+    [Test]
+    public void GroupCreateTest_NotFound()
+    {
+        DefaultMessageFactory dmf = new DefaultMessageFactory();
+        var ex = Assert.Throws<MessageFactoryNotFound>(() => { dmf.Create("FIX.4.99", "B", 33); });
+        string exMsg = "Message factory not found for BeginString=FIX.4.99.";
+        Assert.That(ex!.Message, Is.EqualTo(exMsg));
     }
 }

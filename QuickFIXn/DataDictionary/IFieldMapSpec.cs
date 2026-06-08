@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace QuickFix.DataDictionary;
 
@@ -20,7 +17,7 @@ public interface IFieldMapSpec
     /// <param name="tag"></param>
     /// <returns></returns>
     Boolean IsField(int tag);
-    
+
     /// <summary>
     /// Get the IGroupSpec that corresponds to this group-counter tag
     /// </summary>

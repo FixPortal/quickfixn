@@ -2363,7 +2363,7 @@ public class ExecutionReport : Message
     {
         public static int[] DefaultFieldOrder = [Tags.ContraBroker, Tags.ContraTrader, Tags.ContraTradeQty, Tags.ContraTradeTime, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.ContraBroker, Tags.ContraTrader, Tags.ContraTradeQty, Tags.ContraTradeTime, 0};
 
         public NoContraBrokersGroup()
@@ -2447,7 +2447,7 @@ public class ExecutionReport : Message
     {
         public static int[] DefaultFieldOrder = [Tags.LegSecurityType, Tags.LegSymbol, Tags.LegPositionEffect, Tags.LegCFICode, Tags.LegMaturityMonthYear, Tags.LegMaturityDate, Tags.LegStrikePrice, Tags.LegRatioQty, Tags.LegSide, Tags.LegRefID, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.LegSecurityType, Tags.LegSymbol, Tags.LegPositionEffect, Tags.LegCFICode, Tags.LegMaturityMonthYear, Tags.LegMaturityDate, Tags.LegStrikePrice, Tags.LegRatioQty, Tags.LegSide, Tags.LegRefID, 0};
 
         public NoLegsGroup()

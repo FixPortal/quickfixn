@@ -14,10 +14,10 @@ public abstract class AbstractInitiator : IInitiator
 
     private readonly object _sync = new();
     private readonly Dictionary<SessionID, Session> _sessions = new();
-    private readonly HashSet<SessionID> _sessionIDs = new();
-    private readonly HashSet<SessionID> _pending = new();
-    private readonly HashSet<SessionID> _connected = new();
-    private readonly HashSet<SessionID> _disconnected = new();
+    private readonly HashSet<SessionID> _sessionIDs = [];
+    private readonly HashSet<SessionID> _pending = [];
+    private readonly HashSet<SessionID> _connected = [];
+    private readonly HashSet<SessionID> _disconnected = [];
     private readonly SessionFactory _sessionFactory;
     private Thread? _thread;
 

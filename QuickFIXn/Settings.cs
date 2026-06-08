@@ -4,7 +4,7 @@ namespace QuickFix;
 
 public class Settings
 {
-    private readonly LinkedList<SettingsDictionary> _sections = new();
+    private readonly LinkedList<SettingsDictionary> _sections = [];
 
     public Settings(System.IO.TextReader conf)
     {
@@ -25,7 +25,7 @@ public class Settings
             }
             else if (IsKeyValue(line) && currentSection != null)
             {
-                string[] kv = line.Split(new char[] { '=' }, 2);
+                string[] kv = line.Split(['='], 2);
                 currentSection.SetString(kv[0].Trim(), kv[1].Trim());
             }
         }
@@ -50,7 +50,7 @@ public class Settings
 
     public static bool IsKeyValue(string s)
     {
-        return s.IndexOf('=') != -1;
+        return s.Contains('=');
     }
 
     public static bool IsSection(string s)

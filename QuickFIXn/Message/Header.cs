@@ -2,9 +2,10 @@ using System.Text;
 using QuickFix.Fields;
 using QuickFix.ObjectPooling;
 
-namespace QuickFix; 
+namespace QuickFix;
+
 public class Header : FieldMap {
-    public int[] HEADER_FIELD_ORDER = { Tags.BeginString, Tags.BodyLength, Tags.MsgType };
+    public int[] HEADER_FIELD_ORDER = [Tags.BeginString, Tags.BodyLength, Tags.MsgType];
 
     public Header()
         : base() {

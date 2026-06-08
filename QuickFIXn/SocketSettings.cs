@@ -141,7 +141,7 @@ public class SocketSettings : ICloneable
     /// <c>true</c> if [require client certificate]; otherwise, <c>false</c>.
     /// </value>
     public bool RequireClientCertificate { get; internal set; }
-    
+
     #endregion
 
     /// <summary>
@@ -162,8 +162,8 @@ public class SocketSettings : ICloneable
     /// Setup socket settings based on settings specified in dictionary
     /// </summary>
     /// <remarks>
-    /// used "Configure" as name since it is used in a lot of other places, 
-    /// alternative names are ReadSettings or FromDictionary 
+    /// used "Configure" as name since it is used in a lot of other places,
+    /// alternative names are ReadSettings or FromDictionary
     /// </remarks>
     /// <param name="settingsDictionary">the dictionary to read the settings from</param>
     public void Configure(QuickFix.SettingsDictionary settingsDictionary)
@@ -208,13 +208,13 @@ public class SocketSettings : ICloneable
             CheckCertificateRevocation = ValidateCertificates && settingsDictionary.GetBool(SessionSettings.SSL_CHECK_CERTIFICATE_REVOCATION);
         }
 
-        // Use setting for client certificate check if one exist 
+        // Use setting for client certificate check if one exist
         // otherwise enable client certificate check if a ca certificate is specified
         if (settingsDictionary.Has(SessionSettings.SSL_REQUIRE_CLIENT_CERTIFICATE))
             RequireClientCertificate = settingsDictionary.GetBool(SessionSettings.SSL_REQUIRE_CLIENT_CERTIFICATE);
 
-        // Use setting for SSL if one exist 
-        // otherwise enable ssl if certificate path is specified 
+        // Use setting for SSL if one exist
+        // otherwise enable ssl if certificate path is specified
         if (settingsDictionary.Has(SessionSettings.SSL_ENABLE))
             UseSSL = settingsDictionary.GetBool(SessionSettings.SSL_ENABLE);
         else

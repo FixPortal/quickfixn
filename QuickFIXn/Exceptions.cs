@@ -180,6 +180,7 @@ public class RejectLogon : QuickFIXException
 }
 
 #region Tag Exceptions
+
 /// <summary>
 /// Base class for tag-related errors
 /// </summary>
@@ -201,6 +202,7 @@ public abstract class TagException : QuickFIXException
         this._value = value;
         this.sessionRejectReason = new QuickFix.FixValues.SessionRejectReason(FixValues.SessionRejectReason.OTHER.Value, msg);
     }
+
     public TagException(int field, FixValues.SessionRejectReason reason, string value = "")
         : base(reason.Description)
     {
@@ -208,6 +210,7 @@ public abstract class TagException : QuickFIXException
         this._value = value;
         this.sessionRejectReason = reason;
     }
+
     public TagException(int field, FixValues.SessionRejectReason reason, System.Exception innerException, string value = "")
         : base(reason.Description, innerException)
     {
@@ -264,7 +267,6 @@ public class IncorrectTagValue : TagException
     // FP Enhancement: 2026-05-24 — accept the value that violated the spec so it lands in the reject log line (see TagException).
     public IncorrectTagValue(int field, string value = "") : base(field, FixValues.SessionRejectReason.VALUE_IS_INCORRECT, value) { }
 }
-	
 /// <summary>
 /// Repeated tag not part of repeating group
 /// </summary>
@@ -278,7 +280,7 @@ public class RepeatedTag : TagException
 public class IncorrectDataFormat : TagException
 {
     public IncorrectDataFormat(int field, System.Exception innerException)
-        : base(field, FixValues.SessionRejectReason.INCORRECT_DATA_FORMAT_FOR_VALUE, innerException) 
+        : base(field, FixValues.SessionRejectReason.INCORRECT_DATA_FORMAT_FOR_VALUE, innerException)
     { }
 }
 

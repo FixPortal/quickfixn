@@ -13,7 +13,7 @@ namespace QuickFix;
 /// Acceptor implementation - with threads
 /// Creates a ThreadedSocketReactor for every listening endpoint.
 /// </summary>
-	public class ThreadedSocketAcceptor : IAcceptor
+public class ThreadedSocketAcceptor : IAcceptor
 {
     private const int TenSecondsInTicks = 10000;
 
@@ -25,8 +25,6 @@ namespace QuickFix;
     private readonly object _sync = new();
     private readonly IQuickFixLoggerFactory _qfLoggerFactory;
     private readonly LogFactoryAdapter? _logFactoryAdapter;
-
-    #region Constructors
 
     /// <summary>
     /// Create a ThreadedSocketAcceptor (with a legacy ILogFactory)
@@ -106,14 +104,6 @@ namespace QuickFix;
         {
             throw new ConfigError(e.Message, e);
         }
-    }
-
-    #endregion
-
-    // FP Enhancement: 2026-05-24 — expose the listening endpoints so operations/tests can observe which ports the acceptor is bound to.
-    public IEnumerable<IPEndPoint> EndPoints()
-    {
-        return _socketDescriptorForAddress.Values.Select(socketDescriptor => socketDescriptor.Address);
     }
 
     #region Private Methods
@@ -300,6 +290,12 @@ namespace QuickFix;
     }
 
     #endregion
+
+    // FP Enhancement: 2026-05-24 — expose the listening endpoints so operations/tests can observe which ports the acceptor is bound to.
+    public IEnumerable<IPEndPoint> EndPoints()
+    {
+        return _socketDescriptorForAddress.Values.Select(socketDescriptor => socketDescriptor.Address);
+    }
 
     #region Acceptor Members
 

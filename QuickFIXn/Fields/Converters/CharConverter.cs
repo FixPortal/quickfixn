@@ -1,14 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System;
 
 namespace QuickFix.Fields.Converters;
 
 /// <summary>
 /// Converts char to/from string
 /// </summary>
-public static class CharConverter 
+public static class CharConverter
 {
     /// <summary>
     /// Convert string to char
@@ -17,7 +14,7 @@ public static class CharConverter
     public static char Convert(string c)
     {
         if (c.Length != 1)
-            throw new FieldConvertError("could not convert string to char, str=" + c);
+            throw new FieldConvertError($"could not convert string to char, str={c}");
         return c[0];
     }
 
@@ -33,7 +30,7 @@ public static class CharConverter
     public static char Convert(string c, bool allowTruncation)
     {
         if (c.Length == 0 || (c.Length != 1 && !allowTruncation))
-            throw new FieldConvertError("could not convert string to char, str=" + c);
+            throw new FieldConvertError($"could not convert string to char, str={c}");
         return c[0];
     }
 }

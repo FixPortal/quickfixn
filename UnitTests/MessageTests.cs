@@ -13,7 +13,6 @@ public class MessageTests
 {
     private readonly IMessageFactory _defaultMsgFactory = new DefaultMessageFactory();
 
-
     [Test]
     public void IdentifyTypeTest()
     {
@@ -218,9 +217,18 @@ public class MessageTests
     [Test]
     public void IsHeaderFieldTest()
     {
-        Assert.That(Message.IsHeaderField(Tags.BeginString), Is.EqualTo(true));
-        Assert.That(Message.IsHeaderField(Tags.TargetCompID), Is.EqualTo(true));
-        Assert.That(Message.IsHeaderField(Tags.Account), Is.EqualTo(false));
+        Assert.That(Message.IsHeaderField(Tags.BeginString, null), Is.EqualTo(true));
+        Assert.That(Message.IsHeaderField(Tags.TargetCompID, null), Is.EqualTo(true));
+        Assert.That(Message.IsHeaderField(Tags.Account, null), Is.EqualTo(false));
+
+        var dd = new QuickFix.DataDictionary.DataDictionary();
+        dd.LoadFIXSpec("FIX44");
+        dd.Header.AddField(
+            new QuickFix.DataDictionary.DDField(901109, "FakeField", new Dictionary<string, string>(), "STRING"));
+
+        Assert.That(Message.IsHeaderField(Tags.TargetCompID, dd), Is.EqualTo(true));
+        Assert.That(Message.IsHeaderField(Tags.Account, dd), Is.EqualTo(false));
+        Assert.That(Message.IsHeaderField(901109, dd), Is.EqualTo(true));
     }
 
     [Test]
@@ -386,6 +394,32 @@ public class MessageTests
         Assert.That(hops.GetString(Tags.HopCompID), Is.EqualTo("FOO"));
         hops = nos.Header.GetGroup(2, Tags.NoHops);
         Assert.That(hops.GetString(Tags.HopCompID), Is.EqualTo("BAR"));
+    }
+
+    [Test]
+    public void TempExtraLogoutField()
+    {
+        string data = "8=FIX.4.4|9=40|35=5|58=this is a logout|789=100|10=228|"
+            .Replace('|', Message.SOH);
+
+        QuickFix.DataDictionary.DataDictionary dd = new QuickFix.DataDictionary.DataDictionary();
+        dd.LoadFIXSpec("FIX44");
+        var logout = new QuickFix.FIX44.Logout();
+        logout.FromString(data, false, dd, dd, _defaultMsgFactory);
+        Assert.That(logout.GetInt(Tags.NextExpectedMsgSeqNum), Is.EqualTo(100));
+    }
+
+    [Test]
+    public void TempExtraLogoutFieldFIX42()
+    {
+        string data = "8=FIX.4.2|9=40|35=5|58=this is a logout|789=100|10=228|"
+            .Replace('|', Message.SOH);
+
+        QuickFix.DataDictionary.DataDictionary dd = new QuickFix.DataDictionary.DataDictionary();
+        dd.LoadFIXSpec("FIX42");
+        var logout = new QuickFix.FIX44.Logout();
+        logout.FromString(data, false, dd, dd, _defaultMsgFactory);
+        Assert.That(logout.GetInt(Tags.NextExpectedMsgSeqNum), Is.EqualTo(100));
     }
 
     [Test]
@@ -959,55 +993,55 @@ public class MessageTests
     {
         // Given the following string in FIX JSON Encoding:
         string json = @"
-                {
-                    ""Header"": {
-                        ""BeginString"":""FIX.4.4"",
-                        ""MsgSeqNum"":""360"",
-                        ""MsgType"":""8"",
-                        ""SenderCompID"":""BLPTSOX"",
-                        ""SendingTime"":""20130321-15:21:23"",
-                        ""TargetCompID"":""THINKTSOX""
-                    },
-                    ""Body"": {
-                        ""31337"":""custom body field"",
-                        ""AvgPx"":""122.255"",
-                        ""ClOrdID"":""61101189"",
-                        ""CumQty"":""1990000"",
-                        ""ExecID"":""VCON:20130321:50018:5:12"",
-                        ""LastPx"":""122.255"",
-                        ""LastQty"":""1990000"",
-                        ""OrderID"":""116"",
-                        ""OrderQty"":""1990000"",
-                        ""OrdStatus"":""2"",
-                        ""Side"":""1"",
-                        ""Symbol"":""[N/A]"",
-                        ""TransactTime"":""20130321-15:21:23"",
-                        ""ExecType"":""F"",
-                        ""LeavesQty"":""0"",
-                        ""NoPartyIDs"": [
-                            {
-                                ""PartyIDSource"":""D"",
-                                ""PartyID"":""OHAI"",
-                                ""PartyRole"":""1"",
-                                ""NoPartySubIDs"": [
-                                    {
-                                        ""PartySubID"":""14"",
-                                        ""PartySubIDType"":""4"",
-                                        ""31338"":""custom group field""
-                                    }
-                                ]
-                            },
-                            { ""PartyIDSource"":""D"", ""PartyID"":""TFOLIO:6804469"", ""PartyRole"":""12"" },
-                            { ""PartyIDSource"":""D"", ""PartyID"":""TFOLIO"",         ""PartyRole"":""11"" },
-                            { ""PartyIDSource"":""D"", ""PartyID"":""THINKFOLIO LTD"", ""PartyRole"":""13"" },
-                            { ""PartyIDSource"":""D"", ""PartyID"":""SXT"",            ""PartyRole"":""16"" },
-                            { ""PartyIDSource"":""D"", ""PartyID"":""TFOLIO:6804469"", ""PartyRole"":""36"" }
-                        ]
-                    },
-                    ""Trailer"": {
-                    }
+            {
+                ""Header"": {
+                    ""BeginString"":""FIX.4.4"",
+                    ""MsgSeqNum"":""360"",
+                    ""MsgType"":""8"",
+                    ""SenderCompID"":""BLPTSOX"",
+                    ""SendingTime"":""20130321-15:21:23"",
+                    ""TargetCompID"":""THINKTSOX""
+                },
+                ""Body"": {
+                    ""31337"":""custom body field"",
+                    ""AvgPx"":""122.255"",
+                    ""ClOrdID"":""61101189"",
+                    ""CumQty"":""1990000"",
+                    ""ExecID"":""VCON:20130321:50018:5:12"",
+                    ""LastPx"":""122.255"",
+                    ""LastQty"":""1990000"",
+                    ""OrderID"":""116"",
+                    ""OrderQty"":""1990000"",
+                    ""OrdStatus"":""2"",
+                    ""Side"":""1"",
+                    ""Symbol"":""[N/A]"",
+                    ""TransactTime"":""20130321-15:21:23"",
+                    ""ExecType"":""F"",
+                    ""LeavesQty"":""0"",
+                    ""NoPartyIDs"": [
+                        {
+                            ""PartyIDSource"":""D"",
+                            ""PartyID"":""OHAI"",
+                            ""PartyRole"":""1"",
+                            ""NoPartySubIDs"": [
+                                {
+                                    ""PartySubID"":""14"",
+                                    ""PartySubIDType"":""4"",
+                                    ""31338"":""custom group field""
+                                }
+                            ]
+                        },
+                        { ""PartyIDSource"":""D"", ""PartyID"":""TFOLIO:6804469"", ""PartyRole"":""12"" },
+                        { ""PartyIDSource"":""D"", ""PartyID"":""TFOLIO"",         ""PartyRole"":""11"" },
+                        { ""PartyIDSource"":""D"", ""PartyID"":""THINKFOLIO LTD"", ""PartyRole"":""13"" },
+                        { ""PartyIDSource"":""D"", ""PartyID"":""SXT"",            ""PartyRole"":""16"" },
+                        { ""PartyIDSource"":""D"", ""PartyID"":""TFOLIO:6804469"", ""PartyRole"":""36"" }
+                    ]
+                },
+                ""Trailer"": {
                 }
-            ";
+            }
+        ";
 
         // When the JSON is parsed into a QuickFIX Message
         var dd = new QuickFix.DataDictionary.DataDictionary();

@@ -13,7 +13,7 @@ public class SessionSchedule
     public DayOfWeek? EndDay { get; }
 
     private readonly bool _isWeekdaysSession;
-    private readonly HashSet<DayOfWeek> _weekdays = new();
+    private readonly HashSet<DayOfWeek> _weekdays = [];
 
     public bool NonStopSession { get; }
 
@@ -60,7 +60,7 @@ public class SessionSchedule
         if (utc.Kind != DateTimeKind.Utc)
             throw new ArgumentException("Only UTC time is supported", nameof(utc));
 
-        if (UseLocalTime)
+        if(UseLocalTime)
             return utc.ToLocalTime();
 
         return TimeZone==null ? utc : TimeZoneInfo.ConvertTimeFromUtc(utc, TimeZone);
