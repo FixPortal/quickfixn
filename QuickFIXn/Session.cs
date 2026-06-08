@@ -1044,8 +1044,7 @@ public class Session : IDisposable
                     "Chunked ResendRequest for messages FROM: {BeginSeqNo} TO: {ChunkEndSeqNo} has been satisfied (by a gap fill).",
                     range.BeginSeqNo, range.ChunkEndSeqNo);
                 SeqNumType newStart = max;
-                // FP Enhancement: 2026-06-08 — inclusive chunk end is newStart + MaxMessagesInResendRequest - 1; the unadjusted form requested MaxMessagesInResendRequest + 1 messages per chunk, exceeding the configured cap and risking rejection by strict exchanges (e.g. CME). (Upstream v1.14.1 bug; reported upstream.)
-                SeqNumType newChunkEnd = Math.Min(range.EndSeqNo, newStart + MaxMessagesInResendRequest - 1);
+                SeqNumType newChunkEnd = Math.Min(range.EndSeqNo, newStart + MaxMessagesInResendRequest); // TODO we can +1 this
 
                 Message resendRequest = CreateResendRequest(seqReset.Header.GetString(Tags.BeginString),
                     newStart, newChunkEnd);
