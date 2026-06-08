@@ -5,7 +5,6 @@ using QuickFix.Fields;
 
 namespace UnitTests;
 
-
 [TestFixture]
 public class FieldMapTests
 {
@@ -44,12 +43,12 @@ public class FieldMapTests
     public void GetDecimalTest()
     {
         FieldMap fm = new();
-        var val = new Decimal(20.4);
+        var val = new decimal(20.4);
         fm.SetField(new DecimalField(200, val));
         Assert.That(fm.GetDecimal(200), Is.EqualTo(val));
 
         fm.SetField(new StringField(201, "33.22"));
-        Assert.That(fm.GetDecimal(201), Is.EqualTo(new Decimal(33.22)));
+        Assert.That(fm.GetDecimal(201), Is.EqualTo(new decimal(33.22)));
         Assert.Throws(typeof(FieldNotFoundException),
             delegate { fm.GetString(99900); });
     }
@@ -251,7 +250,7 @@ public class FieldMapTests
     public void DecimalFieldTest()
     {
         FieldMap fm = new();
-        DecimalField field = new DecimalField(200, new Decimal(101.0001));
+        DecimalField field = new DecimalField(200, new decimal(101.0001));
         DecimalField refield = new DecimalField(200);
         fm.SetField(field);
         fm.GetField(refield);
@@ -269,7 +268,7 @@ public class FieldMapTests
     public void DefaultFieldTest()
     {
         FieldMap fm = new();
-        DecimalField field = new DecimalField(200, new Decimal(101.0001));
+        DecimalField field = new DecimalField(200, new decimal(101.0001));
         fm.SetField(field);
         string refield = fm.GetString(200);
         Assert.That("101.0001", Is.EqualTo(refield));
@@ -449,7 +448,7 @@ public class FieldMapTests
     {
         // bug found during issue 56 - Group object was losing type after being added
         FieldMap fm = new FieldMap();
-        QuickFix.FIX42.News.LinesOfTextGroup linesGroup = new QuickFix.FIX42.News.LinesOfTextGroup();
+        QuickFix.FIX42.News.LinesOfTextGroup linesGroup = new();
         linesGroup.Text = new Text("foo");
         fm.AddGroup(linesGroup);
 

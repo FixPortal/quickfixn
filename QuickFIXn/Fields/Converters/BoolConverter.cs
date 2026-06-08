@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace QuickFix.Fields.Converters;
 
@@ -15,7 +12,7 @@ public static class BoolConverter
     /// </summary>
     /// <param name="b"></param>
     /// <returns>"Y" for true, "N" for false</returns>
-    public static string Convert(Boolean b)
+    public static string Convert(bool b)
     {
         return b ? "Y" : "N";
     }
@@ -26,7 +23,7 @@ public static class BoolConverter
     /// <param name="boolstr"></param>
     /// <returns>true for "Y", false for "N"</returns>
     /// <exception cref="FieldConvertError"/>
-    public static Boolean Convert(string boolstr)
+    public static bool Convert(string boolstr)
     {
         switch (boolstr)
         {

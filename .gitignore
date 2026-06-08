@@ -40,6 +40,7 @@ upload_to_s3.rb
 tmp/
 _pkgout/
 
+
 # ReSharper is a .NET coding add-in
 _ReSharper*/
 *.[Rr]e[Ss]harper

@@ -17,10 +17,10 @@ public class SessionID
     public string TargetCompID { get; }
     public string TargetSubID { get; }
     public string TargetLocationID { get; }
-    
+
     public static SessionID GetNonSessionLog()
     {
-     return new SessionID("Non", "Session", "Log");   
+        return new SessionID("Non", "Session", "Log");
     }
     public static string GetNonSessionLogName => "Non:Session->Log";
 
@@ -92,7 +92,7 @@ public class SessionID
     {
         return _id.GetHashCode();
     }
-    
+
     public override bool Equals(object? obj)
     {
         if (obj == null || GetType() != obj.GetType())

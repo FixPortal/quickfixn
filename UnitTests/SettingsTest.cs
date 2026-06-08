@@ -40,7 +40,7 @@ EqualsInValue=We can have '=' in the value
         Assert.That(foo.First.Value.Count, Is.EqualTo(2));
 
         LinkedList<QuickFix.SettingsDictionary> oren = settings.Get("OREN");
-        Assert.That(oren.Count, Is.EqualTo(2));            
+        Assert.That(oren.Count, Is.EqualTo(2));
         Assert.That(oren.First!.Value.Count, Is.EqualTo(1));
         Assert.That(oren.First.Value.GetString("Nero"), Is.EqualTo("TW"));
         oren.RemoveFirst();

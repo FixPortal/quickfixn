@@ -121,7 +121,7 @@ public class ThreadedSocketAcceptor_RestartTests
     {
         TestApplication application = new TestApplication(LogonCallback, LogoffCallback);
         IMessageStoreFactory storeFactory = new MemoryStoreFactory();
-        ILogFactory logFactory = new ScreenLogFactory(false, false, false);
+        ILogFactory logFactory = new NullLogFactory();
         SessionSettings settings = new SessionSettings();
 
         settings.Set(CreateSessionID(StaticAcceptorCompID), CreateSessionConfig());

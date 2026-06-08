@@ -14,7 +14,7 @@ public class SessionState : IDisposable
 {
     #region Private Members
 
-    private readonly object _sync = new object();
+    private readonly object _sync = new();
     private bool _isEnabled = true;
     private bool _receivedLogon = false;
     private bool _receivedReset = false;
@@ -287,14 +287,19 @@ public class SessionState : IDisposable
         }
     }
 
-    public void SetResendRange(SeqNumType begin, SeqNumType end, SeqNumType chunkEnd = ResendRange.NOT_SET)
+    public void SetResendRange(
+        SeqNumType begin, SeqNumType end, SeqNumType trigger,
+        Message resendRequest, SeqNumType chunkEnd = ResendRange.NOT_SET)
     {
-        _resendRange.BeginSeqNo = begin;
-        _resendRange.EndSeqNo = end;
-        _resendRange.ChunkEndSeqNo = chunkEnd == ResendRange.NOT_SET ? end : chunkEnd;
+        _resendRange.Set(begin, end, trigger, resendRequest, chunkEnd);
     }
 
-    public bool ResendRequested()
+    internal void ResetResendRange()
+    {
+        _resendRange.Reset();
+    }
+
+    public bool IsResendRequested()
     {
         return !(_resendRange.BeginSeqNo == 0 && _resendRange.EndSeqNo == 0);
     }

@@ -51,7 +51,7 @@ public class MessageCrackerTests
     public void IsHandlerMethod()
     {
         MethodInfo[] methods = typeof(TheseMightBeHandlerMethods).GetMethods();
-        List<MethodInfo> handlers = new List<MethodInfo>();
+        List<MethodInfo> handlers = [];
 
         foreach (MethodInfo m in methods)
         {

@@ -23,7 +23,7 @@ public class ThreadedSocketReactorTests
                 int randomPort = random.Next(5000, 6000);
                 _tcpListener = new TcpListener(IPAddress.Loopback, randomPort);
                 _tcpListener.Start();
-                
+
                 return randomPort;
             }
             catch { }

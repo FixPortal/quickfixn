@@ -20,18 +20,18 @@ public static class IntConverter
         }
         catch (System.FormatException e)
         {
-            throw new FieldConvertError("Could not convert string to int (" + i + ")", e);
+            throw new FieldConvertError($"Could not convert string to int ({i})", e);
         }
         catch (System.OverflowException e)
         {
-            throw new FieldConvertError("Could not convert string to int (" + i + ")", e);
+            throw new FieldConvertError($"Could not convert string to int ({i})", e);
         }
     }
 
     /// <summary>
     /// convert integer to string
     /// </summary>
-    public static string Convert(System.Int64 i)
+    public static string Convert(long i)
     {
         return i.ToString();
     }

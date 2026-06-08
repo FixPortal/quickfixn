@@ -18,7 +18,7 @@ public interface IMessageStore : IDisposable
     void Get(SeqNumType startSeqNum, SeqNumType endSeqNum, List<string> messages);
 
     /// <summary>
-    /// Adds a raw fix message to the store with the give sequence number
+    /// Adds a raw fix message to the store with the given sequence number
     /// </summary>
     /// <param name="msgSeqNum">the sequence number</param>
     /// <param name="msg">the raw FIX message string</param>
@@ -39,10 +39,10 @@ public interface IMessageStore : IDisposable
     /// Certain custom IMessageStore implementations (e.g. DB-backed stores)
     /// may need to override the default implementation to ensure that these two behaviors
     /// are combined into a single atomic operation.
-    /// </summary>
     /// <param name="msgSeqNum">the sequence number</param>
     /// <param name="msg">the raw FIX message string</param>
     /// <returns>true if successful, false otherwise</returns>
+    /// </summary>
     bool SetAndIncrNextSenderMsgSeqNum(SeqNumType msgSeqNum, string msg)
     {
         bool result = Set(msgSeqNum, msg);
@@ -67,3 +67,4 @@ public interface IMessageStore : IDisposable
     /// </summary>
     void Refresh();
 }
+

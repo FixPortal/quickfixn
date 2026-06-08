@@ -22,7 +22,7 @@ public class SimpleAcceptorApp : /*QuickFix.MessageCracker,*/ QuickFix.IApplicat
         Console.WriteLine("OUT: " + message);
     }
 
-    public void FromAdmin(Message message, SessionID sessionID) 
+    public void FromAdmin(Message message, SessionID sessionID)
     {
         Console.WriteLine("IN:  " + message);
     }

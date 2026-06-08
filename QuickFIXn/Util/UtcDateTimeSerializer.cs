@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace QuickFix.Util;
 
@@ -18,7 +15,7 @@ public static class UtcDateTimeSerializer
     /// </summary>
     /// <param name="d"></param>
     /// <returns></returns>
-    static public string ToString(DateTime d)
+    public static string ToString(DateTime d)
     {
         return d.ToString(FORMAT);
     }
@@ -28,7 +25,7 @@ public static class UtcDateTimeSerializer
     /// </summary>
     /// <param name="s"></param>
     /// <returns></returns>
-    static public DateTime FromString(string s)
+    public static DateTime FromString(string s)
     {
         try
         {

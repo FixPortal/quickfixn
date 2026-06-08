@@ -24,3 +24,4 @@ public class FieldNotFoundException : ApplicationException
         : base(message, inner)
     { Field = -1; }
 }
+

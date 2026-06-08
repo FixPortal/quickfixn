@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.Extensions.Logging;
 using QuickFix;
-using QuickFix.Logger;
 using QuickFix.Store;
 
 namespace Executor;
@@ -9,7 +8,7 @@ namespace Executor;
 class Program
 {
     private const string HttpServerPrefix = "http://127.0.0.1:5080/";
-    
+
     [STAThread]
     static void Main(string[] args)
     {
@@ -45,14 +44,14 @@ class Program
                 new ThreadedSocketAcceptor(executorApp, storeFactory, settings, loggerFactory);
 
             HttpServer srv = new HttpServer(HttpServerPrefix, settings);
-            
+
             acceptor.Start();
             srv.Start();
-            
+
             Console.WriteLine("View Executor status: "+HttpServerPrefix);
             Console.WriteLine("press <enter> to quit");
             Console.Read();
-            
+
             srv.Stop();
             acceptor.Stop();
         }

@@ -12,7 +12,7 @@ public interface IMessageFactory
     /// </summary>
     /// <returns>List of supported begin strings</returns>
     ICollection<string> GetSupportedBeginStrings();
-    
+
     /// <summary>
     /// Creates a message for a specified type and FIX version.
     /// (FIXT11 apps should use the other Create method with explicit applVerId,

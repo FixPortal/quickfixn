@@ -103,7 +103,7 @@ internal static class Program
                     break;
             }
         }
-        
+
         FixToJson(fname, humanReadableValues, sessionDataDictionary, appDataDictionary, tagsToMask, maskText);
         Environment.Exit(1);
     }

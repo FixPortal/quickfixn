@@ -88,7 +88,7 @@ public class FieldTests
         Assert.That(field.Value, Is.EqualTo(newval));
         Assert.That(field.ToString(), Is.EqualTo("20090904-03:44:01.000"));
     }
-    
+
     [Test]
     public void DateTimeFieldNanoTest()
     {
@@ -102,7 +102,7 @@ public class FieldTests
         Assert.That(field.Value, Is.EqualTo(newval));
         Assert.That(field.ToString(), Is.EqualTo("20090904-03:44:01.100310300"));
     }
-    
+
     [Test]
     public void StringFieldTest_TotalAndLength()
     {

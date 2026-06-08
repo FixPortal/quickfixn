@@ -51,6 +51,12 @@ public class SettingsDictionary : System.Collections.IEnumerable
             .ToDictionary(x => x.k, x => x.v);
     }
 
+    /// <summary>
+    /// Get a string value by case-insensitive key
+    /// </summary>
+    /// <param name="key">used for case-insensitive lookup</param>
+    /// <returns></returns>
+    /// <exception cref="ConfigError">if key is not found</exception>
     public string GetString(string key)
     {
         if (_data.TryGetValue(key.ToUpperInvariant(), out var val))
@@ -58,6 +64,7 @@ public class SettingsDictionary : System.Collections.IEnumerable
         throw new ConfigError($"No value for key: {key}");
     }
 
+    [Obsolete("Will be removed in a future release because the engine doesn't use it")]
     public String GetString(string key, bool capitalize)
     {
         string s = GetString(key);
@@ -157,7 +164,7 @@ public class SettingsDictionary : System.Collections.IEnumerable
                     continue;
                 rvList.Add(int.Parse(it));
             }
-            return rvList.Distinct().OrderBy(s => s).ToArray();
+            return rvList.Distinct().OrderBy(s=>s).ToArray();
         }
         catch (FormatException)
         {

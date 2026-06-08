@@ -20,18 +20,18 @@ public static class ULongConverter
         }
         catch (System.FormatException e)
         {
-            throw new FieldConvertError("Could not convert string to ulong (" + i + ")", e);
+            throw new FieldConvertError($"Could not convert string to ulong ({i})", e);
         }
         catch (System.OverflowException e)
         {
-            throw new FieldConvertError("Could not convert string to ulong (" + i + ")", e);
+            throw new FieldConvertError($"Could not convert string to ulong ({i})", e);
         }
     }
 
     /// <summary>
     /// convert ulong to string
     /// </summary>
-    public static string Convert(System.UInt64 i)
+    public static string Convert(ulong i)
     {
         return i.ToString();
     }

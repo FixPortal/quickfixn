@@ -221,7 +221,7 @@ public class RegistrationInstructions : Message
     {
         public static int[] DefaultFieldOrder = [Tags.PartyID, Tags.PartyIDSource, Tags.PartyRole, Tags.PartyRoleQualifier, Tags.NoPartySubIDs, Tags.NoPartyAltIDs, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.PartyID, Tags.PartyIDSource, Tags.PartyRole, Tags.PartyRoleQualifier, Tags.NoPartySubIDs, Tags.NoPartyAltIDs, 0};
 
         public NoPartyIDsGroup()
@@ -336,7 +336,7 @@ public class RegistrationInstructions : Message
         {
             public static int[] DefaultFieldOrder = [Tags.PartySubID, Tags.PartySubIDType, 0];
 
-            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
             public static int[] fieldOrder = {Tags.PartySubID, Tags.PartySubIDType, 0};
 
             public NoPartySubIDsGroup()
@@ -388,7 +388,7 @@ public class RegistrationInstructions : Message
         {
             public static int[] DefaultFieldOrder = [Tags.PartyAltID, Tags.PartyAltIDSource, Tags.NoPartyAltSubIDs, 0];
 
-            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
             public static int[] fieldOrder = {Tags.PartyAltID, Tags.PartyAltIDSource, Tags.NoPartyAltSubIDs, 0};
 
             public NoPartyAltIDsGroup()
@@ -455,7 +455,7 @@ public class RegistrationInstructions : Message
             {
                 public static int[] DefaultFieldOrder = [Tags.PartyAltSubID, Tags.PartyAltSubIDType, 0];
 
-                [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+                [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
                 public static int[] fieldOrder = {Tags.PartyAltSubID, Tags.PartyAltSubIDType, 0};
 
                 public NoPartyAltSubIDsGroup()
@@ -509,7 +509,7 @@ public class RegistrationInstructions : Message
     {
         public static int[] DefaultFieldOrder = [Tags.RegistDtls, Tags.RegistEmail, Tags.MailingDtls, Tags.MailingInst, Tags.NoNestedPartyIDs, Tags.OwnerType, Tags.DateOfBirth, Tags.InvestorCountryOfResidence, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.RegistDtls, Tags.RegistEmail, Tags.MailingDtls, Tags.MailingInst, Tags.NoNestedPartyIDs, Tags.OwnerType, Tags.DateOfBirth, Tags.InvestorCountryOfResidence, 0};
 
         public NoRegistDtlsGroup()
@@ -656,7 +656,7 @@ public class RegistrationInstructions : Message
         {
             public static int[] DefaultFieldOrder = [Tags.NestedPartyID, Tags.NestedPartyIDSource, Tags.NestedPartyRole, Tags.NestedPartyRoleQualifier, Tags.NoNestedPartySubIDs, 0];
 
-            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+            [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
             public static int[] fieldOrder = {Tags.NestedPartyID, Tags.NestedPartyIDSource, Tags.NestedPartyRole, Tags.NestedPartyRoleQualifier, Tags.NoNestedPartySubIDs, 0};
 
             public NoNestedPartyIDsGroup()
@@ -755,7 +755,7 @@ public class RegistrationInstructions : Message
             {
                 public static int[] DefaultFieldOrder = [Tags.NestedPartySubID, Tags.NestedPartySubIDType, 0];
 
-                [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+                [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
                 public static int[] fieldOrder = {Tags.NestedPartySubID, Tags.NestedPartySubIDType, 0};
 
                 public NoNestedPartySubIDsGroup()
@@ -809,7 +809,7 @@ public class RegistrationInstructions : Message
     {
         public static int[] DefaultFieldOrder = [Tags.DistribPaymentMethod, Tags.DistribPercentage, Tags.CashDistribCurr, Tags.CashDistribAgentName, Tags.CashDistribAgentCode, Tags.CashDistribAgentAcctNumber, Tags.CashDistribPayRef, Tags.CashDistribAgentAcctName, 0];
 
-        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in a future release.")]
+        [Obsolete("Use DefaultFieldOrder instead.  This will be removed in 1.16.")]
         public static int[] fieldOrder = {Tags.DistribPaymentMethod, Tags.DistribPercentage, Tags.CashDistribCurr, Tags.CashDistribAgentName, Tags.CashDistribAgentCode, Tags.CashDistribAgentAcctNumber, Tags.CashDistribPayRef, Tags.CashDistribAgentAcctName, 0};
 
         public NoDistribInstsGroup()

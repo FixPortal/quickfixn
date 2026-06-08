@@ -2,9 +2,10 @@ using System.Text;
 using QuickFix.Fields;
 using QuickFix.ObjectPooling;
 
-namespace QuickFix; 
+namespace QuickFix;
+
 public class Trailer : FieldMap {
-    public int[] TRAILER_FIELD_ORDER = { Tags.SignatureLength, Tags.Signature, Tags.CheckSum };
+    public int[] TRAILER_FIELD_ORDER = [Tags.SignatureLength, Tags.Signature, Tags.CheckSum];
 
     public Trailer()
         : base() {

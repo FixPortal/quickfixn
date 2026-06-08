@@ -1,8 +1,7 @@
-namespace QuickFix;
+﻿namespace QuickFix;
 
 internal class MessageBuilder
 {
-    private readonly string _msgStr;
     private readonly bool _validateLengthAndChecksum;
     private readonly DataDictionary.DataDictionary _sessionDict;
     private readonly DataDictionary.DataDictionary _appDict;
@@ -11,7 +10,8 @@ internal class MessageBuilder
     private Message? _message;
     private readonly Fields.ApplVerID _defaultApplVerId;
 
-    public string OriginalString => _msgStr;
+    public string OriginalString { get; }
+
     public Fields.MsgType MsgType { get; }
 
     /// <summary>
@@ -27,21 +27,21 @@ internal class MessageBuilder
         DataDictionary.DataDictionary appDict,
         IMessageFactory msgFactory)
     {
-        _msgStr = msgStr;
+        OriginalString = msgStr;
         _defaultApplVerId = new Fields.ApplVerID(defaultApplVerId);
         _validateLengthAndChecksum = validateLengthAndChecksum;
         _sessionDict = sessionDict;
         _appDict = appDict;
         _msgFactory = msgFactory;
-        MsgType = Message.IdentifyType(_msgStr);
-        BeginString = Message.ExtractBeginString(_msgStr);
+        MsgType = Message.IdentifyType(OriginalString);
+        BeginString = Message.ExtractBeginString(OriginalString);
     }
 
     internal Message Build()
     {
         Message message = _msgFactory.Create(BeginString, _defaultApplVerId, MsgType.Value);
         message.FromString(
-            _msgStr,
+            OriginalString,
             _validateLengthAndChecksum,
             _sessionDict,
             _appDict,
@@ -58,7 +58,7 @@ internal class MessageBuilder
 
         Message message = _msgFactory.Create(BeginString, MsgType.Value);
         message.FromString(
-            _msgStr,
+            OriginalString,
             false,
             _sessionDict,
             _appDict,

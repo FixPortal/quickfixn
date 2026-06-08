@@ -18,11 +18,11 @@ public static class AsciiValidator
     /// <returns></returns>
     public static void Validate(string i)
     {
-        if (i is null || i.Length < 1)
+        if (string.IsNullOrEmpty(i))
             throw new FieldConvertError("The argument string cannot be null or empty");
         int asciiValOfFirstChar = System.Convert.ToInt32(i[0]);
         if (asciiValOfFirstChar < ASCII_ZERO || asciiValOfFirstChar > ASCII_NINE)
             if (asciiValOfFirstChar != ASCII_MINUS)
-                throw new FieldConvertError("Could not convert string to int (" + i + "): The first character must be a digit or a minus sign");
+                throw new FieldConvertError($"Could not convert string to int ({i}): The first character must be a digit or a minus sign");
     }
 }

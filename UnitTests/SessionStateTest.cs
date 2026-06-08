@@ -31,7 +31,7 @@ public class SessionStateTest
         now = now.AddMilliseconds(heartBtIntMillis);
         Assert.That(SessionState.TimedOut(now, heartBtIntMillis, lastReceivedTime), Is.True);
     }
-    
+
     [Test]
     public void LogonTimedOut()
     {
@@ -61,8 +61,8 @@ public class SessionStateTest
         Assert.That(SessionState.LogoutTimedOut(now, sentLogout, logoutTimeout, lastSentTime), Is.False);
         now = now.AddMilliseconds(1000);
         Assert.That(SessionState.LogoutTimedOut(now, sentLogout, logoutTimeout, lastSentTime), Is.True);
-       
-        sentLogout = false; 
+
+        sentLogout = false;
         Assert.That(SessionState.LogoutTimedOut(now, sentLogout, logoutTimeout, lastSentTime), Is.False);
     }
 

@@ -2,7 +2,6 @@
 using NUnit.Framework;
 using QuickFix.Util;
 
-
 namespace UnitTests.Util;
 
 [TestFixture]
@@ -14,7 +13,7 @@ public class UtcDateTimeSerializerTests
     /// </summary>
     /// <param name="d1"></param>
     /// <param name="d2"></param>
-    static public void AssertHackyDateTimeEquality(DateTime d1, DateTime d2)
+    public static void AssertHackyDateTimeEquality(DateTime d1, DateTime d2)
     {
         Assert.That(d2.Kind, Is.EqualTo(d1.Kind), "kind");
         Assert.That(d2.Date, Is.EqualTo(d1.Date), "date");
