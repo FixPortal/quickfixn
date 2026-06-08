@@ -680,7 +680,8 @@ public class Session : IDisposable
         {
             if (e.InnerException is not null)
                 Log.Log(LogLevel.Error, "{Message}", e.InnerException.Message);
-            GenerateReject(msgBuilder, e.sessionRejectReason, e.Field);
+            // FP Enhancement: 2026-06-08 — pass the offending field value (e.Value, e.g. from IncorrectTagValue) into the reject so it lands in the structured reject-log line.
+            GenerateReject(msgBuilder, e.sessionRejectReason, e.Field, e.Value);
         }
         catch (UnsupportedVersion uvx)
         {
@@ -875,6 +876,8 @@ public class Session : IDisposable
                             GenerateSequenceReset(resendReq, begin, msgSeqNum);
                         }
                         Send(msg.ConstructString());
+                        // FP Enhancement: 2026-06-08 — mirror the outbound LogExtended hook for replayed messages. The resend path sends via Send(string), bypassing SendRaw where LogExtended is invoked, so tracked resent application messages were missing from the extended XML/JSON audit stream. (LogExtended itself skips admin message types.)
+                        LogExtended(msg, msg.Header.GetString(Tags.MsgType));
                         begin = 0;
                     }
                     current = msgSeqNum + 1;
@@ -1041,7 +1044,8 @@ public class Session : IDisposable
                     "Chunked ResendRequest for messages FROM: {BeginSeqNo} TO: {ChunkEndSeqNo} has been satisfied (by a gap fill).",
                     range.BeginSeqNo, range.ChunkEndSeqNo);
                 SeqNumType newStart = max;
-                SeqNumType newChunkEnd = Math.Min(range.EndSeqNo, newStart + MaxMessagesInResendRequest); // TODO we can +1 this
+                // FP Enhancement: 2026-06-08 — inclusive chunk end is newStart + MaxMessagesInResendRequest - 1; the unadjusted form requested MaxMessagesInResendRequest + 1 messages per chunk, exceeding the configured cap and risking rejection by strict exchanges (e.g. CME). (Upstream v1.14.1 bug; reported upstream.)
+                SeqNumType newChunkEnd = Math.Min(range.EndSeqNo, newStart + MaxMessagesInResendRequest - 1);
 
                 Message resendRequest = CreateResendRequest(seqReset.Header.GetString(Tags.BeginString),
                     newStart, newChunkEnd);
@@ -1095,8 +1099,10 @@ public class Session : IDisposable
                 }
                 if (checkTooLow && IsTargetTooLow(msgSeqNum))
                 {
+                    // FP Enhancement: 2026-06-08 — guard GapFillFlag (tag 123, optional) with IsSetField before GetBoolean. A reset-mode SequenceReset legitimately omits tag 123; the unguarded read threw FieldNotFoundException, which Verify's catch-all turned into a session disconnect. (Upstream v1.14.1 bug; reported upstream.)
                     if (_state.LastProcessedMessageWasQueued
                         && msg.Header.GetString(35) == MsgType.SEQUENCE_RESET
+                        && msg.IsSetField(Tags.GapFillFlag)
                         && msg.GetBoolean(Tags.GapFillFlag))
                     {
                         Log.Log(LogLevel.Warning,
@@ -1115,7 +1121,8 @@ public class Session : IDisposable
                 {
                     ResendRange range = _state.GetResendRange();
 
-                    if (CmeEnhancedResend && msgType == MsgType.SEQUENCE_RESET && msg.GetBoolean(Tags.GapFillFlag))
+                    // FP Enhancement: 2026-06-08 — guard GapFillFlag (tag 123, optional) with IsSetField before GetBoolean; a reset-mode SequenceReset during an active resend omits tag 123 and the unguarded read disconnected the session via Verify's catch-all. (Upstream v1.14.1 bug; reported upstream.)
+                    if (CmeEnhancedResend && msgType == MsgType.SEQUENCE_RESET && msg.IsSetField(Tags.GapFillFlag) && msg.GetBoolean(Tags.GapFillFlag))
                     {
                         HandleCmeEnhancedResendGapFill(msg);
                     }
@@ -1543,9 +1550,10 @@ public class Session : IDisposable
         SendRaw(heartbeat);
     }
 
-    internal void GenerateReject(MessageBuilder msgBuilder, FixValues.SessionRejectReason reason, int field)
+    // FP Enhancement: 2026-06-08 — thread the offending field value through the MessageBuilder bridge so the value carried by TagException reaches GenerateReject's reject-log event; the producer side was previously unwired (value always defaulted to empty).
+    internal void GenerateReject(MessageBuilder msgBuilder, FixValues.SessionRejectReason reason, int field, string value = "")
     {
-        GenerateReject(msgBuilder.RejectableMessage(), reason, field);
+        GenerateReject(msgBuilder.RejectableMessage(), reason, field, value);
     }
 
     // FP Enhancement: 2026-05-24 — optional `value` parameter carries the offending field value into the reject log line; backward-compatible (defaults to empty).
@@ -1654,7 +1662,8 @@ public class Session : IDisposable
 
             if (rejectMessage.IsSetField(Tags.RefSeqNum))
             {
-                SeqNumType refSeqNum = (SeqNumType)rejectMessage.GetInt(Tags.RefSeqNum);
+                // FP Enhancement: 2026-06-08 — read RefSeqNum as ulong (GetULong) rather than narrowing a 64-bit sequence number through 32-bit int, which truncated above int.MaxValue.
+                SeqNumType refSeqNum = rejectMessage.GetULong(Tags.RefSeqNum);
                 var messages = new List<string>();
                 _state.Get(refSeqNum, refSeqNum, messages);
 
@@ -1671,15 +1680,16 @@ public class Session : IDisposable
     }
 
     // FP Enhancement: 2026-05-24 — emit XML + JSON renderings of tracked messages via Log.OnIncomingAndOutgoing. Tracked messages are those whose rendered string is present in SessionID.SessionLogIdentifiers (populated by application code).
+    // FP Enhancement: 2026-06-08 — render the message string once and do a single atomic TryGetValue. The prior ContainsKey-then-indexer pair was a TOCTOU on the ConcurrentDictionary: if application code removed the entry between the two calls, the indexer threw KeyNotFoundException onto the send/receive path.
     private void LogExtended(Message message, string msgType)
     {
         if (Message.IsAdminMsgType(msgType)) return;
 
-        if (SessionID.SessionLogIdentifiers != null && message.ToString() != null)
-            if (SessionID.SessionLogIdentifiers.ContainsKey(message.ToString()))
-            {
-                Log.OnIncomingAndOutgoing((SessionID.SessionLogIdentifiers[message.ToString()].LogId, message.ToString(), message.ToXML(), message.ToJSON()));
-            }
+        string rendered = message.ToString();
+        if (rendered != null && SessionID.SessionLogIdentifiers.TryGetValue(rendered, out var tracked))
+        {
+            Log.OnIncomingAndOutgoing((tracked.LogId, rendered, message.ToXML(), message.ToJSON()));
+        }
     }
 
     protected void InitializeHeader(Message m, SeqNumType msgSeqNum = 0)
