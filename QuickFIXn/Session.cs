@@ -31,6 +31,8 @@ public class Session : IDisposable
     private readonly bool _appDoesEarlyIntercept;
     // FP Enhancement: 2026-05-24 — cache whether the application opts into the rejection-notification callback (see IApplicationMessageRejection / NotifyMessageRejected).
     private readonly bool _appHandlesRejection;
+    // FP Enhancement: verbatim wire-frame tap for the engine Tier-2 capture seam (null when not wired). See IFixWireTap.
+    private readonly IFixWireTap? _wireTap;
 
     private const LogLevel MessagesLogLevel = LogLevel.Information;
 
@@ -241,12 +243,14 @@ public class Session : IDisposable
         int heartBtInt,
         IQuickFixLoggerFactory loggerFactory,
         IMessageFactory msgFactory,
-        string senderDefaultApplVerId)
+        string senderDefaultApplVerId,
+        IFixWireTap? wireTap = null)
     {
         _schedule = sessionSchedule;
         _msgFactory = msgFactory;
         _appDoesEarlyIntercept = app is IApplicationExt;
         _appHandlesRejection = app is IApplicationMessageRejection;
+        _wireTap = wireTap;
 
         Application = app;
         SessionID = sessId;
@@ -387,6 +391,11 @@ public class Session : IDisposable
         {
             if (_responder is null)
                 return false;
+
+            // FP Enhancement: capture the verbatim outbound frame before redaction and before it
+            // reaches the responder. SendRaw funnels every admin/app/resend/gap-fill frame through
+            // here, so this is the single outbound chokepoint. See IFixWireTap.
+            TapOutbound(message);
 
             if (Log.IsEnabled(MessagesLogLevel))
             {
@@ -549,9 +558,43 @@ public class Session : IDisposable
     /// <param name="msgStr"></param>
     public void Next(string msgStr)
     {
+        // FP Enhancement: capture the verbatim inbound frame once per wire arrival, before parsing
+        // and before any field redaction (queued-message replay re-enters via NextMessage, not
+        // here, so this fires exactly once per arrival). See IFixWireTap.
+        TapInbound(msgStr);
         NextMessage(msgStr);
         _state.LastProcessedMessageWasQueued = false;
         NextQueued();
+    }
+
+    // FP Enhancement: invoke the capture wire-tap. A throwing tap must never disrupt FIX
+    // processing, so the call is guarded; only the error text is logged (never the frame body).
+    private void TapInbound(string rawFrame)
+    {
+        if (_wireTap is null)
+            return;
+        try
+        {
+            _wireTap.OnInbound(SessionID, rawFrame);
+        }
+        catch (Exception e)
+        {
+            Log.Log(LogLevel.Warning, "FIX wire-tap OnInbound threw and was suppressed: {Error}", e.Message);
+        }
+    }
+
+    private void TapOutbound(string rawFrame)
+    {
+        if (_wireTap is null)
+            return;
+        try
+        {
+            _wireTap.OnOutbound(SessionID, rawFrame);
+        }
+        catch (Exception e)
+        {
+            Log.Log(LogLevel.Warning, "FIX wire-tap OnOutbound threw and was suppressed: {Error}", e.Message);
+        }
     }
 
     /// <summary>
