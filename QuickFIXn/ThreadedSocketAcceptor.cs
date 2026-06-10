@@ -39,13 +39,15 @@ public class ThreadedSocketAcceptor : IAcceptor
         IMessageStoreFactory storeFactory,
         SessionSettings settings,
         ILogFactory? logFactory = null,
-        IMessageFactory? messageFactory = null)
+        IMessageFactory? messageFactory = null,
+        IFixWireTap? wireTap = null)
         : this(
             application,
             storeFactory,
             settings,
             logFactory is null ? NullQuickFixLoggerFactory.Instance : new LogFactoryAdapter(logFactory),
-            messageFactory)
+            messageFactory,
+            wireTap)
     { }
 
     /// <summary>
@@ -61,7 +63,8 @@ public class ThreadedSocketAcceptor : IAcceptor
         IMessageStoreFactory storeFactory,
         SessionSettings settings,
         ILoggerFactory? loggerFactory = null,
-        IMessageFactory? messageFactory = null)
+        IMessageFactory? messageFactory = null,
+        IFixWireTap? wireTap = null)
         : this(
             application,
             storeFactory,
@@ -69,7 +72,8 @@ public class ThreadedSocketAcceptor : IAcceptor
             loggerFactory is null
                 ? NullQuickFixLoggerFactory.Instance
                 : new MelQuickFixLoggerFactory(loggerFactory),
-            messageFactory)
+            messageFactory,
+            wireTap)
     { }
 
     private ThreadedSocketAcceptor(
@@ -77,7 +81,8 @@ public class ThreadedSocketAcceptor : IAcceptor
         IMessageStoreFactory storeFactory,
         SessionSettings settings,
         IQuickFixLoggerFactory qfLoggerFactory,
-        IMessageFactory? messageFactory = null)
+        IMessageFactory? messageFactory = null,
+        IFixWireTap? wireTap = null)
     {
         if (qfLoggerFactory is LogFactoryAdapter lfa)
         {
@@ -89,7 +94,7 @@ public class ThreadedSocketAcceptor : IAcceptor
         }
         IMessageFactory mf = messageFactory ?? new DefaultMessageFactory();
         _settings = settings;
-        _sessionFactory = new SessionFactory(application, storeFactory, qfLoggerFactory, mf);
+        _sessionFactory = new SessionFactory(application, storeFactory, qfLoggerFactory, mf, wireTap);
         _qfLoggerFactory = qfLoggerFactory;
 
         try

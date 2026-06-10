@@ -30,8 +30,9 @@ public class SocketInitiator : AbstractInitiator
         IMessageStoreFactory storeFactory,
         SessionSettings settings,
         ILogFactory? logFactoryNullable = null,
-        IMessageFactory? messageFactoryNullable = null)
-        : base(application, storeFactory, settings, logFactoryNullable, messageFactoryNullable)
+        IMessageFactory? messageFactoryNullable = null,
+        IFixWireTap? wireTap = null)
+        : base(application, storeFactory, settings, logFactoryNullable, messageFactoryNullable, wireTap)
     {
         _nonSessionLog = QfLoggerFactory.CreateNonSessionLogger<SocketInitiator>();
     }
@@ -41,8 +42,9 @@ public class SocketInitiator : AbstractInitiator
         IMessageStoreFactory storeFactory,
         SessionSettings settings,
         ILoggerFactory? loggerFactoryNullable = null,
-        IMessageFactory? messageFactoryNullable = null)
-        : base(application, storeFactory, settings, loggerFactoryNullable, messageFactoryNullable)
+        IMessageFactory? messageFactoryNullable = null,
+        IFixWireTap? wireTap = null)
+        : base(application, storeFactory, settings, loggerFactoryNullable, messageFactoryNullable, wireTap)
     {
         _nonSessionLog = QfLoggerFactory.CreateNonSessionLogger<SocketInitiator>();
     }
