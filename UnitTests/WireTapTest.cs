@@ -149,6 +149,36 @@ public class WireTapTest
     }
 
     [Test]
+    public void SessionFactory_threads_wiretap_into_created_session()
+    {
+        // The acceptor/initiator only ever build a Session via SessionFactory, so the tap must
+        // ride through the factory ctor onto the Session it creates — otherwise the seam wired at
+        // Session level is unreachable in production.
+        var tap = new RecordingWireTap();
+        _application = new SessionTestSupport.MockApplication();
+        _responder = new SessionTestSupport.MockResponder();
+        _sessionId = new SessionID("FIX.4.2", "SENDER", "TARGET");
+        _seqNum = 1;
+
+        SettingsDictionary config = new();
+        config.SetBool(SessionSettings.USE_DATA_DICTIONARY, false);
+        config.SetString(SessionSettings.CONNECTION_TYPE, "acceptor");
+        config.SetString(SessionSettings.START_TIME, "00:00:00");
+        config.SetString(SessionSettings.END_TIME, "00:00:00");
+        config.SetBool(SessionSettings.PERSIST_MESSAGES, false);
+
+        var factory = new SessionFactory(_application, new MemoryStoreFactory(), null, null, tap);
+        var session = factory.Create(_sessionId, config);
+        session.SetResponder(_responder);
+        session.CheckLatency = false;
+
+        string raw = SendLogonTo(session);
+
+        Assert.That(tap.Inbound, Has.Count.EqualTo(1));
+        Assert.That(tap.Inbound[0], Is.EqualTo(raw));
+    }
+
+    [Test]
     public void Null_wiretap_processes_logon_normally()
     {
         var session = BuildAcceptor(null);

@@ -17,11 +17,16 @@ public class SessionFactory
     protected IMessageFactory _messageFactory;
     protected Dictionary<string, DataDictionary.DataDictionary> _dictionariesByPath = new();
 
+    // FP Enhancement: optional verbatim wire-frame capture seam, threaded onto every Session this
+    // factory creates. Null (the default) leaves FIX processing untouched.
+    private readonly IFixWireTap? _wireTap;
+
     internal SessionFactory(
         IApplication app,
         IMessageStoreFactory storeFactory,
         IQuickFixLoggerFactory? loggerFactory = null,
-        IMessageFactory? messageFactory = null)
+        IMessageFactory? messageFactory = null,
+        IFixWireTap? wireTap = null)
     {
         // TODO: for V2, consider ONLY instantiating MessageFactory in the Create() method,
         //   and removing instance var _messageFactory altogether.
@@ -33,6 +38,7 @@ public class SessionFactory
         _messageStoreFactory = storeFactory;
         _loggerFactory = loggerFactory ?? NullQuickFixLoggerFactory.Instance;
         _messageFactory = messageFactory ?? new DefaultMessageFactory();
+        _wireTap = wireTap;
     }
 
     private static bool DetectIfInitiator(SettingsDictionary settings)
@@ -111,7 +117,8 @@ public class SessionFactory
             heartBtInt,
             _loggerFactory,
             sessionMsgFactory,
-            senderDefaultApplVerId);
+            senderDefaultApplVerId,
+            _wireTap);
 
         if (settings.Has("MillisecondsInTimeStamp")) {
             throw new ApplicationException(

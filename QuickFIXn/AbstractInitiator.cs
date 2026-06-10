@@ -31,7 +31,8 @@ public abstract class AbstractInitiator : IInitiator
         IMessageStoreFactory storeFactory,
         SessionSettings settings,
         ILogFactory? logFactoryNullable = null,
-        IMessageFactory? messageFactoryNullable = null)
+        IMessageFactory? messageFactoryNullable = null,
+        IFixWireTap? wireTap = null)
         : this(
             app,
             storeFactory,
@@ -39,7 +40,8 @@ public abstract class AbstractInitiator : IInitiator
             logFactoryNullable is null
                 ? NullQuickFixLoggerFactory.Instance
                 : new LogFactoryAdapter(logFactoryNullable),
-            messageFactoryNullable)
+            messageFactoryNullable,
+            wireTap)
     { }
 
     protected AbstractInitiator(
@@ -47,7 +49,8 @@ public abstract class AbstractInitiator : IInitiator
         IMessageStoreFactory storeFactory,
         SessionSettings settings,
         ILoggerFactory? loggerFactoryNullable = null,
-        IMessageFactory? messageFactoryNullable = null)
+        IMessageFactory? messageFactoryNullable = null,
+        IFixWireTap? wireTap = null)
         : this(
             app,
             storeFactory,
@@ -55,7 +58,8 @@ public abstract class AbstractInitiator : IInitiator
             loggerFactoryNullable is null
                 ? NullQuickFixLoggerFactory.Instance
                 : new MelQuickFixLoggerFactory(loggerFactoryNullable),
-            messageFactoryNullable)
+            messageFactoryNullable,
+            wireTap)
     { }
 
     private AbstractInitiator(
@@ -63,7 +67,8 @@ public abstract class AbstractInitiator : IInitiator
         IMessageStoreFactory storeFactory,
         SessionSettings settings,
         IQuickFixLoggerFactory qfLoggerFactory,
-        IMessageFactory? messageFactoryNullable = null)
+        IMessageFactory? messageFactoryNullable = null,
+        IFixWireTap? wireTap = null)
     {
         _settings = settings;
         if (qfLoggerFactory is LogFactoryAdapter lfa)
@@ -75,7 +80,7 @@ public abstract class AbstractInitiator : IInitiator
             _logFactoryAdapter = lfa;
         }
         var msgFactory = messageFactoryNullable ?? new DefaultMessageFactory();
-        _sessionFactory = new SessionFactory(app, storeFactory, qfLoggerFactory, msgFactory);
+        _sessionFactory = new SessionFactory(app, storeFactory, qfLoggerFactory, msgFactory, wireTap);
         QfLoggerFactory = qfLoggerFactory;
 
         HashSet<SessionID> definedSessions = _settings.GetSessions();
