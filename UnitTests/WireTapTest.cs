@@ -98,6 +98,30 @@ public class WireTapTest
         Assert.That(tap.Outbound, Is.Not.Empty);
         Assert.That(tap.Outbound[0], Does.Contain("35=A"));
     }
+    [Test]
+    public void Outbound_tap_fires_when_responder_is_null()
+    {
+        // A-F5: the capture seam must record every generated outbound frame, not only those that
+        // reach the wire. When the responder is null (session disconnecting), Send returns false
+        // and the frame is not transmitted — but the tap must still fire so the correlator sees
+        // the attempted outbound and can mark it as un-transmitted rather than missing.
+        var tap = new RecordingWireTap();
+        _application = new SessionTestSupport.MockApplication();
+        _sessionId = new SessionID("FIX.4.2", "SENDER", "TARGET");
+        SettingsDictionary config = new();
+        config.SetBool(SessionSettings.PERSIST_MESSAGES, false);
+        config.SetString(SessionSettings.CONNECTION_TYPE, "acceptor");
+        config.SetString(SessionSettings.START_TIME, "00:00:00");
+        config.SetString(SessionSettings.END_TIME, "00:00:00");
+        var session = new Session(
+            false, _application, new MemoryStoreFactory(), _sessionId,
+            new DataDictionaryProvider(), new SessionSchedule(config), 0,
+            new LogFactoryAdapter(new NullLogFactory()), new DefaultMessageFactory(), "blah", tap);
+        // deliberate: no SetResponder call — _responder remains null
+        var result = session.Send("8=FIX.4.235=049=SENDER56=TARGET34=152=20260611-00:00:0010=000");
+        Assert.That(result, Is.False, "Send must return false when responder is null");
+        Assert.That(tap.Outbound, Has.Count.EqualTo(1), "tap must fire even though the frame was not transmitted");
+    }
 
     [Test]
     public void Inbound_tap_captures_unredacted_frame()
@@ -127,11 +151,13 @@ public class WireTapTest
     }
 
     [Test]
-    public void Inbound_tap_does_not_double_fire_on_queued_replay()
+    public void Inbound_tap_fires_on_queued_replay_to_enable_correlator_slotting()
     {
-        // Panel finding F8: the old ILog path captured a queued message twice (once on arrival,
-        // again on replay via ConstructString). The wire-tap fires only at Next(string), and
-        // replay re-enters via NextMessage, so each wire arrival is tapped exactly once.
+        // A-F1: when a frame is queued (sequence gap) and later replayed via NextQueued, the
+        // capture correlator has no pending CaptureId unless the tap fires again on replay.
+        // NextQueued now calls TapInbound before NextMessage so the correlator can slot a fresh
+        // id for the replayed frame — four taps in total: logon arrival, nos3 arrival, nos2
+        // arrival, and the nos3 replay.
         var tap = new RecordingWireTap();
         var session = BuildAcceptor(tap);
         SendLogonTo(session); // seq 1 establishes the session
@@ -143,9 +169,9 @@ public class WireTapTest
         string nos2 = CreateNos(2).ConstructString();
         session.Next(nos2);
 
-        // Three wire arrivals (logon, nos3, nos2) → three taps; the replayed seq 3 is NOT re-tapped.
-        Assert.That(tap.Inbound, Has.Count.EqualTo(3));
-        Assert.That(tap.Inbound.FindAll(f => f == nos3), Has.Count.EqualTo(1));
+        // Four taps: three wire arrivals plus one replay tap for the queued seq-3 frame.
+        Assert.That(tap.Inbound, Has.Count.EqualTo(4));
+        Assert.That(tap.Inbound.FindAll(f => f == nos3), Has.Count.EqualTo(2));
     }
 
     [Test]
