@@ -389,13 +389,13 @@ public class Session : IDisposable
     {
         lock (_sync)
         {
+            // A-F5: tap before the null-responder early return so the outbound frame is always
+            // captured even when the session is disconnecting; the capture seam must see every
+            // generated outbound, not only frames that reach the wire. See IFixWireTap.
+            TapOutbound(message);
+
             if (_responder is null)
                 return false;
-
-            // FP Enhancement: capture the verbatim outbound frame before redaction and before it
-            // reaches the responder. SendRaw funnels every admin/app/resend/gap-fill frame through
-            // here, so this is the single outbound chokepoint. See IFixWireTap.
-            TapOutbound(message);
 
             if (Log.IsEnabled(MessagesLogLevel))
             {
@@ -1851,7 +1851,12 @@ public class Session : IDisposable
             }
             else
             {
-                NextMessage(msg.ConstructString());
+                // A-F1: re-tap the queued frame on replay so the engine capture correlator can
+                // slot a fresh CaptureId for this message; without this, the single-slot
+                // correlator has no pending id when NextMessage fires and the frame is un-captured.
+                var reconstructed = msg.ConstructString();
+                TapInbound(reconstructed);
+                NextMessage(reconstructed);
             }
             _state.LastProcessedMessageWasQueued = true;
             return true;
