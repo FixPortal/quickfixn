@@ -95,7 +95,13 @@ public abstract class AbstractInitiator : IInitiator
 
         lock (_sync)
         {
-            if (_thread is not null && !IsStopped)
+            // Refuse to start while ANY worker thread reference is still live. Keying only on
+            // !IsStopped left a race: a Stop() in progress sets IsStopped=true outside _sync and
+            // then blocks in Join() before nulling _thread, so a concurrent Start() would pass the
+            // old guard, flip IsStopped back to false, and spawn a second worker while the first was
+            // still being torn down. _thread is nulled only by Stop() after Join, so this is null
+            // exactly when (and only when) it is safe to start a fresh worker.
+            if (_thread is not null)
                 return;
 
             // create all sessions
@@ -249,7 +255,12 @@ public abstract class AbstractInitiator : IInitiator
 
         // Give OnStop() time to finish its business
         _thread?.Join(5000);
-        _thread = null;
+        // Null _thread under _sync so Start()'s guard (which holds _sync) observes the cleared
+        // reference consistently and a fresh worker can be created on the next Start().
+        lock (_sync)
+        {
+            _thread = null;
+        }
 
         // dispose all sessions and clear all session sets
         lock (_sync)
