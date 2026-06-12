@@ -123,9 +123,9 @@ public class ThreadedSocketAcceptor : IAcceptor
         {
             string host = dict.GetString(SessionSettings.SOCKET_ACCEPT_HOST);
 
-            if (IsAnyIpAddress(host))
+            if (IPAddress.TryParse(host, out IPAddress? parsedAddr) && IsAnyIpAddress(host))
             {
-                socketEndPoint = new IPEndPoint(IPAddress.Any, port);
+                socketEndPoint = new IPEndPoint(parsedAddr, port);
             }
             else
             {
@@ -171,27 +171,30 @@ public class ThreadedSocketAcceptor : IAcceptor
     /// <returns>true if session added successfully, false if session already exists or is not an acceptor</returns>
     private bool CreateSession(SessionID sessionId, SettingsDictionary dict)
     {
-        if (!_sessions.ContainsKey(sessionId))
+        lock (_sync)
         {
-            string connectionType = dict.GetString(SessionSettings.CONNECTION_TYPE);
-            if ("acceptor" == connectionType)
+            if (!_sessions.ContainsKey(sessionId))
             {
-                AcceptorSocketDescriptor descriptor = GetAcceptorSocketDescriptor(dict);
-                Session session = _sessionFactory.Create(sessionId, dict);
-                descriptor.AcceptSession(session);
-                _sessions[sessionId] = session;
-
-                // start SocketReactor if it was created via AddSession call
-                // and if acceptor is already started
-                if (IsStarted && !_disposed)
+                string connectionType = dict.GetString(SessionSettings.CONNECTION_TYPE);
+                if ("acceptor" == connectionType)
                 {
-                    descriptor.SocketReactor.Start();
-                }
+                    AcceptorSocketDescriptor descriptor = GetAcceptorSocketDescriptor(dict);
+                    Session session = _sessionFactory.Create(sessionId, dict);
+                    descriptor.AcceptSession(session);
+                    _sessions[sessionId] = session;
 
-                return true;
+                    // start SocketReactor if it was created via AddSession call
+                    // and if acceptor is already started
+                    if (IsStarted && !_disposed)
+                    {
+                        descriptor.SocketReactor.Start();
+                    }
+
+                    return true;
+                }
             }
+            return false;
         }
-        return false;
     }
 
     private void StartAcceptingConnections()
@@ -206,6 +209,17 @@ public class ThreadedSocketAcceptor : IAcceptor
     }
 
     private void StopAcceptingConnections()
+    {
+        lock (_sync)
+        {
+            foreach (AcceptorSocketDescriptor socketDescriptor in _socketDescriptorForAddress.Values)
+            {
+                socketDescriptor.SocketReactor.StopAccepting();
+            }
+        }
+    }
+
+    private void ShutdownReactors()
     {
         lock (_sync)
         {
@@ -299,7 +313,10 @@ public class ThreadedSocketAcceptor : IAcceptor
     // FP Enhancement: 2026-05-24 — expose the listening endpoints so operations/tests can observe which ports the acceptor is bound to.
     public IEnumerable<IPEndPoint> EndPoints()
     {
-        return _socketDescriptorForAddress.Values.Select(socketDescriptor => socketDescriptor.Address);
+        lock (_sync)
+        {
+            return _socketDescriptorForAddress.Values.Select(socketDescriptor => socketDescriptor.Address).ToList();
+        }
     }
 
     #region Acceptor Members
@@ -334,8 +351,9 @@ public class ThreadedSocketAcceptor : IAcceptor
             if( IsStarted )
             {
                 IsStarted = false;
-                LogoutAllSessions(force);
                 StopAcceptingConnections();
+                LogoutAllSessions(force);
+                ShutdownReactors();
             }
         }
     }
@@ -348,7 +366,10 @@ public class ThreadedSocketAcceptor : IAcceptor
     {
         get
         {
-            return _sessions.Values.Any(session => session.IsLoggedOn);
+            lock (_sync)
+            {
+                return _sessions.Values.Any(session => session.IsLoggedOn);
+            }
         }
     }
 
@@ -381,7 +402,10 @@ public class ThreadedSocketAcceptor : IAcceptor
     /// <returns>the SessionIDs for the sessions managed by this acceptor</returns>
     public HashSet<SessionID> GetSessionIDs()
     {
-        return new HashSet<SessionID>(_sessions.Keys);
+        lock (_sync)
+        {
+            return new HashSet<SessionID>(_sessions.Keys);
+        }
     }
 
     /// <summary>
@@ -425,39 +449,42 @@ public class ThreadedSocketAcceptor : IAcceptor
     /// <returns>true if session removed or not already present; false if could not be removed due to an active connection</returns>
     public bool RemoveSession(SessionID sessionId, bool terminateActiveSession)
     {
-        if (_sessions.TryGetValue(sessionId, out var session))
+        lock (_sync)
         {
-            if (session.IsLoggedOn && !terminateActiveSession)
-                return false;
-            session.Disconnect("Dynamic session removal");
-
-            // Track a descriptor that this removal empties, so its listening port can be freed.
-            AcceptorSocketDescriptor? emptiedDescriptor = null;
-            foreach (AcceptorSocketDescriptor descriptor in _socketDescriptorForAddress.Values)
+            if (_sessions.TryGetValue(sessionId, out var session))
             {
-                if (descriptor.RemoveSession(sessionId))
+                if (session.IsLoggedOn && !terminateActiveSession)
+                    return false;
+                session.Disconnect("Dynamic session removal");
+
+                // Track a descriptor that this removal empties, so its listening port can be freed.
+                AcceptorSocketDescriptor? emptiedDescriptor = null;
+                foreach (AcceptorSocketDescriptor descriptor in _socketDescriptorForAddress.Values)
                 {
-                    if (descriptor.GetAcceptedSessions().Count == 0)
-                        emptiedDescriptor = descriptor;
-                    break;
+                    if (descriptor.RemoveSession(sessionId))
+                    {
+                        if (descriptor.GetAcceptedSessions().Count == 0)
+                            emptiedDescriptor = descriptor;
+                        break;
+                    }
+                }
+
+                _sessions.Remove(sessionId);
+                session.Dispose();
+                lock (_settings)
+                    _settings.Remove(sessionId);
+
+                // The removed session was the last one on its port: shut the reactor down and drop
+                // the descriptor, so the port is released and a later AddSession on it builds a fresh
+                // descriptor + reactor. Done after the loop to avoid mutating the dictionary mid-iteration.
+                if (emptiedDescriptor is not null)
+                {
+                    emptiedDescriptor.SocketReactor.Shutdown();
+                    _socketDescriptorForAddress.Remove(emptiedDescriptor.Address);
                 }
             }
-
-            _sessions.Remove(sessionId);
-            session.Dispose();
-            lock (_settings)
-                _settings.Remove(sessionId);
-
-            // The removed session was the last one on its port: shut the reactor down and drop
-            // the descriptor, so the port is released and a later AddSession on it builds a fresh
-            // descriptor + reactor. Done after the loop to avoid mutating the dictionary mid-iteration.
-            if (emptiedDescriptor is not null)
-            {
-                emptiedDescriptor.SocketReactor.Shutdown();
-                _socketDescriptorForAddress.Remove(emptiedDescriptor.Address);
-            }
+            return true;
         }
-        return true;
     }
 
     #endregion
@@ -467,20 +494,33 @@ public class ThreadedSocketAcceptor : IAcceptor
     /// Any override should call base.Dispose(disposing).
     /// </summary>
     /// <param name="disposing">true if called from Dispose()</param>
-    protected void Dispose(bool disposing)
+    protected virtual void Dispose(bool disposing)
     {
         if(_disposed) { return; }
         try
         {
-            Stop();
-            DisposeSessions();
-            _logFactoryAdapter?.Dispose();
-            _sessions.Clear();
-            _disposed = true;
+            if (disposing)
+            {
+                Stop();
+                // Take _sync around the session-collection teardown so a concurrent
+                // CreateSession/RemoveSession (which lock _sync) cannot mutate _sessions
+                // mid-enumeration. Stop() is invoked outside the lock — the acceptor lock is
+                // non-reentrant and Stop() takes it internally.
+                lock (_sync)
+                {
+                    DisposeSessions();
+                    _sessions.Clear();
+                }
+                _logFactoryAdapter?.Dispose();
+            }
         }
         catch (ObjectDisposedException)
         {
             // ignore
+        }
+        finally
+        {
+            _disposed = true;
         }
     }
     /// <summary>

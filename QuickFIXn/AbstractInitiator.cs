@@ -93,21 +93,27 @@ public abstract class AbstractInitiator : IInitiator
         if (_disposed)
             throw new ObjectDisposedException(this.GetType().Name);
 
-        // create all sessions
-        foreach (SessionID sessionId in _settings.GetSessions())
+        lock (_sync)
         {
-            SettingsDictionary dict = _settings.Get(sessionId);
-            CreateSession(sessionId, dict);
+            if (_thread is not null && !IsStopped)
+                return;
+
+            // create all sessions
+            foreach (SessionID sessionId in _settings.GetSessions())
+            {
+                SettingsDictionary dict = _settings.Get(sessionId);
+                CreateSession(sessionId, dict);
+            }
+
+            if (0 == _sessions.Count)
+                throw new ConfigError("No sessions defined for initiator");
+
+            // start it up
+            IsStopped = false;
+            OnConfigure(_settings);
+            _thread = new Thread(OnStart);
+            _thread.Start();
         }
-
-        if (0 == _sessions.Count)
-            throw new ConfigError("No sessions defined for initiator");
-
-        // start it up
-        IsStopped = false;
-        OnConfigure(_settings);
-        _thread = new Thread(OnStart);
-        _thread.Start();
     }
 
     /// <summary>
@@ -269,7 +275,10 @@ public abstract class AbstractInitiator : IInitiator
                 foreach (SessionID sessionId in _connected)
                 {
                     Session? session = Session.LookupSession(sessionId);
-                    return session is not null && session.IsLoggedOn;
+                    if (session is not null && session.IsLoggedOn)
+                    {
+                        return true;
+                    }
                 }
             }
 
@@ -409,7 +418,10 @@ public abstract class AbstractInitiator : IInitiator
     /// <returns>the SessionIDs for the sessions managed by this initiator</returns>
     public HashSet<SessionID> GetSessionIDs()
     {
-        return new HashSet<SessionID>(_sessions.Keys);
+        lock (_sync)
+        {
+            return new HashSet<SessionID>(_sessions.Keys);
+        }
     }
 
     private bool _disposed = false;

@@ -19,15 +19,18 @@ public class WireTapTest
     private sealed class RecordingWireTap : IFixWireTap
     {
         public List<string> Inbound { get; } = new();
+        public List<string> InboundReplay { get; } = new();
         public List<string> Outbound { get; } = new();
 
         public void OnInbound(SessionID sessionId, string rawFrame) => Inbound.Add(rawFrame);
+        public void OnInboundReplay(SessionID sessionId, string rawFrame) => InboundReplay.Add(rawFrame);
         public void OnOutbound(SessionID sessionId, string rawFrame) => Outbound.Add(rawFrame);
     }
 
     private sealed class ThrowingWireTap : IFixWireTap
     {
         public void OnInbound(SessionID sessionId, string rawFrame) => throw new InvalidOperationException("boom");
+        public void OnInboundReplay(SessionID sessionId, string rawFrame) => throw new InvalidOperationException("boom");
         public void OnOutbound(SessionID sessionId, string rawFrame) => throw new InvalidOperationException("boom");
     }
 
@@ -169,9 +172,11 @@ public class WireTapTest
         string nos2 = CreateNos(2).ConstructString();
         session.Next(nos2);
 
-        // Four taps: three wire arrivals plus one replay tap for the queued seq-3 frame.
-        Assert.That(tap.Inbound, Has.Count.EqualTo(4));
-        Assert.That(tap.Inbound.FindAll(f => f == nos3), Has.Count.EqualTo(2));
+        // Three wire arrivals on the inbound tap plus one replay tap on the inbound-replay tap.
+        Assert.That(tap.Inbound, Has.Count.EqualTo(3));
+        Assert.That(tap.InboundReplay, Has.Count.EqualTo(1));
+        Assert.That(tap.Inbound.FindAll(f => f == nos3), Has.Count.EqualTo(1));
+        Assert.That(tap.InboundReplay[0], Is.EqualTo(nos3));
     }
 
     [Test]

@@ -110,6 +110,11 @@ public class SocketReader : IDisposable
         catch (AggregateException ex) // Timeout
         {
             _currentReadTask = null;
+            if (ex.InnerException is OperationCanceledException) {
+                // Nothing read 
+                return 0;
+            }
+
             IOException? ioException = ex.InnerException as IOException;
             SocketException? inner = ioException?.InnerException as SocketException;
             if (inner is not null && inner.SocketErrorCode == SocketError.TimedOut) {
@@ -163,8 +168,17 @@ public class SocketReader : IDisposable
             try
             {
                 // FP Enhancement: 2026-06-01 — Log each incoming message type at Information so receipt is visible in ACA log streams (QF/n FileLog output does not surface there).
+                string msgType;
+                try
+                {
+                    msgType = Message.GetMsgType(msg);
+                }
+                catch (Exception)
+                {
+                    msgType = "unknown";
+                }
                 _qfSession.Log.Log(LogLevel.Information, LogEventIds.IncomingMessage,
-                    "Incoming {MsgType} on {SessionId}", Message.GetMsgType(msg), _qfSession.SessionID);
+                    "Incoming {MsgType} on {SessionId}", msgType, _qfSession.SessionID);
                 _qfSession.Next(msg);
             }
             catch (Exception e)
@@ -307,9 +321,22 @@ public class SocketReader : IDisposable
                 _nonSessionLog.Log(LogLevel.Warning,
                     "SocketReader: disposing with an in-flight ReadAsync; cancelling gracefully (ObjectDisposedException would have killed the reader thread without this fix).");
 
-            _currentReadTask?.ContinueWith(_ => { }).Wait(1000);
-            _currentReadTask?.Dispose();
-            _currentReadTask = null;
+            try
+            {
+                if (_currentReadTask is not null)
+                {
+                    bool completed = _currentReadTask.ContinueWith(_ => { }).Wait(1000);
+                    if (completed && _currentReadTask.IsCompleted)
+                    {
+                        _currentReadTask.Dispose();
+                    }
+                    _currentReadTask = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                _nonSessionLog.Log(LogLevel.Warning, ex, "SocketReader: error during current read task cleanup.");
+            }
 
             _readCancellationTokenSource.Dispose();
 

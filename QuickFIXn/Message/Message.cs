@@ -353,6 +353,10 @@ public class Message : FieldMap
     public override void Clear()
     {
         _invalidField = 0;
+        _isValid = true;
+        AllowStringTruncationForCharFields = false;
+        Header.AllowStringTruncationForCharFields = false;
+        Trailer.AllowStringTruncationForCharFields = false;
         Header.Clear();
         base.Clear();
         Trailer.Clear();
@@ -400,6 +404,14 @@ public class Message : FieldMap
         RawMessage = msgstr;
 
         Clear();
+
+        if ((transportDict is not null && transportDict.AllowStringTruncationForCharFields) ||
+            (appDict is not null && appDict.AllowStringTruncationForCharFields))
+        {
+            this.AllowStringTruncationForCharFields = true;
+            this.Header.AllowStringTruncationForCharFields = true;
+            this.Trailer.AllowStringTruncationForCharFields = true;
+        }
 
         bool expectingHeader = true;
         bool expectingBody = true;
@@ -543,6 +555,7 @@ public class Message : FieldMap
 
                         Group grp = msgFactory?.Create(beginString, msgType, ddField.Tag)
                             ?? new Group(ddField.Tag, grpSpec.Delim);
+                        grp.AllowStringTruncationForCharFields = fieldMap.AllowStringTruncationForCharFields;
                         FromJson(jsonGrp, beginString, msgType, grpSpec, msgFactory, dataDict, grp);
                         fieldMap.AddGroup(grp);
                     }
@@ -599,6 +612,7 @@ public class Message : FieldMap
                 // Create a new group!
                 grp = msgFactory?.Create(ExtractBeginString(msgstr), GetMsgType(msgstr), grpNoFld.Tag)
                     ?? new Group(grpNoFld.Tag, grpEntryDelimiterTag);
+                grp.AllowStringTruncationForCharFields = fieldMap.AllowStringTruncationForCharFields;
             }
             else if (!groupSpec.IsField(f.Tag))
             {

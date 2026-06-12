@@ -33,6 +33,7 @@ public class Session : IDisposable
     private readonly bool _appHandlesRejection;
     // FP Enhancement: verbatim wire-frame tap for the engine Tier-2 capture seam (null when not wired). See IFixWireTap.
     private readonly IFixWireTap? _wireTap;
+    private readonly System.Collections.Concurrent.ConcurrentDictionary<(bool Outbound, ulong Seq), (int LogId, DateTime CaptureTime)> _resentTracker = new();
 
     private const LogLevel MessagesLogLevel = LogLevel.Information;
 
@@ -465,6 +466,8 @@ public class Session : IDisposable
             _state.ReceivedReset = false;
             _state.SentReset = false;
             _state.ClearQueue();
+            // Drop the LogExtended resend-correlation cache; its seqnum keys are recycled next session.
+            _resentTracker.Clear();
             _state.LogoutReason = "";
             if (ResetOnDisconnect)
                 _state.Reset("ResetOnDisconnect");
@@ -583,6 +586,20 @@ public class Session : IDisposable
         }
     }
 
+    private void TapInboundReplay(string rawFrame)
+    {
+        if (_wireTap is null)
+            return;
+        try
+        {
+            _wireTap.OnInboundReplay(SessionID, rawFrame);
+        }
+        catch (Exception e)
+        {
+            Log.Log(LogLevel.Warning, "FIX wire-tap OnInboundReplay threw and was suppressed: {Error}", e.Message);
+        }
+    }
+
     private void TapOutbound(string rawFrame)
     {
         if (_wireTap is null)
@@ -616,10 +633,10 @@ public class Session : IDisposable
                         LogAssist.RedactSensitiveFields(msgStr, RedactFieldsInLogs, RedactionLogText));
                 }
             }
-        } catch (Exception)
+        } catch (Exception ex)
         {
-            Log.Log(MessagesLogLevel, LogEventIds.IncomingMessage, "{Message}",
-                LogAssist.RedactSensitiveFields(msgStr, RedactFieldsInLogs, RedactionLogText));
+            string safeMsg = msgStr.Length > 200 ? msgStr.Substring(0, 200) + "... [truncated due to error]" : msgStr;
+            Log.Log(LogLevel.Warning, ex, "Failed to format/redact incoming message. Raw start: {Message}", safeMsg);
         }
 
         MessageBuilder msgBuilder = new MessageBuilder(
@@ -683,8 +700,9 @@ public class Session : IDisposable
                 NextLogon(message);
             else if (MsgType.LOGOUT.Equals(msgType))
                 NextLogout(message);
-            // FP Enhancement: 2026-05-24 — tolerate a Logout (msgtype 5) arriving before logon completes; FIX spec permits it and disconnecting abruptly hides the counterparty's reason.
-            else if (!IsLoggedOn && msgType != "5")
+            // FP Enhancement: 2026-05-24 — tolerate a Logout (msgtype 5) arriving before logon completes; FIX spec permits it.
+            // This is handled by routing MsgType.LOGOUT to NextLogout above regardless of IsLoggedOn.
+            else if (!IsLoggedOn)
                 Disconnect($"Received msg type '{msgType}' when not logged on");
             else if (MsgType.HEARTBEAT.Equals(msgType))
                 NextHeartbeat(message);
@@ -702,7 +720,7 @@ public class Session : IDisposable
             }
 
             // FP Enhancement: 2026-05-24 — emit incoming-message XML/JSON via Log.OnIncomingAndOutgoing when the SessionID has a tracked LogId (see LogExtended below).
-            LogExtended(message, msgType);
+            LogExtended(message, msgType, isOutbound: false);
 
         }
         catch (InvalidMessage e)
@@ -723,8 +741,16 @@ public class Session : IDisposable
         {
             if (e.InnerException is not null)
                 Log.Log(LogLevel.Error, "{Message}", e.InnerException.Message);
-            // FP Enhancement: 2026-06-08 — pass the offending field value (e.Value, e.g. from IncorrectTagValue) into the reject so it lands in the structured reject-log line.
-            GenerateReject(msgBuilder, e.sessionRejectReason, e.Field, e.Value);
+
+            if (!_state.ReceivedLogon)
+            {
+                Disconnect("Logon message has invalid tag format/value: " + e.Message);
+            }
+            else
+            {
+                // FP Enhancement: 2026-06-08 — pass the offending field value (e.Value, e.g. from IncorrectTagValue) into the reject so it lands in the structured reject-log line.
+                GenerateReject(msgBuilder, e.sessionRejectReason, e.Field, e.Value);
+            }
         }
         catch (UnsupportedVersion uvx)
         {
@@ -796,11 +822,15 @@ public class Session : IDisposable
             if (!_state.SentReset)
             {
                 _state.Reset("Reset requested by counterparty");
+                _resentTracker.Clear();
             }
         }
 
         if (IsAcceptor && ResetOnLogon)
+        {
             _state.Reset("ResetOnLogon");
+            _resentTracker.Clear();
+        }
         if (RefreshOnLogon)
             Refresh();
 
@@ -920,7 +950,7 @@ public class Session : IDisposable
                         }
                         Send(msg.ConstructString());
                         // FP Enhancement: 2026-06-08 — mirror the outbound LogExtended hook for replayed messages. The resend path sends via Send(string), bypassing SendRaw where LogExtended is invoked, so tracked resent application messages were missing from the extended XML/JSON audit stream. (LogExtended itself skips admin message types.)
-                        LogExtended(msg, msg.Header.GetString(Tags.MsgType));
+                        LogExtended(msg, msg.Header.GetString(Tags.MsgType), isOutbound: true);
                         begin = 0;
                     }
                     current = msgSeqNum + 1;
@@ -1654,14 +1684,14 @@ public class Session : IDisposable
                 PopulateSessionRejectReason(reject, field, reason.Description, true);
 
             // FP Enhancement: 2026-05-24 — structured rejection log event (see Log.OnRejectionEvent / LoggerExtensions).
-            Log.OnRejectionEvent(message.RawMessage, $"Message {msgSeqNum} Rejected: {reason.Description} (Field={field}, Value={value})");
+            Log.OnRejectionEvent(LogAssist.RedactSensitiveFields(message.RawMessage, RedactFieldsInLogs, RedactionLogText), $"Message {msgSeqNum} Rejected: {reason.Description} (Field={field}, Value={value})");
             Log.Log(LogLevel.Warning, "Message {MsgSeqNum} Rejected: {Reason} (Field={Field})", msgSeqNum, reason.Description, field);
         }
         else
         {
             PopulateRejectReason(reject, reason.Description);
             // FP Enhancement: 2026-05-24 — structured rejection log event for the no-field branch (see above).
-            Log.OnRejectionEvent(message.RawMessage, $"Message {msgSeqNum} Rejected: {reason.Value}");
+            Log.OnRejectionEvent(LogAssist.RedactSensitiveFields(message.RawMessage, RedactFieldsInLogs, RedactionLogText), $"Message {msgSeqNum} Rejected: {reason.Value}");
             Log.Log(LogLevel.Error, "Message {MsgSeqNum} Rejected: {Reason}", msgSeqNum, reason.Value);
         }
 
@@ -1710,7 +1740,10 @@ public class Session : IDisposable
                 _state.Get(refSeqNum, refSeqNum, messages);
 
                 if (messages.Count > 0)
-                    originalMessage = new Message(messages[0]);
+                {
+                    originalMessage = new Message();
+                    originalMessage.FromString(messages[0], false, SessionDataDictionary, ApplicationDataDictionary, _msgFactory, ignoreBody: false);
+                }
             }
 
             ((IApplicationMessageRejection)Application).OnMessageRejected(rejectMessage, originalMessage, SessionID, reason);
@@ -1723,13 +1756,41 @@ public class Session : IDisposable
 
     // FP Enhancement: 2026-05-24 — emit XML + JSON renderings of tracked messages via Log.OnIncomingAndOutgoing. Tracked messages are those whose rendered string is present in SessionID.SessionLogIdentifiers (populated by application code).
     // FP Enhancement: 2026-06-08 — render the message string once and do a single atomic TryGetValue. The prior ContainsKey-then-indexer pair was a TOCTOU on the ConcurrentDictionary: if application code removed the entry between the two calls, the indexer threw KeyNotFoundException onto the send/receive path.
-    private void LogExtended(Message message, string msgType)
+    private void LogExtended(Message message, string msgType, bool isOutbound)
     {
         if (Message.IsAdminMsgType(msgType)) return;
+        if (SessionID.SessionLogIdentifiers.IsEmpty) return;
 
-        string rendered = message.ToString();
-        if (rendered != null && SessionID.SessionLogIdentifiers.TryGetValue(rendered, out var tracked))
+        (int LogId, DateTime CaptureTime) tracked = default;
+        bool found = false;
+        ulong seqNum = 0;
+
+        if (message.Header.IsSetField(Tags.MsgSeqNum))
         {
+            seqNum = message.Header.GetULong(Tags.MsgSeqNum);
+            if (_resentTracker.TryGetValue((isOutbound, seqNum), out tracked))
+            {
+                found = true;
+            }
+        }
+
+        string? rendered = null;
+        if (!found)
+        {
+            rendered = message.ToString();
+            if (rendered != null && SessionID.SessionLogIdentifiers.TryGetValue(rendered, out tracked))
+            {
+                found = true;
+                if (seqNum != 0)
+                {
+                    _resentTracker[(isOutbound, seqNum)] = tracked;
+                }
+            }
+        }
+
+        if (found)
+        {
+            rendered ??= message.ToString();
             Log.OnIncomingAndOutgoing((tracked.LogId, rendered, message.ToXML(), message.ToJSON()));
         }
     }
@@ -1855,10 +1916,13 @@ public class Session : IDisposable
                 // slot a fresh CaptureId for this message; without this, the single-slot
                 // correlator has no pending id when NextMessage fires and the frame is un-captured.
                 var reconstructed = msg.ConstructString();
-                TapInbound(reconstructed);
+                TapInboundReplay(reconstructed);
+                // Set the queued flag BEFORE NextMessage so the replayed message's own Verify sees it
+                // (the #309 too-low SequenceReset-GapFill "obey anyway" case at Verify). The former
+                // post-loop assignment was a redundant duplicate that lagged the flag by one message.
+                _state.LastProcessedMessageWasQueued = true;
                 NextMessage(reconstructed);
             }
-            _state.LastProcessedMessageWasQueued = true;
             return true;
         }
         return false;
@@ -1926,7 +1990,7 @@ public class Session : IDisposable
 
             // FP Enhancement: 2026-05-24 — mirror the incoming LogExtended hook for outbound messages so tracked sends are emitted via Log.OnIncomingAndOutgoing.
             var result = Send(messageString);
-            LogExtended(message, msgType);
+            LogExtended(message, msgType, isOutbound: true);
             return result;
         }
     }

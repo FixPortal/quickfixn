@@ -22,6 +22,11 @@ public interface IFixWireTap
     /// <param name="rawFrame">The exact wire bytes, SOH-delimited, before parsing or redaction.</param>
     void OnInbound(SessionID sessionId, string rawFrame);
 
+    /// <summary>Called once per inbound queued-replay arrival with the verbatim, pre-parse frame.</summary>
+    /// <param name="sessionId">The session the frame arrived on.</param>
+    /// <param name="rawFrame">The exact wire bytes, SOH-delimited, before parsing or redaction.</param>
+    void OnInboundReplay(SessionID sessionId, string rawFrame) => OnInbound(sessionId, rawFrame);
+
     /// <summary>Called for every outbound frame with the verbatim, pre-redaction body.</summary>
     /// <param name="sessionId">The session the frame is sent on.</param>
     /// <param name="rawFrame">The exact wire bytes, SOH-delimited, before redaction.</param>

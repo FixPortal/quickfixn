@@ -148,7 +148,12 @@ public class SocketInitiator : AbstractInitiator
             _sessionToHostNum[sessionId] = ++num;
 
             _socketSettings.ServerCommonName = hostName;
-            return new IPEndPoint(addrs.First(a => a.AddressFamily == AddressFamily.InterNetwork), port);
+            IPAddress? addr = addrs.FirstOrDefault(a => a.AddressFamily == AddressFamily.InterNetwork)
+                              ?? addrs.FirstOrDefault(a => a.AddressFamily == AddressFamily.InterNetworkV6);
+            if (addr is null)
+                throw new Exception("No IPv4 or IPv6 address found");
+
+            return new IPEndPoint(addr, port);
         }
         catch (Exception e)
         {
@@ -239,8 +244,19 @@ public class SocketInitiator : AbstractInitiator
             // Create a Ssl-SocketInitiatorThread if a certificate is given
             SocketInitiatorThread t = new SocketInitiatorThread(
                 this, session, socketEndPoint, socketSettings, QfLoggerFactory);
-            t.Start();
             AddThread(t);
+            try
+            {
+                t.Start();
+            }
+            catch (Exception)
+            {
+                lock (_sync)
+                {
+                    _threads.Remove(session.SessionID);
+                }
+                throw;
+            }
         }
         catch (Exception e) {
             session.Log.Log(LogLevel.Error, e, "Connection error: {Message}", e.Message);
