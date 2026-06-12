@@ -14,7 +14,7 @@ For general QuickFIX/n documentation, refer to the upstream `README.md`.
 
 | Remote     | URL                                  | Purpose                       |
 |------------|--------------------------------------|-------------------------------|
-| `origin`   | `github.com/FixPortal/quickfixn`     | FixPortal fork (this repo)    |
+| `origin`   | `github.com/FixPortal/fixportal-quickfixn`     | FixPortal fork (this repo)    |
 | `upstream` | `github.com/connamara/quickfixn`     | Official QuickFIX/n (GitHub)  |
 
 ### Key branches
