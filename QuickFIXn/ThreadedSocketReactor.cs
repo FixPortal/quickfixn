@@ -70,7 +70,7 @@ public class ThreadedSocketReactor
         }
     }
 
-    public void Shutdown()
+    public void StopAccepting()
     {
         lock (_sync)
         {
@@ -81,6 +81,29 @@ public class ThreadedSocketReactor
                     _state = State.SHUTDOWN_REQUESTED;
                     _tcpListener.Server.Close();
                     _tcpListener.Stop();
+                }
+                catch (Exception e)
+                {
+                    _nonSessionLog.Log(LogLevel.Error, e, "Error while closing server socket");
+                }
+            }
+        }
+    }
+
+    public void Shutdown()
+    {
+        lock (_sync)
+        {
+            if (ReactorState != State.SHUTDOWN_COMPLETE)
+            {
+                try
+                {
+                    if (ReactorState == State.RUNNING)
+                    {
+                        _state = State.SHUTDOWN_REQUESTED;
+                        _tcpListener.Server.Close();
+                        _tcpListener.Stop();
+                    }
                     ShutdownClientHandlerThreads();
                 }
                 catch (Exception e)

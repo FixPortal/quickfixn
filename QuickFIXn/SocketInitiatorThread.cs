@@ -189,20 +189,51 @@ public class SocketInitiatorThread : IResponder
         return true;
     }
 
+    private readonly object _disconnectSync = new();
+    private bool _disconnected = false;
+
     public void Disconnect()
     {
+        lock (_disconnectSync)
+        {
+            if (_disconnected)
+                return;
+            _disconnected = true;
+        }
+
         // FP Enhancement: 2026-06-01 — Cancel before waiting; dispose CTS only after the in-flight ReadAsync unwinds to prevent ObjectDisposedException killing the reader thread.
-        _readCancellationTokenSource.Cancel();
+        try
+        {
+            _readCancellationTokenSource.Cancel();
+        }
+        catch (ObjectDisposedException) { }
 
         if (_currentReadTask is { IsCompleted: false })
             NonSessionLog.Log(LogLevel.Warning,
                 "SocketInitiatorThread: disconnecting with an in-flight ReadAsync; cancelling gracefully (ObjectDisposedException would have killed the reader thread without this fix).");
 
-        _currentReadTask?.ContinueWith(_ => { }).Wait(1000);
-        _currentReadTask?.Dispose();
-        _currentReadTask = null;
+        try
+        {
+            if (_currentReadTask is not null)
+            {
+                bool completed = _currentReadTask.ContinueWith(_ => { }).Wait(1000);
+                if (completed && _currentReadTask.IsCompleted)
+                {
+                    _currentReadTask.Dispose();
+                }
+                _currentReadTask = null;
+            }
+        }
+        catch (Exception ex)
+        {
+            NonSessionLog.Log(LogLevel.Warning, ex, "SocketInitiatorThread: error during current read task cleanup.");
+        }
 
-        _readCancellationTokenSource.Dispose();
+        try
+        {
+            _readCancellationTokenSource.Dispose();
+        }
+        catch (ObjectDisposedException) { }
 
         _stream?.Close();
     }

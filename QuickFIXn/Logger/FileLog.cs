@@ -107,6 +107,7 @@ public class FileLog : ILog
         lock (_sync)
         {
             DisposedCheck();
+            DirectoryCheck();
 
             _messageLog?.Dispose();
             _eventLog?.Dispose();
@@ -126,7 +127,7 @@ public class FileLog : ILog
             DisposedCheck();
             DirectoryCheck();
             EnsureMessageLogInit();
-            _messageLog.WriteLine(DateTimeConverter.ToFIX(DateTime.UtcNow, TimeStampPrecision.Millisecond) + " : " + msg);
+            _messageLog.WriteLine(DateTimeConverter.ToFIX(_timeProvider.GetUtcNow().UtcDateTime, TimeStampPrecision.Millisecond) + " : " + msg);
         }
     }
 
@@ -137,7 +138,7 @@ public class FileLog : ILog
             DisposedCheck();
             DirectoryCheck();
             EnsureMessageLogInit();
-            _messageLog.WriteLine(DateTimeConverter.ToFIX(DateTime.UtcNow, TimeStampPrecision.Millisecond) + " : " + msg);
+            _messageLog.WriteLine(DateTimeConverter.ToFIX(_timeProvider.GetUtcNow().UtcDateTime, TimeStampPrecision.Millisecond) + " : " + msg);
         }
     }
 
@@ -148,7 +149,7 @@ public class FileLog : ILog
             DisposedCheck();
             DirectoryCheck();
             EnsureEventLogInit();
-            _eventLog.WriteLine(DateTimeConverter.ToFIX(DateTime.UtcNow, TimeStampPrecision.Millisecond) + " : " + s);
+            _eventLog.WriteLine(DateTimeConverter.ToFIX(_timeProvider.GetUtcNow().UtcDateTime, TimeStampPrecision.Millisecond) + " : " + s);
         }
     }
 
@@ -215,16 +216,17 @@ public class FileLog : ILog
         }
     }
 
+    [MemberNotNull(nameof(_messageLogFileName), nameof(_eventLogFileName))]
     private void InitialiseLogs(string normalizedPath, bool initOnly)
     {
-        _creationDate = _timeProvider.GetLocalNow().Date;
-
         if (!System.IO.Directory.Exists(normalizedPath))
             System.IO.Directory.CreateDirectory(normalizedPath);
 
         _messageLogFileName = System.IO.Path.Combine(normalizedPath, _sessionPrefix + ".messages.current.log");
         _eventLogFileName = System.IO.Path.Combine(normalizedPath, _sessionPrefix + ".event.current.log");
         _currentFileLogPath = normalizedPath;
+
+        _creationDate = _timeProvider.GetLocalNow().Date;
 
         if (initOnly)
             return;
@@ -244,6 +246,6 @@ public class FileLog : ILog
     public void OnIncomingAndOutgoing((int Id, string Raw, string Xml, string Json) message) { }
     public void OnRejectionEvent(string originalMessage, string rejectionText)
     {
-        OnEvent(rejectionText);
+        OnEvent($"{rejectionText} | Original: {originalMessage}");
     }
 }

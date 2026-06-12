@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace QuickFix.Logger;
 
@@ -19,29 +20,89 @@ internal class CompositeLog : ILog
     public void Clear()
     {
         DisposedCheck();
+        List<Exception>? exceptions = null;
         foreach (var log in _logs)
-            log.Clear();
+        {
+            try
+            {
+                log.Clear();
+            }
+            catch (Exception ex)
+            {
+                exceptions ??= new List<Exception>();
+                exceptions.Add(ex);
+            }
+        }
+        if (exceptions is not null)
+        {
+            throw new AggregateException("One or more logs failed to clear", exceptions);
+        }
     }
 
     public void OnIncoming(string msg)
     {
         DisposedCheck();
+        List<Exception>? exceptions = null;
         foreach (var log in _logs)
-            log.OnIncoming(msg);
+        {
+            try
+            {
+                log.OnIncoming(msg);
+            }
+            catch (Exception ex)
+            {
+                exceptions ??= new List<Exception>();
+                exceptions.Add(ex);
+            }
+        }
+        if (exceptions is not null)
+        {
+            throw new AggregateException("One or more logs failed to process OnIncoming", exceptions);
+        }
     }
 
     public void OnOutgoing(string msg)
     {
         DisposedCheck();
+        List<Exception>? exceptions = null;
         foreach (var log in _logs)
-            log.OnOutgoing(msg);
+        {
+            try
+            {
+                log.OnOutgoing(msg);
+            }
+            catch (Exception ex)
+            {
+                exceptions ??= new List<Exception>();
+                exceptions.Add(ex);
+            }
+        }
+        if (exceptions is not null)
+        {
+            throw new AggregateException("One or more logs failed to process OnOutgoing", exceptions);
+        }
     }
 
     public void OnEvent(string s)
     {
         DisposedCheck();
+        List<Exception>? exceptions = null;
         foreach (var log in _logs)
-            log.OnEvent(s);
+        {
+            try
+            {
+                log.OnEvent(s);
+            }
+            catch (Exception ex)
+            {
+                exceptions ??= new List<Exception>();
+                exceptions.Add(ex);
+            }
+        }
+        if (exceptions is not null)
+        {
+            throw new AggregateException("One or more logs failed to process OnEvent", exceptions);
+        }
     }
 
     public void Dispose()
@@ -55,8 +116,24 @@ internal class CompositeLog : ILog
         if (_disposed) return;
         if (disposing)
         {
+            List<Exception>? exceptions = null;
             foreach (var log in _logs)
-                log.Dispose();
+            {
+                try
+                {
+                    log.Dispose();
+                }
+                catch (Exception ex)
+                {
+                    exceptions ??= new List<Exception>();
+                    exceptions.Add(ex);
+                }
+            }
+            _disposed = true;
+            if (exceptions is not null)
+            {
+                throw new AggregateException("One or more logs failed to dispose", exceptions);
+            }
         }
         _disposed = true;
     }
@@ -70,19 +147,91 @@ internal class CompositeLog : ILog
     ~CompositeLog() => Dispose(false);
 
     // FP Enhancement: 2026-05-24 — fan FixPortal log events out to every child log in the composite (rejections & tracked-message tuples).
-    public void LogOn() { }
-    public void LogOff() { }
+    public void LogOn()
+    {
+        DisposedCheck();
+        List<Exception>? exceptions = null;
+        foreach (var log in _logs)
+        {
+            try
+            {
+                log.LogOn();
+            }
+            catch (Exception ex)
+            {
+                exceptions ??= new List<Exception>();
+                exceptions.Add(ex);
+            }
+        }
+        if (exceptions is not null)
+        {
+            throw new AggregateException("One or more logs failed to process LogOn", exceptions);
+        }
+    }
+
+    public void LogOff()
+    {
+        DisposedCheck();
+        List<Exception>? exceptions = null;
+        foreach (var log in _logs)
+        {
+            try
+            {
+                log.LogOff();
+            }
+            catch (Exception ex)
+            {
+                exceptions ??= new List<Exception>();
+                exceptions.Add(ex);
+            }
+        }
+        if (exceptions is not null)
+        {
+            throw new AggregateException("One or more logs failed to process LogOff", exceptions);
+        }
+    }
 
     public void OnIncomingAndOutgoing((int Id, string Raw, string Xml, string Json) message)
     {
         DisposedCheck();
+        List<Exception>? exceptions = null;
         foreach (var log in _logs)
-            log.OnIncomingAndOutgoing((message.Id, message.Raw, message.Xml, message.Json));
+        {
+            try
+            {
+                log.OnIncomingAndOutgoing((message.Id, message.Raw, message.Xml, message.Json));
+            }
+            catch (Exception ex)
+            {
+                exceptions ??= new List<Exception>();
+                exceptions.Add(ex);
+            }
+        }
+        if (exceptions is not null)
+        {
+            throw new AggregateException("One or more logs failed to process OnIncomingAndOutgoing", exceptions);
+        }
     }
+
     public void OnRejectionEvent(string originalMessage, string rejectionText)
     {
         DisposedCheck();
+        List<Exception>? exceptions = null;
         foreach (var log in _logs)
-            log.OnRejectionEvent(originalMessage, rejectionText);
+        {
+            try
+            {
+                log.OnRejectionEvent(originalMessage, rejectionText);
+            }
+            catch (Exception ex)
+            {
+                exceptions ??= new List<Exception>();
+                exceptions.Add(ex);
+            }
+        }
+        if (exceptions is not null)
+        {
+            throw new AggregateException("One or more logs failed to process OnRejectionEvent", exceptions);
+        }
     }
 }

@@ -121,6 +121,50 @@ public class FixPortalRejectValueCarrierTest
         Assert.That(cap.Rejections[^1].Text, Does.Contain("Field=54"));
         Assert.That(cap.Rejections[^1].Text, Does.Contain("Value=ZZ"));
     }
+
+    [Test]
+    public void GenerateReject_RedactsSensitiveFieldsInTheOriginalFrame()
+    {
+        // Regression for the redaction-leak finding: OnRejectionEvent must not write the
+        // verbatim (pre-redaction) original wire frame into the event log.
+        var cap = new CapturingLog();
+        var sessionId = new SessionID("FIX.4.2", "RD_SENDER", "RD_TARGET");
+
+        using var session = new Session(false, new SessionTestSupport.MockApplication(),
+            new MemoryStoreFactory(), sessionId, new DataDictionaryProvider(),
+            new SessionSchedule(AcceptorConfig()), 0,
+            new LogFactoryAdapter(new CapturingLogFactory(cap)),
+            new DefaultMessageFactory(), "blah");
+        session.RedactFieldsInLogs = new[] { 554 }; // redact Password(554)
+        session.SetResponder(new SessionTestSupport.MockResponder());
+        session.CheckLatency = false;
+
+        var logon = new QuickFix.FIX42.Logon();
+        logon.Header.SetField(new TargetCompID(sessionId.SenderCompID));
+        logon.Header.SetField(new SenderCompID(sessionId.TargetCompID));
+        logon.Header.SetField(new MsgSeqNum(1));
+        logon.Header.SetField(new SendingTime(System.DateTime.UtcNow));
+        logon.SetField(new HeartBtInt(1));
+        session.Next(logon.ConstructString());
+
+        // Build a frame carrying a sensitive field, then parse it so RawMessage is populated.
+        var built = new Message();
+        built.Header.SetField(new MsgType("D"));
+        built.Header.SetField(new SenderCompID(sessionId.TargetCompID));
+        built.Header.SetField(new TargetCompID(sessionId.SenderCompID));
+        built.Header.SetField(new MsgSeqNum(5));
+        built.SetField(new StringField(554, "s3cr3t-password"));
+        var offending = new Message();
+        offending.FromString(built.ConstructString(), validate: false, transportDict: null, appDict: null);
+        Assume.That(offending.RawMessage, Does.Contain("s3cr3t-password"));
+
+        session.GenerateReject(offending, QuickFix.FixValues.SessionRejectReason.VALUE_IS_INCORRECT, 554, "x");
+
+        Assert.That(cap.Rejections, Is.Not.Empty);
+        Assert.That(cap.Rejections[^1].Original, Does.Not.Contain("s3cr3t-password"),
+            "the sensitive field value must not leak into the rejection event log");
+        Assert.That(cap.Rejections[^1].Original, Does.Contain("<redacted>"));
+    }
 }
 
 [TestFixture]
@@ -172,5 +216,86 @@ public class FixPortalLogExtendedTest
 
         Assert.That(cap.IncomingAndOutgoing.Exists(x => x.Id == 777), Is.True,
             "a tracked non-admin message should emit OnIncomingAndOutgoing with its LogId");
+    }
+}
+
+[TestFixture]
+public class FixPortalResentTrackerTest
+{
+    // Pins the A1 fix: the LogExtended resend-correlation cache (_resentTracker) is cleared on a
+    // sequence reset, so a recycled seqnum after the reset cannot re-emit the pre-reset LogId.
+    [Test]
+    public void SequenceReset_ClearsResentTracker_RecycledSeqnumDoesNotReuseStaleLogId()
+    {
+        var cap = new CapturingLog();
+        var sessionId = new SessionID("FIX.4.2", "RT_SENDER", "RT_TARGET");
+        var config = new SettingsDictionary();
+        config.SetBool(SessionSettings.PERSIST_MESSAGES, false);
+        config.SetString(SessionSettings.CONNECTION_TYPE, "acceptor");
+        config.SetString(SessionSettings.START_TIME, "00:00:00");
+        config.SetString(SessionSettings.END_TIME, "00:00:00");
+
+        using var session = new Session(false, new SessionTestSupport.MockApplication(),
+            new MemoryStoreFactory(), sessionId, new DataDictionaryProvider(),
+            new SessionSchedule(config), 0,
+            new LogFactoryAdapter(new CapturingLogFactory(cap)),
+            new DefaultMessageFactory(), "FIX.4.2");
+        session.SetResponder(new SessionTestSupport.MockResponder());
+        session.CheckLatency = false;
+
+        SendLogon(session, sessionId, seq: 1, reset: false);
+
+        // M1: tracked order at inbound seq 2 -> LogId 10.
+        var m1 = BuildOrder(sessionId, seq: 2, clOrdId: "M1");
+        Register(session, sessionId, m1, logId: 10);
+        session.Next(m1);
+        Assume.That(cap.IncomingAndOutgoing.Exists(x => x.Id == 10), Is.True, "M1 should emit LogId 10");
+
+        // Counterparty resets sequence numbers (ResetSeqNumFlag=Y) -> clears _resentTracker.
+        SendLogon(session, sessionId, seq: 1, reset: true);
+
+        // M2: a DIFFERENT tracked order at the recycled inbound seq 2 -> LogId 20.
+        var m2 = BuildOrder(sessionId, seq: 2, clOrdId: "M2");
+        Register(session, sessionId, m2, logId: 20);
+        session.Next(m2);
+
+        Assert.That(cap.IncomingAndOutgoing[^1].Id, Is.EqualTo(20),
+            "recycled-seqnum message must emit its own LogId, not the pre-reset stale one");
+        Assert.That(cap.IncomingAndOutgoing.FindAll(x => x.Id == 10), Has.Count.EqualTo(1),
+            "the pre-reset LogId 10 must emit once (for M1), never be re-attributed to M2");
+    }
+
+    private static void SendLogon(Session session, SessionID id, ulong seq, bool reset)
+    {
+        var logon = new QuickFix.FIX42.Logon();
+        logon.Header.SetField(new TargetCompID(id.SenderCompID));
+        logon.Header.SetField(new SenderCompID(id.TargetCompID));
+        logon.Header.SetField(new MsgSeqNum(seq));
+        logon.Header.SetField(new SendingTime(System.DateTime.UtcNow));
+        logon.SetField(new EncryptMethod(EncryptMethod.NONE));
+        logon.SetField(new HeartBtInt(1));
+        if (reset)
+        {
+            logon.SetField(new ResetSeqNumFlag(true));
+        }
+        session.Next(logon.ConstructString());
+    }
+
+    private static string BuildOrder(SessionID id, ulong seq, string clOrdId)
+    {
+        var o = new QuickFix.FIX42.NewOrderSingle(
+            new ClOrdID(clOrdId), new HandlInst(HandlInst.MANUAL_ORDER), new Symbol("IBM"),
+            new Side(Side.BUY), new TransactTime(), new OrdType(OrdType.MARKET));
+        o.Header.SetField(new TargetCompID(id.SenderCompID));
+        o.Header.SetField(new SenderCompID(id.TargetCompID));
+        o.Header.SetField(new MsgSeqNum(seq));
+        o.Header.SetField(new SendingTime(System.DateTime.UtcNow));
+        return o.ConstructString();
+    }
+
+    private static void Register(Session session, SessionID id, string wire, int logId)
+    {
+        var parsed = new Message(wire, session.SessionDataDictionary, session.ApplicationDataDictionary, false);
+        id.SessionLogIdentifiers[parsed.ToString()] = (logId, System.DateTime.UtcNow);
     }
 }

@@ -35,8 +35,8 @@ public interface ILog : IDisposable
     //   LogOn / LogOff — explicit logon/logoff markers for sinks that want session-life events.
     //   OnIncomingAndOutgoing — tracked-message tuple (LogId + Raw + Xml + Json) emitted via Session.LogExtended.
     // Implementors default these to no-ops where the underlying sink doesn't care.
-    void OnRejectionEvent(string originalMessage, string eventText);
-    void LogOn();
-    void LogOff();
-    void OnIncomingAndOutgoing((int Id, string Raw, string Xml, string Json) message);
+    void OnRejectionEvent(string originalMessage, string eventText) { }
+    void LogOn() { }
+    void LogOff() { }
+    void OnIncomingAndOutgoing((int Id, string Raw, string Xml, string Json) message) { }
 }

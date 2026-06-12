@@ -67,6 +67,6 @@ public class ScreenLog : ILog
     public void OnIncomingAndOutgoing((int Id, string Raw, string Xml, string Json) message) { }
     public void OnRejectionEvent(string originalMessage, string rejectionText)
     {
-        OnEvent(rejectionText);
+        OnEvent($"{rejectionText} | Original: {originalMessage}");
     }
 }

@@ -18,11 +18,11 @@ public static class Utility
     {
         var effectiveDate = (now ?? DateTime.Now).Date;
 
-        var parsedPath = relativePath.StartsWith(@".\", StringComparison.Ordinal)
+        var parsedPath = (relativePath.StartsWith(@".\", StringComparison.Ordinal) || relativePath.StartsWith(@"./", StringComparison.Ordinal))
             ? Path.Combine(AppDomain.CurrentDomain.BaseDirectory, relativePath.Substring(2))
             : relativePath;
 
         return Regex.Replace(parsedPath, @"\{DATE:(?<Format>[^}]*)\}",
-            m => effectiveDate.ToString(m.Groups["Format"].Value));
+            m => effectiveDate.ToString(m.Groups["Format"].Value, System.Globalization.CultureInfo.InvariantCulture));
     }
 }

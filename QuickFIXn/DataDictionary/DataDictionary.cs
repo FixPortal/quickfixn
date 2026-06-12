@@ -71,15 +71,19 @@ public class DataDictionary
     public DataDictionary(DataDictionary src)
         : this()
     {
-        Messages = src.Messages;
-        FieldsByName = src.FieldsByName;
-        FieldsByTag = src.FieldsByTag;
+        Messages = new Dictionary<string, DDMap>(src.Messages);
+        FieldsByName = new Dictionary<string, DDField>(src.FieldsByName);
+        FieldsByTag = new Dictionary<int, DDField>(src.FieldsByTag);
+        _componentsByName = new Dictionary<string, XmlNode>(src._componentsByName);
+
         MajorVersion = src.MajorVersion;
         MinorVersion = src.MinorVersion;
         Version = src.Version;
         CheckFieldsHaveValues = src.CheckFieldsHaveValues;
         CheckFieldsOutOfOrder = src.CheckFieldsOutOfOrder;
         CheckUserDefinedFields = src.CheckUserDefinedFields;
+        AllowUnknownEnumValues = src.AllowUnknownEnumValues;
+        AllowUnknownMessageFields = src.AllowUnknownMessageFields;
         Header = src.Header;
         Trailer = src.Trailer;
 
@@ -137,7 +141,7 @@ public class DataDictionary
     {
         if (Messages.ContainsKey(msgType))
             return;
-        if (FieldsByTag[35].EnumDict.ContainsKey(msgType))
+        if (FieldsByTag.TryGetValue(35, out var tag35) && tag35.EnumDict.ContainsKey(msgType))
             return;
         throw new InvalidMessageType();
 
@@ -209,9 +213,22 @@ public class DataDictionary
         List<int> groupTagList = map.GetGroupTags();
         if (groupTagList.Count > 0)
         {
-            if (!Messages.TryGetValue(msgType, out DDMap? msgDdMap))
+            DDMap? msgDdMap = null;
+            if (map is Header)
             {
-                // This shouldn't be possible
+                msgDdMap = this.Header;
+            }
+            else if (map is Trailer)
+            {
+                msgDdMap = this.Trailer;
+            }
+            else
+            {
+                Messages.TryGetValue(msgType, out msgDdMap);
+            }
+
+            if (msgDdMap is null)
+            {
                 throw new MessageParseError(
                     $"Cannot locate msgType='{msgType}' message groups in DataDictionary (Please report this error)");
             }
@@ -319,6 +336,8 @@ public class DataDictionary
                 Fields.Converters.DateTimeConverter.ParseToDateOnly(field.ToString());
             else if (type == typeof(TimeOnlyField))
                 Fields.Converters.DateTimeConverter.InternalParseToTimeOnly(field.ToString());
+            else if (type == typeof(Fields.ULongField))
+                Fields.Converters.ULongConverter.Convert(field.ToString());
         }
         catch (FieldConvertError e)
         {
@@ -452,12 +471,24 @@ public class DataDictionary
 
     public void Load(string path)
     {
-        var stream = new FileStream(path, FileMode.Open, FileAccess.Read);
-        Load(stream);
+        using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read))
+        {
+            Load(stream);
+        }
     }
 
     public void Load(Stream stream)
     {
+        MajorVersion = null;
+        MinorVersion = null;
+        Version = null;
+        Messages.Clear();
+        FieldsByName.Clear();
+        FieldsByTag.Clear();
+        _componentsByName.Clear();
+        Header = new DDMap();
+        Trailer = new DDMap();
+
         XmlReaderSettings readerSettings = new()
         {
             IgnoreComments = true
@@ -712,8 +743,12 @@ public class DataDictionary
                     break;
 
                 case "component":
-                    XmlNode compNode = _componentsByName[nameAttribute];
-                    ParseMsgNode(compNode, ddmap, childNode.Attributes?["required"]?.Value == "Y");
+                    if (!_componentsByName.TryGetValue(nameAttribute, out XmlNode? compNode))
+                    {
+                        throw new DictionaryParseException($"Component '{nameAttribute}' not defined in components section of the DataDictionary.");
+                    }
+                    bool childCompRequired = (childNode.Attributes?["required"]?.Value == "Y") && componentRequired.GetValueOrDefault(true);
+                    ParseMsgNode(compNode, ddmap, childCompRequired);
                     break;
 
                 default:

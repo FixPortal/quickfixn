@@ -60,12 +60,13 @@ public class FieldMap : IEnumerable<KeyValuePair<int, IField>> {
     public void CopyStateFrom(FieldMap src)
     {
         FieldOrder = src.FieldOrder;
+        AllowStringTruncationForCharFields = src.AllowStringTruncationForCharFields;
 
         _fields = new SortedDictionary<int, IField>(src._fields);
 
         _groups = new Dictionary<int, List<Group>>();
         foreach (KeyValuePair<int, List<Group>> g in src._groups)
-            _groups.Add(g.Key, new List<Group>(g.Value));
+            _groups.Add(g.Key, g.Value.Select(grp => grp.Clone()).ToList());
 
         RepeatedTags = new List<IField>(src.RepeatedTags);
     }
@@ -77,6 +78,7 @@ public class FieldMap : IEnumerable<KeyValuePair<int, IField>> {
     /// <returns>true if field was removed, false otherwise</returns>
     public bool RemoveField(int field)
     {
+        _groups.Remove(field);
         return _fields.Remove(field);
     }
 
@@ -483,9 +485,15 @@ public class FieldMap : IEnumerable<KeyValuePair<int, IField>> {
             throw new FieldNotFoundException(field);
 
         if (groupList.Count.Equals(1))
+        {
             _groups.Remove(field);
+            _fields.Remove(field);
+        }
         else
+        {
             groupList.RemoveAt(num - 1);
+            SetField(new IntField(field, groupList.Count), true);
+        }
     }
 
     /// <summary>
@@ -501,7 +509,9 @@ public class FieldMap : IEnumerable<KeyValuePair<int, IField>> {
         if (!_groups.TryGetValue(field, out List<Group>? groupList) || num <= 0 || groupList.Count < num)
             throw new FieldNotFoundException(field);
 
-        return groupList[num - 1] = group;
+        Group clonedGroup = group.Clone();
+        groupList[num - 1] = clonedGroup;
+        return clonedGroup;
     }
 
     /// <summary>
@@ -511,6 +521,7 @@ public class FieldMap : IEnumerable<KeyValuePair<int, IField>> {
     {
         _fields.Clear();
         _groups.Clear();
+        RepeatedTags.Clear();
     }
 
     /// <summary>

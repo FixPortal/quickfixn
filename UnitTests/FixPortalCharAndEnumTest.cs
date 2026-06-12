@@ -30,6 +30,21 @@ public class FixPortalLenientCharFieldTest
         m.SetField(new StringField(7000, "AB"));
         Assert.Throws<FieldConvertError>(() => m.GetChar(7000));
     }
+
+    [Test]
+    public void FromString_SetsAllowStringTruncationFromDictionaries()
+    {
+        var dd = new DataDictionary();
+        dd.AllowStringTruncationForCharFields = true;
+
+        var m = new Message();
+        string msgStr = "8=FIX.4.2\x01" + "9=12\x01" + "35=B\x01" + "4=AB\x01" + "10=114\x01";
+
+        m.FromString(msgStr, validate: false, transportDict: null, appDict: dd);
+
+        Assert.That(m.AllowStringTruncationForCharFields, Is.True);
+        Assert.That(m.GetChar(4), Is.EqualTo('A'));
+    }
 }
 
 [TestFixture]

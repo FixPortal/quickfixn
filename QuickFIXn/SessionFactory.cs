@@ -107,6 +107,11 @@ public class SessionFactory
         if(defaultApplVerId is not null)
             senderDefaultApplVerId = defaultApplVerId.Value;
 
+        if (settings.Has("MillisecondsInTimeStamp")) {
+            throw new ConfigError(
+                "Setting 'MillisecondsInTimeStamp' was removed.  Use 'TimestampPrecision=Milliseconds' instead.");
+        }
+
         Session session = new Session(
             isInitiator,
             _application,
@@ -119,11 +124,6 @@ public class SessionFactory
             sessionMsgFactory,
             senderDefaultApplVerId,
             _wireTap);
-
-        if (settings.Has("MillisecondsInTimeStamp")) {
-            throw new ApplicationException(
-                "Setting 'MillisecondsInTimeStamp' was removed.  Use 'TimestampPrecision=Milliseconds' instead.");
-        }
 
         if (settings.Has("Encoding")){
             CharEncoding.SetEncoding(settings.GetString(SessionSettings.ENCODING));
@@ -189,10 +189,14 @@ public class SessionFactory
         // FP Enhancement: 2026-05-24 — ParsePath expands a `.\` prefix against AppDomain.CurrentDomain.BaseDirectory.
         path = Enhancements.Utility.ParsePath(StringUtil.FixSlashes(path));
 
-        if (!_dictionariesByPath.TryGetValue(path, out var dd))
+        DataDictionary.DataDictionary dd;
+        lock (_dictionariesByPath)
         {
-            dd = new DataDictionary.DataDictionary(path);
-            _dictionariesByPath[path] = dd;
+            if (!_dictionariesByPath.TryGetValue(path, out dd))
+            {
+                dd = new DataDictionary.DataDictionary(path);
+                _dictionariesByPath[path] = dd;
+            }
         }
 
         DataDictionary.DataDictionary ddCopy = new DataDictionary.DataDictionary(dd);
@@ -236,7 +240,7 @@ public class SessionFactory
                         throw new ArgumentException(
                             $"Malformed {SessionSettings.APP_DATA_DICTIONARY} : {setting.Key}");
 
-                    string beginStringQualifier = setting.Key.Substring(offset);
+                    string beginStringQualifier = setting.Key.Substring(offset + 1);
                     DataDictionary.DataDictionary dd = CreateDataDictionary(sessionId, settings, setting.Key, beginStringQualifier);
                     provider.AddApplicationDataDictionary(Message.GetApplVerID(beginStringQualifier).Value, dd);
                 }
